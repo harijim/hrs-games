@@ -69,3 +69,11 @@ blockquote{margin:8px 0;padding:10px 14px;border-left:4px solid var(--saffron);b
 .ioshint .share svg{vertical-align:-3px}
 .ioshint .x{margin-left:auto;flex:none;min-width:44px;min-height:44px;border:0;background:transparent;font-size:1.1rem;cursor:pointer;color:#334}
 .set.unsupported label,.set.unsupported .mini{opacity:.55}
+.game .banner .bt{flex:1;min-width:0}
+.game .banner .newb{display:inline-block;font-size:.72rem;font-weight:700;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:2px 8px;margin-bottom:4px}
+.game .banner .thumb{width:60px;height:120px;object-fit:cover;object-position:top;border-radius:12px;border:2px solid rgba(255,255,255,.75);box-shadow:0 6px 16px rgba(0,0,0,.25);flex:none;background:#fff}
+.g2 .banner{background:linear-gradient(135deg,#1a6fa8 0%,#26a7d8 45%,#3fae5a 100%)}
+.classic{margin:2px 0 0;font-size:.88rem}
+.classic a{color:var(--mute);display:inline-block;padding:10px 0;min-height:44px}
+.newnote{margin:0 0 14px;padding:10px 14px;border-radius:14px;background:#eef6ff;border:1px solid #cfe2fb;font-size:.92rem}
+.actions .btn.cont{flex:1 1 100%;flex-wrap:wrap;text-align:center}.btn .sr-meta{font-weight:500;opacity:.92;font-size:.92em}

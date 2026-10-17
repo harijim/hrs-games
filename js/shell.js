@@ -3,28 +3,34 @@
 'use strict';
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const SDG_WHEN = t => ['Jan', 'Apr', 'Jul', 'Oct'][t % 4] + ' ' + (2026 + Math.floor(t / 4));
 const GAMES = [
-  { id: 'viksit', cls: 'g1', icon: '🇮🇳', path: 'games/viksit-2047/index.html', title: 'Viksit Bharat 2047', sub: 'The Planner\'s Desk',
-    desc: 'Steer India from 2026 to 2047 as the national planner: fund sectors, build a reliable clean power grid, respond to shocks, and chase the Viksit Bharat yardsticks with real 2026 data.',
-    time: '25–40 min', turns: '7 terms', age: 'Ages 13+',
-    learn: ['How growth, infrastructure, education and energy reinforce each other', 'Why the evening peak, storage and transmission make or break a clean grid', 'Trade-offs between public approval, debt and long-term investment', 'Reading real numbers: IMF, CEA, MNRE and NITI Aayog targets'],
-    save: 'hrs_save_viksit_v1', best: 'hrs_best_viksit_v1',
-    saveLabel: s => `${s.S.year}, term ${Math.min(s.S.term + 1, 7)} of 7` },
-  { id: 'sdg', cls: 'g2', icon: '🌐', path: 'games/sdg-2030/index.html', title: 'SDG 2030', sub: 'Race to the Goals',
-    desc: 'Lead a nation through ten half-year turns to 2030. Choose sustainable policies or tempting shortcuts, manage risks, and pull rival nations towards 1.5°C.',
-    time: '15–25 min', turns: '10 turns', age: 'Ages 12+',
-    learn: ['The 17 Sustainable Development Goals and how they boost each other', 'Short-term wins vs long-term costs and delayed consequences', 'Systems thinking: synergies, risks and tipping points', 'Why climate action needs global cooperation'],
-    save: 'hrs_save_sdg_v1', best: 'sdg2030_best_v1',
-    saveLabel: s => { const t = s.S.turn; return `${2026 + Math.floor(t / 2)} ${t % 2 ? 'H2' : 'H1'}, turn ${Math.min(t + 1, 10)} of 10`; } },
+  { id: 'viksit', cls: 'g1', icon: '🇮🇳', path: 'games/viksit-2047/index.html', title: 'Viksit Bharat 2047', sub: 'Plan India\'s road to 2047', thumb: 'assets/thumbs/viksit-2047.jpg', badge: '✨ New edition',
+    desc: 'Seven 3-year terms from 2026 to 2047. React to the news, drop coins on sectors and the national power grid, unlock specialisation hubs, and chase NITI Aayog\'s US$30 trillion aspiration with real 2026 data.',
+    time: '20–30 min', turns: '7 terms', age: 'Ages 13+',
+    learn: ['How growth, infrastructure, skills and energy reinforce each other', 'Why the evening peak, storage and grid lines make or break a clean grid', 'Trade-offs between public approval, debt and long-term investment', 'Reading real numbers: IMF, CEA, MNRE and NITI Aayog targets'],
+    save: 'hrs_save_viksit_v2', best: 'hrs_best_viksit_v2',
+    saveLabel: s => `${s.S.year}, term ${Math.min(s.S.term + 1, 7)} of 7`,
+    bestLabel: b => `🏆 Best: <b>${esc(b.score)}</b>/100 · grade <b>${esc(b.grade)}</b>${b.title ? ` · ${esc(b.title)}` : ''}`,
+    classic: { path: 'games/viksit-2047-classic/index.html', save: 'hrs_save_viksit_v1', label: 'The Planner\'s Desk' } },
+  { id: 'sdg', cls: 'g2', icon: '🌍', path: 'games/sdg-2030/index.html', title: 'SDG 2030', sub: 'Heal the World', thumb: 'assets/thumbs/sdg-2030.jpg', badge: '✨ New edition',
+    desc: 'One choice per season, 20 seasons to 2030. Pick one of three cards, watch a tiny planet heal or decay, and fill all 17 Sustainable Development Goals. Quick wins pay now, but their storms land later.',
+    time: '5–8 min', turns: '20 seasons', age: 'Ages 10+',
+    learn: ['The 17 Sustainable Development Goals, one coloured dot each', 'Short-term wins vs delayed consequences', 'Balancing money, happiness, the planet and peace', 'Why sustainable choices pay back over time'],
+    save: 'hrs_save_sdg_v2', best: 'hrs_best_sdg_v2',
+    saveLabel: s => `${SDG_WHEN(Math.min(s.S.turn, 19))}, season ${Math.min(s.S.turn + 1, 20)} of 20`,
+    bestLabel: b => `🏆 Best: <b>${esc(b.score)}</b>/17 goals${b.title ? ` · ${esc(b.title)}` : ''}`,
+    classic: { path: 'games/sdg-2030-classic/index.html', save: 'hrs_save_sdg_v1', label: 'Race to the Goals' } },
 ];
 
 function renderGames() {
   $('#games').innerHTML = GAMES.map(g => {
     const save = HRS.store.get(g.save), best = HRS.store.get(g.best);
-    const hasSave = save && save.S && !(save.S.over && save.phase === 'over');
-    const bestHtml = best ? `<div class="best">🏆 Best: <b>${esc(best.score)}</b> · grade <b>${esc(best.grade)}</b>${best.title || best.ending ? ` · ${esc(best.title || best.ending)}` : ''}</div>` : '<div class="best none">No score yet. Your first run awaits.</div>';
+    const hasSave = save && save.S && !save.S.over;
+    const cs = HRS.store.get(g.classic.save), classicSave = cs && cs.S && !cs.S.over;
+    const bestHtml = best ? `<div class="best">${g.bestLabel(best)}</div>` : '<div class="best none">No score yet. Your first run awaits.</div>';
     return `<article class="game ${g.cls}" aria-labelledby="t-${g.id}">
-      <div class="banner"><span class="ico" aria-hidden="true">${g.icon}</span><div><h2 id="t-${g.id}">${g.title}</h2><p>${g.sub}</p></div></div>
+      <div class="banner"><span class="ico" aria-hidden="true">${g.icon}</span><div class="bt"><span class="newb">${g.badge}</span><h2 id="t-${g.id}">${g.title}</h2><p>${g.sub}</p></div>${g.thumb ? `<img class="thumb" src="${g.thumb}" alt="" width="60" height="120" loading="lazy">` : ''}</div>
       <div class="body">
         <p class="desc">${g.desc}</p>
         <div class="meta"><span class="chip">⏱️ ${g.time}</span><span class="chip">🔁 ${g.turns}</span><span class="chip">👤 ${g.age}</span><span class="chip">✈️ Works offline</span></div>
@@ -34,6 +40,7 @@ function renderGames() {
           ${hasSave ? `<a class="btn cont" href="${g.path}?continue=1">⏯ Continue <span class="sr-meta">(${esc(g.saveLabel(save))})</span></a>` : ''}
           <a class="btn ${hasSave ? 'ghost' : ''}" href="${g.path}?new=1" data-new="${g.id}">▶ ${hasSave ? 'New game' : 'Play'}</a>
         </div>
+        <p class="classic"><a href="${g.classic.path}${classicSave ? '?continue=1' : ''}">🕰️ Classic edition: ${g.classic.label}${classicSave ? ' · continue saved game' : ''}</a></p>
       </div></article>`;
   }).join('');
 }
