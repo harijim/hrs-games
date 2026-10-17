@@ -1,0 +1,7 @@
+# Harpreet Raj Singh Games
+# Note: crawlers only read robots.txt at the domain root (https://harijim.github.io/robots.txt);
+# this copy documents intent. Submit the sitemap in Google Search Console.
+User-agent: *
+Allow: /
+
+Sitemap: https://harijim.github.io/hrs-games/sitemap.xml

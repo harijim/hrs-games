@@ -59,13 +59,14 @@ HRS.dialog({ overlay: $('#dlg'), box: $('#dlgBox'), isOpen: () => !$('#dlg').cla
 
 /* routing */
 const ROUTES = ['home', 'about', 'settings', 'privacy'];
+const HOME_TITLE = document.title; // SEO title from <head> (tools/seo.js)
 function route() {
   const r = (location.hash || '#').slice(1) || 'home', page = ROUTES.includes(r) ? r : (r === 'disclaimers' ? 'about' : 'home');
   ROUTES.forEach(p => { $('#page-' + p).hidden = p !== page; });
   document.querySelectorAll('[data-route]').forEach(a => { if (a.dataset.route === page) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
   if (page === 'home') renderGames();
   if (page === 'settings') loadSettings();
-  document.title = (page === 'home' ? '' : page[0].toUpperCase() + page.slice(1) + ' · ') + 'Harpreet Raj Singh Games';
+  document.title = page === 'home' ? HOME_TITLE : page[0].toUpperCase() + page.slice(1) + ' · Harpreet Raj Singh Games';
   if (route.started) { $('#page-' + page).querySelector('h1').setAttribute('tabindex', '-1'); $('#page-' + page).querySelector('h1').focus(); window.scrollTo(0, 0); }
   route.started = true;
   if (r === 'disclaimers') $('#disclaimers').scrollIntoView();

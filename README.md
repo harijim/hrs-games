@@ -9,5 +9,7 @@ Created by **Harpreet Raj Singh**.
 - Viksit Bharat 2047: The Planner's Desk
 - SDG 2030: Race to the Goals
 
+Privacy policy: https://harijim.github.io/hrs-games/privacy.html · About: https://harijim.github.io/hrs-games/about.html
+
 Works offline and can be installed to the home screen (Android / iPhone: Share → Add to Home Screen).
 This repository contains only the built web app. © 2026 Harpreet Raj Singh. All rights reserved.
