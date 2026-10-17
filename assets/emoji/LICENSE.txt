@@ -1,0 +1,5 @@
+Emoji graphics: Twemoji
+Copyright 2019 Twitter, Inc and other contributors (https://github.com/jdecked/twemoji)
+Graphics licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/
+Optimised SVGs from @twemoji/svg (MIT). Parser code (js/twemoji.min.js) licensed under the MIT License.
+Used in Harpreet Raj Singh Games with attribution; no changes were made to the artwork.

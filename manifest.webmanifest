@@ -1,0 +1,25 @@
+{
+  "name": "Harpreet Raj Singh Games",
+  "short_name": "HRS Games",
+  "description": "Productive edutainment games for progressive youth and adults of the 21st Century, to steer this Century in a positive direction.",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f3ee",
+  "theme_color": "#0b1f3a",
+  "lang": "en",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Viksit Bharat 2047", "url": "./games/viksit-2047/index.html?continue=1", "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }] },
+    { "name": "SDG 2030", "url": "./games/sdg-2030/index.html?continue=1", "icons": [{ "src": "assets/icons/icon-96.png", "sizes": "96x96" }] }
+  ]
+}

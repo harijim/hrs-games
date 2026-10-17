@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Harpreet Raj Singh Games">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1f3a"/><stop offset=".65" stop-color="#123d63"/><stop offset="1" stop-color="#0e6f68"/></linearGradient>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b4f86"/><stop offset="1" stop-color="#ffb35c"/></linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset="1" stop-color="#ff9933"/></linearGradient>
+    <linearGradient id="land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1fa36b"/><stop offset="1" stop-color="#0a5a45"/></linearGradient>
+    <clipPath id="badge"><circle cx="256" cy="256" r="184"/></clipPath>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <g id="mark">
+    <g clip-path="url(#badge)">
+      <rect x="60" y="60" width="392" height="392" fill="url(#sky)"/>
+      <circle cx="256" cy="282" r="84" fill="url(#sun)"/>
+      <g stroke="#ffe7a8" stroke-width="12" stroke-linecap="round" opacity=".85">
+        <line x1="256" y1="168" x2="256" y2="138"/><line x1="176" y1="202" x2="156" y2="182"/><line x1="336" y1="202" x2="356" y2="182"/><line x1="140" y1="270" x2="112" y2="270"/><line x1="372" y1="270" x2="400" y2="270"/>
+      </g>
+      <ellipse cx="256" cy="560" rx="330" ry="262" fill="url(#land)"/>
+      <path d="M206 452 C224 400 244 346 256 300 C268 346 288 400 306 452 Z" fill="#f4f1e8"/>
+      <path d="M256 322 V338 M256 356 V378 M256 398 V428" stroke="#ff9933" stroke-width="7" stroke-linecap="round"/>
+    </g>
+    <circle cx="256" cy="256" r="184" fill="none" stroke="#ffcf73" stroke-width="10"/>
+  </g>
+</svg>

@@ -1,0 +1,71 @@
+:root{--ink:#0f1b2d;--mute:#56657a;--bg:#f5f3ee;--card:#fff;--line:#e3ded2;--navy:#0b1f3a;--saffron:#ff9933;--teal:#0e9f8a;--accent:#1d4ed8;--bad:#c0392b}
+*{box-sizing:border-box}
+html{font-size:calc(100% * var(--hrs-scale,1))}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+a{color:var(--accent)}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#fff;padding:8px;z-index:9}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 16px;background:var(--navy);color:#fff}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;min-height:44px}
+.brand img{border-radius:12px}
+.brand b{display:block;font-size:1.05rem}.brand small{display:block;color:#b9c7dc;font-size:.78rem}
+.topnav{margin-left:auto;display:flex;gap:4px}
+.topnav a{color:#dfe8f5;text-decoration:none;padding:10px 12px;border-radius:10px;min-height:44px;display:inline-flex;align-items:center}
+.topnav a[aria-current="page"]{background:rgba(255,255,255,.14);color:#fff;font-weight:600}
+main{max-width:1060px;margin:0 auto;padding:16px}
+main:focus{outline:none}
+.hero{padding:18px 4px 8px}
+.hero h1{margin:0;font-size:clamp(1.5rem,4vw,2.2rem);color:var(--navy);letter-spacing:-.3px}
+.tagline{font-size:1.08rem;color:#2c3a50;margin:8px 0 4px;max-width:760px}
+.by{color:var(--mute);margin:0}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:16px 0}
+.game{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 6px 20px rgba(15,27,45,.06)}
+.game .banner{padding:18px;color:#fff;display:flex;gap:12px;align-items:center;min-height:110px}
+.game .banner .ico{font-size:2.6rem;line-height:1}
+.game .banner h2{margin:0;font-size:1.3rem;line-height:1.2}
+.game .banner p{margin:4px 0 0;opacity:.9;font-size:.9rem}
+.g1 .banner{background:linear-gradient(135deg,#ff9933 0%,#d9822b 30%,#000080 75%,#138808 100%)}
+.g2 .banner{background:linear-gradient(135deg,#0d1b2a 0%,#19486a 45%,#3f7e44 100%)}
+.game .body{padding:14px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.game .desc{margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:.8rem;background:#f1efe8;border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.learn h3{margin:0 0 4px;font-size:.85rem;text-transform:uppercase;letter-spacing:.5px;color:var(--mute)}
+.learn ul{margin:0;padding-left:18px;font-size:.92rem}
+.best{font-size:.9rem;background:#fff8ec;border:1px solid #f4dcb4;border-radius:12px;padding:8px 10px}
+.best.none{background:#f7f7f4;border-color:var(--line);color:var(--mute)}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.btn{font:600 1rem/1.2 inherit;font-family:inherit;min-height:48px;padding:12px 18px;border-radius:14px;border:0;background:var(--accent);color:#fff;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:1}
+.btn.cont{background:var(--teal)}
+.btn.ghost{background:#fff;color:var(--navy);border:1px solid #c9d2df}
+.btn.danger{background:#fff;color:var(--bad);border:1px solid var(--bad)}
+.btn:hover{filter:brightness(1.07)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin:14px 0}
+.panel h2{margin:4px 0 8px;font-size:1.1rem;color:var(--navy)}
+.page h1{color:var(--navy);margin:8px 0}
+blockquote{margin:8px 0;padding:10px 14px;border-left:4px solid var(--saffron);background:#fff8ec;border-radius:0 12px 12px 0;font-size:1.05rem}
+.settings .set{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.settings .set:last-child{border-bottom:0}
+.set label small{display:block;color:var(--mute);font-size:.85rem}
+.set input[type=checkbox]{width:56px;height:44px;padding:6px 0;background-clip:content-box;appearance:none;-webkit-appearance:none;background-color:#cdd5e0;border-radius:999px;position:relative;cursor:pointer;margin:0;transition:background-color .2s}
+.set input[type=checkbox]::after{content:"";position:absolute;top:10px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:left .2s}
+.set input[type=checkbox]:checked{background-color:var(--teal)}.set input[type=checkbox]:checked::after{left:28px}
+.set select{min-height:44px;font:inherit;border-radius:10px;border:1px solid #c9d2df;padding:6px 10px;background:#fff;grid-column:2/4}
+.mini{min-height:44px;min-width:60px;border-radius:10px;border:1px solid #c9d2df;background:#fff;cursor:pointer;font:inherit}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap}.row-btns .btn{flex:0 1 auto}
+.fine{color:var(--mute);font-size:.85rem}
+.prose h2{margin-top:16px}
+.foot{text-align:center;color:var(--mute);font-size:.85rem;padding:16px}
+.foot a{display:inline-block;padding:12px 6px;min-height:44px}
+.dlg{position:fixed;inset:0;background:rgba(5,12,25,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.dlg.hidden{display:none}
+.dlg-box{background:#fff;border-radius:18px;padding:18px;max-width:440px;width:100%}
+.dlg-box h2{margin:0 0 8px;color:var(--navy)}
+@media (max-width:560px){.topnav{margin-left:0;width:100%;justify-content:space-between}.topnav a{flex:1;justify-content:center}.games{grid-template-columns:1fr}}
+.ioshint{display:flex;gap:12px;align-items:flex-start;background:#e9f2ff;border:1px solid #b9d3fb;border-radius:16px;padding:12px 12px 12px 14px;margin:8px 0 4px}
+.ioshint[hidden]{display:none}
+.ioshint img{border-radius:12px;flex:none}
+.ioshint p{margin:2px 0 0;font-size:.95rem}
+.ioshint .share{display:inline-flex;align-items:center;gap:2px;color:#1d4ed8;font-weight:600;white-space:nowrap}
+.ioshint .share svg{vertical-align:-3px}
+.ioshint .x{margin-left:auto;flex:none;min-width:44px;min-height:44px;border:0;background:transparent;font-size:1.1rem;cursor:pointer;color:#334}
+.set.unsupported label,.set.unsupported .mini{opacity:.55}
