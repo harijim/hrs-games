@@ -34,21 +34,25 @@ function recordBest() {
 window.HRSViksit3 = { save, SAVE_KEY, BEST_KEY, bestKey, UI };
 
 /* ---------- wrap game flow (global function declarations are re-assignable) ---------- */
+/* v4 re-renders the current screen on a language switch (rerender → show*(…, true)): no sounds, announcements or best records then */
+UI.rr = false;
+if (typeof rerender === 'function') { const _rr = rerender; rerender = function () { UI.rr = true; try { return _rr.apply(this, arguments); } finally { UI.rr = false; } }; }
 const _showEvent = showEvent;
-showEvent = function () { _showEvent(); HRS.sfx('event'); HRS.announce('Breaking news: ' + S.event.t); queueSave(); };
+showEvent = function () { _showEvent.apply(this, arguments); if (!UI.rr) { HRS.sfx('event'); HRS.announce(tl('news') + S.event.t); } queueSave(); };
 const _showPlan = showPlan;
 showPlan = function () { _showPlan(); queueSave(); };
 const _enactTerm = enactTerm;
 enactTerm = function (s) { HRS.sfx('whoosh'); HRS.buzz('medium'); return _enactTerm(s); };
 const _showResult = showResult;
-showResult = function (a) {
-  UI.beforeIdx = S.history.indexOf(a); _showResult(a);
+showResult = function (a, re) {
+  UI.beforeIdx = S.history.indexOf(a); _showResult(a, re);
+  if (re || UI.rr) return;
   if (S.newMs.length || S.newHubs.length) { HRS.sfx('milestone'); HRS.buzz('success'); } else HRS.sfx('good');
   if (S.over) recordBest();
   queueSave();
 };
 const _showEnd = showEnd;
-showEnd = function () { recordBest(); _showEnd(); HRS.sfx('end'); HRS.buzz('success'); HRS.store.del(SAVE_KEY); };
+showEnd = function (re) { if (re || UI.rr) return _showEnd(re); recordBest(); _showEnd(re); HRS.sfx('end'); HRS.buzz('success'); HRS.store.del(SAVE_KEY); };
 const _startGame = startGame;
 startGame = function (seed, skipIntro, mode) { UI.counted = false; UI.beforeIdx = -1; _startGame(seed, skipIntro, mode); queueSave(); };
 const _toast = toast;
@@ -78,13 +82,22 @@ const GLOSSARY = [
   ['Hubs', 'Game mechanic: keep funding a combination of sectors and a hub switches on, boosting growth and your final score.'],
   ['Lag', 'Years before an investment pays off in the game (skills ~4, grid lines ~3, nuclear ~6).'],
 ];
+/* strings this app layer adds, in the app language (the game itself is localised by its own VB.t since v4) */
+const LL = () => (window.HRS && HRS.lang && HRS.lang()) || 'en';
+const L = {
+  disc: { en: 'Educational simulation, not a forecast. Not affiliated with or endorsed by the Government of India.', hi: 'शैक्षिक सिमुलेशन, कोई भविष्यवाणी नहीं। भारत सरकार से संबद्ध या उसके द्वारा समर्थित नहीं।', pa: 'ਸਿੱਖਿਆਦਾਇਕ ਸਿਮੂਲੇਸ਼ਨ, ਕੋਈ ਭਵਿੱਖਬਾਣੀ ਨਹੀਂ। ਭਾਰਤ ਸਰਕਾਰ ਨਾਲ ਸੰਬੰਧਿਤ ਜਾਂ ਉਸ ਵੱਲੋਂ ਸਮਰਥਿਤ ਨਹੀਂ।' },
+  welcome: { en: '💾 Welcome back! {i} {n} game restored: {y}, term {t} of {T}.', hi: '💾 फिर से स्वागत है! {i} आपका खेल वापस आ गया: {y}, कार्यकाल {t}/{T}।', pa: '💾 ਜੀ ਆਇਆਂ ਨੂੰ! {i} ਤੁਹਾਡੀ ਗੇਮ ਵਾਪਸ ਆ ਗਈ: {y}, ਕਾਰਜਕਾਲ {t}/{T}।' },
+  news: { en: 'Breaking news: ', hi: 'ताज़ा ख़बर: ', pa: 'ਤਾਜ਼ਾ ਖ਼ਬਰ: ' },
+  src: { en: 'Show source', hi: 'स्रोत देखें', pa: 'ਸਰੋਤ ਵੇਖੋ' },
+};
+const tl = (k, v) => (L[k][LL()] || L[k].en).replace(/\{(\w+)\}/g, (_, x) => v && v[x] !== undefined ? v[x] : '');
 const _helpSheet = helpSheet;
 helpSheet = function () {
   _helpSheet();
   const row = $('sheetBody').querySelector('.row2');
-  if (row && !kid()) row.insertAdjacentHTML('beforebegin', `<details class="x"><summary>📖 Glossary</summary><div><dl class="hrs-gloss">${GLOSSARY.map(([t, d]) => `<dt>${t}</dt><dd>${d}</dd>`).join('')}</dl></div></details>`);
-  $('sheetBody').insertAdjacentHTML('beforeend', `<div class="hrs-links"><a href="../../index.html">🏠 All games</a><a href="../viksit-2047/">✨ Newest edition</a><a href="../viksit-2047-v2/">v2 edition</a><a href="../viksit-2047-classic/">Classic edition</a><a href="../../about.html">About &amp; disclaimers</a><a href="../../privacy.html">Privacy</a></div>
-  <p class="mut center" style="font-size:.78rem">Educational simulation, not a forecast. Not affiliated with or endorsed by the Government of India.</p>`);
+  if (row && !kid() && !(window.VB && VB.t)) row.insertAdjacentHTML('beforebegin', `<details class="x"><summary>📖 Glossary</summary><div><dl class="hrs-gloss">${GLOSSARY.map(([t, d]) => `<dt>${t}</dt><dd>${d}</dd>`).join('')}</dl></div></details>`);
+  $('sheetBody').insertAdjacentHTML('beforeend', `<div class="hrs-links"><a href="../../index.html">🏠 All games</a><a href="../viksit-2047-v2/">v2 edition</a><a href="../viksit-2047-classic/">Classic edition</a><a href="../../about.html">About &amp; disclaimers</a><a href="../../privacy.html">Privacy</a></div>
+  <p class="mut center hrs-disc" style="font-size:.78rem" lang="${LL()}">${tl('disc')}</p>`);
 };
 
 /* ---------- sound/haptics for taps; save after every move (registered after the game's own handlers) ---------- */
@@ -102,7 +115,7 @@ window.addEventListener('pagehide', save);
 
 /* ---------- a11y: bottom sheet is a dialog; source triggers are keyboard-reachable; back button ---------- */
 HRS.dialog({ overlay: $('sheet'), box: $('sheetCard'), isOpen: () => !$('sheet').classList.contains('hidden'), isDismissible: () => true, close: () => closeSheet() });
-HRS.clickables('span.src[data-tip],.kpi[data-tip]', () => 'Show source');
+HRS.clickables('span.src[data-tip],.kpi[data-tip]', () => tl('src'));
 HRS.onBack(() => { if (!$('tip').classList.contains('hidden')) { hideTip(); return true; } return false; });
 $('confetti').setAttribute('aria-hidden', 'true');
 
@@ -121,11 +134,11 @@ if (rec && (rec.v === 3 || rec.v === 2) && rec.S) {
     ['sv-gdp', 'sv-adq', 'sv-nf', 'sv-ap', 'hYear'].forEach(id => { if ($(id)) delete $(id)._v; });
     renderTop(false);
     if (rec.phase === 'event' && S.event) _showEvent();
-    else if (rec.phase === 'result' && S.history[rec.beforeIdx]) _showResult(S.history[rec.beforeIdx]);
+    else if (rec.phase === 'result' && S.history[rec.beforeIdx]) { const b = S.history[rec.beforeIdx]; if (typeof lastBefore !== 'undefined') lastBefore = b; _showResult(b); } // v4 re-renders the result screen from lastBefore
     else if (S.over) _showEnd();
     else _showPlan();
     UI.restoring = false;
-    _toast(`💾 Welcome back! ${S.cfg.i} ${S.cfg.n} game restored: ${S.year}, term ${Math.min(S.term + 1, NTERMS)} of ${NTERMS}.`);
+    _toast(tl('welcome', { i: S.cfg.i, n: S.cfg.n, y: S.year, t: Math.min(S.term + 1, NTERMS), T: NTERMS }));
     if (rec.v === 2) save();
   } catch (err) { console.warn('save restore failed', err); UI.restoring = false; HRS.store.del(SAVE_KEY); startGame(); }
 } else {

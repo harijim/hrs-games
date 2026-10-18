@@ -23,3 +23,15 @@ a,button,input,select,label,[role="button"],[tabindex]{touch-action:manipulation
 body{-webkit-tap-highlight-color:rgba(0,0,0,0)}
 .hrs-tour-box{margin-bottom:env(safe-area-inset-bottom,0px)}
 .hrs-tour{padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Hindi + Punjabi: bundled Noto subsets, fetched only when Devanagari / Gurmukhi characters appear (OFL, see assets/fonts) */
+@font-face{font-family:"HRS Devanagari";src:url(../assets/fonts/noto-sans-devanagari.woff2) format("woff2");font-weight:400 800;font-display:swap;unicode-range:U+0900-097F,U+1CD0-1CFF,U+200C-200D,U+25CC,U+A8E0-A8FF}
+@font-face{font-family:"HRS Gurmukhi";src:url(../assets/fonts/noto-sans-gurmukhi.woff2) format("woff2");font-weight:400 800;font-display:swap;unicode-range:U+0A00-0A7F,U+200C-200D,U+25CC,U+262C}
+/* the games name Noto first in their Indic stacks: serve the bundled subset under that name when it isn't installed */
+@font-face{font-family:"Noto Sans Devanagari";src:url(../assets/fonts/noto-sans-devanagari.woff2) format("woff2");font-weight:400 800;font-display:swap;unicode-range:U+0900-097F,U+1CD0-1CFF,U+200C-200D,U+25CC,U+A8E0-A8FF}
+@font-face{font-family:"Noto Sans Gurmukhi";src:url(../assets/fonts/noto-sans-gurmukhi.woff2) format("woff2");font-weight:400 800;font-display:swap;unicode-range:U+0A00-0A7F,U+200C-200D,U+25CC,U+262C}
+.hrs-links :lang(hi),.hrs-links:lang(hi),.tlinks :lang(hi),.hrs-toast:lang(hi),.hrs-lang-note:lang(hi),.hrs-links a:lang(hi),.tlinks a:lang(hi){font-family:"HRS Devanagari",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.hrs-links a:lang(pa),.tlinks a:lang(pa),.hrs-toast:lang(pa),.hrs-lang-note:lang(pa){font-family:"HRS Gurmukhi",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.hrs-lang-note{margin:6px auto 0;text-align:center;font:600 12px/1.4 "HRS Devanagari","HRS Gurmukhi",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;opacity:.75}
+.hrs-toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:100001;max-width:calc(100vw - 32px);
+  background:linear-gradient(115deg,#5b21e6,#d1146b);color:#fff;font:700 14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,"HRS Devanagari","HRS Gurmukhi",sans-serif;padding:10px 16px;border-radius:999px;box-shadow:0 10px 30px rgba(60,10,120,.35);transition:opacity .3s,transform .3s;pointer-events:none;text-align:center}
+.hrs-toast.on{opacity:1;transform:translate(-50%,0)}

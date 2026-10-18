@@ -61,6 +61,7 @@ const isIOSSafari = isIOS && /Safari\//.test(UA) && !/CriOS|FxiOS|EdgiOS|OPiOS|G
 const canVibrate = () => !!NativeHaptics || (typeof navigator.vibrate === 'function' && !isIOS);
 function buzz(kind = 'light') {
   if (!settings().vibration || !canVibrate()) return;
+  if (!NativeHaptics && navigator.userActivation && !navigator.userActivation.hasBeenActive) return; // web: only after a user gesture
   try {
     if (NativeHaptics) { if (kind === 'success' || kind === 'warning' || kind === 'error') NativeHaptics.notification({ type: kind.toUpperCase() }); else NativeHaptics.impact({ style: kind === 'heavy' ? 'HEAVY' : kind === 'medium' ? 'MEDIUM' : 'LIGHT' }); return; }
     if (typeof navigator.vibrate === 'function') navigator.vibrate({ light: 10, medium: 20, heavy: 40, success: [15, 40, 15], warning: [30, 60, 30], error: [60, 40, 60] }[kind] || 10);
@@ -236,15 +237,82 @@ function tour(steps, { onDone, label = 'Tutorial' } = {}) {
 }
 
 /* ---------- service worker (offline) ---------- */
+
+/* ---------- language (shared with the games) ----------
+   Key 'hrs-lang' holds a plain string: 'en' | 'hi' | 'pa' (default from navigator.language, then persisted).
+   Changes fire window event 'hrs-lang-change' ({ detail: { lang, prev } }) in this page, and the same event
+   is re-fired in other open pages from the 'storage' event. A game declares the languages its own text supports
+   with <meta name="hrs-langs" content="en,hi,pa"> or window.HRS_GAME_LANGS = [...]; otherwise English only. */
+const LANG_KEY = 'hrs-lang', LANGS = ['en', 'hi', 'pa'];
+const LANG_NAMES = { en: 'English', hi: 'हिन्दी', pa: 'ਪੰਜਾਬੀ' };
+function detectLang() { const n = [].concat(navigator.languages || [], navigator.language || []).map(x => String(x).toLowerCase()); for (const x of n) { const b = x.split('-')[0]; if (LANGS.includes(b)) return b; } return 'en'; }
+function lang() { let l = null; try { l = localStorage.getItem(LANG_KEY); } catch (e) {} if (!LANGS.includes(l)) { l = detectLang(); try { localStorage.setItem(LANG_KEY, l); } catch (e) {} } return l; }
+const IS_GAME = /\/games\//.test(location.pathname);
+function gameLangs() { const m = document.querySelector('meta[name="hrs-langs"]'); const v = window.HRS_GAME_LANGS || (m ? m.content.split(',') : ['en']); return v.map(x => String(x).trim()).filter(Boolean); }
+function applyLang() {
+  const l = lang(), h = document.documentElement; h.dataset.hrsLang = l;
+  if (IS_GAME) { const ok = gameLangs().includes(l); h.dataset.hrsLangOk = ok ? '1' : '0'; if (ok) h.lang = l; }
+}
+function setLang(l) {
+  if (!LANGS.includes(l)) return; const prev = lang(); try { localStorage.setItem(LANG_KEY, l); } catch (e) {}
+  applyLang(); if (prev !== l) window.dispatchEvent(new CustomEvent('hrs-lang-change', { detail: { lang: l, prev } }));
+}
+window.addEventListener('storage', e => { if (e.key === LANG_KEY) { applyLang(); window.dispatchEvent(new CustomEvent('hrs-lang-change', { detail: { lang: lang(), prev: e.oldValue } })); } });
+/* our in-game overlay (home button, help links) speaks the app language even when the game text is English */
+const OV = {
+  'All games': { hi: 'सभी गेम', pa: 'ਸਾਰੀਆਂ ਗੇਮਾਂ' }, 'Classic edition': { hi: 'क्लासिक संस्करण', pa: 'ਕਲਾਸਿਕ ਐਡੀਸ਼ਨ' }, 'Classic': { hi: 'क्लासिक', pa: 'ਕਲਾਸਿਕ' },
+  'v2 edition': { hi: 'v2 संस्करण', pa: 'v2 ਐਡੀਸ਼ਨ' }, 'Newest edition': { hi: 'नया संस्करण', pa: 'ਨਵਾਂ ਐਡੀਸ਼ਨ' }, 'About': { hi: 'परिचय', pa: 'ਜਾਣ-ਪਛਾਣ' },
+  'About & disclaimers': { hi: 'परिचय और अस्वीकरण', pa: 'ਜਾਣ-ਪਛਾਣ ਅਤੇ ਬੇਦਾਅਵਾ' }, 'Privacy': { hi: 'गोपनीयता', pa: 'ਪਰਦੇਦਾਰੀ' },
+  note: { en: 'Game text in English for now', hi: 'गेम का पाठ अभी अंग्रेज़ी में है', pa: 'ਗੇਮ ਦਾ ਪਾਠ ਹਾਲੇ ਅੰਗਰੇਜ਼ੀ ਵਿੱਚ ਹੈ' },
+  home: { en: 'All games', hi: 'सभी गेम', pa: 'ਸਾਰੀਆਂ ਗੇਮਾਂ' },
+};
+const ovT = (k, l) => (OV[k] && OV[k][l]) || (OV[k] && OV[k].en) || k;
+const ovOrig = new WeakMap();
+function translateOverlay(root) {
+  if (!IS_GAME) return; const l = lang();
+  (root || document).querySelectorAll('.hrs-links a, .tlinks a').forEach(a => {
+    const tn = [...a.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim()).sort((x, y) => y.textContent.length - x.textContent.length)[0]; if (!tn) return;
+    // the English label is kept on the link itself, so it survives emoji parsing replacing text nodes
+    if (!a.dataset.hrsEn) a.dataset.hrsEn = tn.textContent;
+    const en = a.dataset.hrsEn, key = en.trim(), lead = en.match(/^\s*/)[0], want = l === 'en' || !OV[key] ? en : lead + OV[key][l];
+    if (tn.textContent !== want) tn.textContent = want;
+    if (l !== 'en') a.lang = l; else a.removeAttribute('lang');
+  });
+  document.querySelectorAll('a.hrs-home').forEach(a => { if (!a.dataset.enLabel) a.dataset.enLabel = a.getAttribute('aria-label') || ''; a.setAttribute('aria-label', l === 'en' ? a.dataset.enLabel || ovT('home', 'en') : ovT('home', l)); });
+  const ok = gameLangs().includes(l);
+  (root || document).querySelectorAll('.hrs-links, .tlinks').forEach(c => {
+    let n = c.nextElementSibling && c.nextElementSibling.classList.contains('hrs-lang-note') ? c.nextElementSibling : null;
+    if (ok) { if (n) n.remove(); return; }
+    if (!n) { n = document.createElement('p'); n.className = 'hrs-lang-note'; c.after(n); }
+    n.lang = l; n.textContent = '🌐 ' + ovT('note', l);
+  });
+}
+let noteShown = false;
+function langToast() {
+  if (!IS_GAME || noteShown) return; const l = lang(); if (l === 'en' || gameLangs().includes(l)) return;
+  let k = 'hrs-lang-note:' + location.pathname + ':' + l; try { if (sessionStorage.getItem(k)) return; sessionStorage.setItem(k, '1'); } catch (e) {}
+  noteShown = true; const t = document.createElement('div'); t.className = 'hrs-toast'; t.lang = l; t.setAttribute('role', 'status'); t.textContent = '🌐 ' + ovT('note', l);
+  document.body.appendChild(t); requestAnimationFrame(() => t.classList.add('on')); setTimeout(() => { t.classList.remove('on'); setTimeout(() => t.remove(), 400); }, 3800);
+}
+// SEO: in English the page keeps the description written for search engines (games may set their own per language)
+const MD = document.querySelector('meta[name="description"]'), MD0 = MD && MD.getAttribute('content');
+if (IS_GAME && MD) new MutationObserver(() => { if (lang() === 'en' && MD.getAttribute('content') !== MD0) MD.setAttribute('content', MD0); }).observe(MD, { attributes: true, attributeFilter: ['content'] });
+function startLang() {
+  translateOverlay(); langToast();
+  let q = 0; // re-run when link rows are added or rewritten (e.g. emoji parsing); our own edits are characterData only
+  if (IS_GAME) new MutationObserver(ms => { if (!q && ms.some(m => (m.target.closest && m.target.closest('.hrs-links, .tlinks')) || [...m.addedNodes].some(n => n.nodeType === 1 && (n.matches('.hrs-links, .tlinks') || n.querySelector('.hrs-links, .tlinks'))))) q = requestAnimationFrame(() => { q = 0; translateOverlay(); }); }).observe(document.body, { childList: true, subtree: true });
+}
+window.addEventListener('hrs-lang-change', () => { translateOverlay(); noteShown = false; langToast(); });
+
 if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !Cap) {
   window.addEventListener('load', () => navigator.serviceWorker.register(new URL('sw.js', ROOT).href, { scope: ROOT.href }).catch(() => {}));
 }
 
-apply();
+apply(); applyLang();
 document.documentElement.classList.toggle('hrs-ios', isIOS); document.documentElement.classList.toggle('hrs-standalone', isStandalone);
 if (mq.addEventListener) mq.addEventListener('change', apply);
 window.addEventListener('storage', e => { if (e.key === SETTINGS_KEY) apply(); });
-document.addEventListener('DOMContentLoaded', startEmoji);
+document.addEventListener('DOMContentLoaded', startEmoji); document.addEventListener('DOMContentLoaded', startLang);
 
-window.HRS = { ROOT, store, settings, setSetting, reduceMotion, apply, sfx, buzz, openExternal, onBack, handleBack, home, parseEmoji, clickables, titlePopovers, showPopover, hidePopover, dialog, announce, tour, isNative: !!Cap, isIOS, isIOSSafari, isStandalone, canVibrate };
+window.HRS = { lang, setLang, LANGS, LANG_NAMES, gameLangs, translateOverlay, ROOT, store, settings, setSetting, reduceMotion, apply, sfx, buzz, openExternal, onBack, handleBack, home, parseEmoji, clickables, titlePopovers, showPopover, hidePopover, dialog, announce, tour, isNative: !!Cap, isIOS, isIOSSafari, isStandalone, canVibrate };
 })();

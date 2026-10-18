@@ -3,67 +3,105 @@
 'use strict';
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const t = (k, v) => HRSI18N.t(k, v);
 // mirrors SDG2.when(t, mode) / MODES in games/sdg-2030 (v3 build): months per turn, start year, game length
-const SDG_MODES = { kids: { e: '🎒', name: 'Kids', step: 6, y: 2026, T: 10 }, college: { e: '🎓', name: 'College', step: 3, y: 2027, T: 16 }, adults: { e: '💼', name: 'Adults', step: 3, y: 2026, T: 20 }, classic: { e: '🌍', name: '', step: 3, y: 2026, T: 20 } };
-const SDG_WHEN = (t, m) => { const c = SDG_MODES[m] || SDG_MODES.classic, mo = t * c.step; return ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][mo % 12] + ' ' + (c.y + Math.floor(mo / 12)); };
-const sdgLabel = st => { const c = SDG_MODES[st.mode] || SDG_MODES.classic, T = st.T || c.T; return `${c.name ? c.e + ' ' + c.name + ' · ' : ''}${SDG_WHEN(Math.min(st.turn, T - 1), st.mode)}, ${st.mode === 'kids' ? 'turn' : 'season'} ${Math.min(st.turn + 1, T)} of ${T}`; };
-const VB_MODES = { school: { e: '🎒', name: 'School' }, college: { e: '🎓', name: 'College' }, expert: { e: '💼', name: 'Expert' } };
+const mode = (e, key, extra) => Object.assign({ e, get name() { return key ? t(key) : ''; } }, extra);
+const SDG_MODES = { kids: mode('🎒', 'm.kids', { step: 6, y: 2026, T: 10 }), college: mode('🎓', 'm.college', { step: 3, y: 2027, T: 16 }), adults: mode('💼', 'm.adults', { step: 3, y: 2026, T: 20 }), classic: mode('🌍', '', { step: 3, y: 2026, T: 20 }) };
+const SDG_WHEN = (n, m) => { const c = SDG_MODES[m] || SDG_MODES.classic, mo = n * c.step; return t('months').split(' ')[mo % 12] + ' ' + (c.y + Math.floor(mo / 12)); };
+const sdgLabel = st => { const c = SDG_MODES[st.mode] || SDG_MODES.classic, T = st.T || c.T; return `${c.name ? c.e + ' ' + c.name + ' · ' : ''}${SDG_WHEN(Math.min(st.turn, T - 1), st.mode)}, ${t(st.mode === 'kids' ? 'sdg.turn' : 'sdg.season', { n: Math.min(st.turn + 1, T), T })}`; };
+const VB_MODES = { school: mode('🎒', 'm.school'), college: mode('🎓', 'm.college'), expert: mode('💼', 'm.expert') };
 const VB_BEST = { school: 'hrs_best_viksit_v3_school', college: 'hrs_best_viksit_v2', expert: 'hrs_best_viksit_v3_expert' };
 const live = s => s && s.S && !s.S.over ? s : null;
 // v3 save, or an unfinished v2 game that v3 will adopt on open (until imported or declined)
 const viksitSave = () => live(HRS.store.get('hrs_save_viksit_v3')) || (s => s && s.t > (HRS.store.get('hrs_viksit_v2_imported') || 0) ? s : null)(live(HRS.store.get('hrs_save_viksit_v2')));
 const SDG_BEST = { kids: 'hrs_best_sdg_v2_kids', college: 'hrs_best_sdg_v2', adults: 'hrs_best_sdg_v2_adults' };
+// card text is looked up at render time, so a language switch re-renders in place
+const txt = p => ({ get title() { return t(p + '.title'); }, get sub() { return t(p + '.sub'); }, get badge() { return t(p + '.badge'); }, get desc() { return t(p + '.desc'); }, get time() { return t(p + '.time'); }, get turns() { return t(p + '.turns'); }, get age() { return t(p + '.age'); }, get learn() { return [1, 2, 3, 4].map(i => t(p + '.l' + i)); }, get empty() { return t(p + '.empty'); } });
 const GAMES = [
-  { id: 'viksit', cls: 'g1', icon: '🇮🇳', path: 'games/viksit-2047/index.html', title: 'Viksit Bharat 2047', sub: 'Plan India\'s road to 2047', thumb: 'assets/thumbs/viksit-2047.jpg', badge: '✨ New edition',
-    desc: 'Pick your level: 🎒 School (5 friendly groups, a fact and quiz each term), 🎓 College (trade-offs, dilemmas, predict the numbers) or 💼 Expert (tight budgets, harsh shocks, a coalition to keep happy). Seven 3-year terms to 2047 with real 2026 data.',
-    time: '15–30 min', turns: '3 levels · 7 terms', age: 'Ages 10+',
-    learn: ['How growth, infrastructure, skills and energy reinforce each other', 'Why the evening peak, storage and grid lines make or break a clean grid', 'Trade-offs between public approval, debt and long-term investment', 'Reading real numbers: IMF, CEA, MNRE and NITI Aayog targets'],
+  Object.defineProperties({ id: 'viksit', cls: 'g1', icon: '🇮🇳', path: 'games/viksit-2047/index.html', thumb: 'assets/thumbs/viksit-2047.jpg',
     getSave: viksitSave,
-    saveLabel: s => { const m = VB_MODES[s.S.mode] || VB_MODES.college; return `${m.e} ${m.name} · ${s.S.year}, term ${Math.min(s.S.term + 1, 7)} of 7`; },
-    bestOf: () => Object.entries(VB_BEST).map(([m, k]) => [m, HRS.store.get(k)]).filter(x => x[1]),
-    bestLabel: (b, all) => all.length > 1 || (all[0] && all[0][0] !== 'college')
-      ? `🏆 Best: ${all.map(([m, x]) => `<span class="pm">${VB_MODES[m].e} ${VB_MODES[m].name} <b>${esc(x.score)}</b> ${esc(x.grade)}</span>`).join(' · ')}`
-      : `🏆 Best: <b>${esc(b.score)}</b>/100 · grade <b>${esc(b.grade)}</b>${b.title ? ` · ${esc(b.title)}` : ''}`,
-    editions: [{ path: 'games/viksit-2047-v2/index.html', save: 'hrs_save_viksit_v2', label: 'v2 edition' }, { path: 'games/viksit-2047-classic/index.html', save: 'hrs_save_viksit_v1', label: 'Classic: The Planner\'s Desk' }] },
-  { id: 'sdg', cls: 'g2', icon: '🌍', path: 'games/sdg-2030/index.html', title: 'SDG 2030', sub: 'Heal the World', thumb: 'assets/thumbs/sdg-2030.jpg', badge: '✨ New edition',
-    desc: 'Pick who\'s playing: 🎒 School Kids (10 turns, clear hints, can\'t fail), 🎓 College (16 seasons, hidden bills, quizzes and dilemmas) or 💼 Adults (20 seasons, elections, tipping points, no hints). One card per turn: watch a tiny planet heal or decay as you fill all 17 Sustainable Development Goals.',
-    time: '4–10 min', turns: '3 modes · 10–20 turns', age: 'Ages 8+',
-    learn: ['The 17 Sustainable Development Goals, one coloured dot each', 'Short-term wins vs delayed consequences', 'Balancing money, happiness, the planet and peace', 'Quick quizzes, feelings moments and ethical dilemmas'],
+    saveLabel: s => { const m = VB_MODES[s.S.mode] || VB_MODES.college; return `${m.e} ${m.name} · ${t('vb.save', { year: s.S.year, n: Math.min(s.S.term + 1, 7) })}`; },
+    bestOf: () => Object.entries(VB_BEST).map(([m, k]) => [m, HRS.store.get(k)]).filter(x => x[1]), modes: VB_MODES, max: 100,
+    editions: [{ path: 'games/viksit-2047-v2/index.html', save: 'hrs_save_viksit_v2', get label() { return t('vb.ed.v2'); } }, { path: 'games/viksit-2047-classic/index.html', save: 'hrs_save_viksit_v1', get label() { return t('vb.ed.c'); } }] }, Object.getOwnPropertyDescriptors(txt('vb'))),
+  Object.defineProperties({ id: 'sdg', cls: 'g2', icon: '🌍', path: 'games/sdg-2030/index.html', thumb: 'assets/thumbs/sdg-2030.jpg',
     save: 'hrs_save_sdg_v2', best: 'hrs_best_sdg_v2',
     saveLabel: s => sdgLabel(s.S),
-    bestOf: () => Object.entries(SDG_BEST).map(([m, k]) => [m, HRS.store.get(k)]).filter(x => x[1]),
-    bestLabel: (b, all) => all.length > 1 || (all[0] && all[0][0] !== 'college')
-      ? `🏆 Best: ${all.map(([m, x]) => `<span class="pm">${SDG_MODES[m].e} ${SDG_MODES[m].name} <b>${esc(x.score)}</b>/17</span>`).join(' · ')}`
-      : `🏆 Best: <b>${esc(b.score)}</b>/17 goals${b.title ? ` · ${esc(b.title)}` : ''}`,
-    editions: [{ path: 'games/sdg-2030-classic/index.html', save: 'hrs_save_sdg_v1', label: 'Classic: Race to the Goals' }] },
+    bestOf: () => Object.entries(SDG_BEST).map(([m, k]) => [m, HRS.store.get(k)]).filter(x => x[1]), modes: SDG_MODES, max: 17,
+    editions: [{ path: 'games/sdg-2030-classic/index.html', save: 'hrs_save_sdg_v1', get label() { return t('sdg.ed.c'); } }] }, Object.getOwnPropertyDescriptors(txt('sdg'))),
 ];
 
+const SEEN_BEST = 'hrs_seen_best'; // launcher-only: which best records were already celebrated
+const chipBest = (g, all) => all.map(([m, x]) => `<span class="pm">${g.modes[m].e} ${g.modes[m].name} <b>${esc(x.score)}</b>/${g.max}${x.grade ? ' ' + esc(x.grade) : ''}</span>`).join('');
 function renderGames() {
-  $('#games').innerHTML = GAMES.map(g => {
-    const save = g.getSave ? g.getSave() : HRS.store.get(g.save), all = g.bestOf ? g.bestOf() : null, best = all ? (all.length ? all[0][1] : null) : HRS.store.get(g.best);
+  const seen = HRS.store.get(SEEN_BEST), sig = {}, fresh = [];
+  $('#games').innerHTML = GAMES.map((g, i) => {
+    const save = g.getSave ? g.getSave() : HRS.store.get(g.save), all = g.bestOf();
     const hasSave = save && save.S && !save.S.over;
-    const bestHtml = best ? `<div class="best">${g.bestLabel(best, all)}</div>` : '<div class="best none">No score yet. Your first run awaits.</div>';
-    return `<article class="game ${g.cls}" aria-labelledby="t-${g.id}">
-      <div class="banner"><span class="ico" aria-hidden="true">${g.icon}</span><div class="bt"><span class="newb">${g.badge}</span><h2 id="t-${g.id}">${g.title}</h2><p>${g.sub}</p></div>${g.thumb ? `<img class="thumb" src="${g.thumb}" alt="" width="60" height="120" loading="lazy">` : ''}</div>
+    all.forEach(([m, x]) => { const k = g.id + ':' + m, v = JSON.stringify(x); sig[k] = v; if (seen && seen[k] !== v) fresh.push(g.id); });
+    const isNew = fresh.includes(g.id);
+    const bestHtml = all.length ? `<div class="best" aria-label="${t('card.bestAria')}"><span class="tro" aria-hidden="true">🏆</span>${isNew ? `<span class="nb">✨ ${t('card.newBest')}</span>` : ''}${chipBest(g, all)}</div>`
+      : `<div class="best none">${g.empty}</div>`;
+    return `<article class="game ${g.cls}" aria-labelledby="t-${g.id}" style="--i:${i}" data-game="${g.id}">
+      <div class="hero-c"><span class="band" aria-hidden="true"></span><span class="ico" aria-hidden="true"><span>${g.icon}</span></span>${g.thumb ? `<img class="thumb" src="${g.thumb}" alt="" width="74" height="150" ${g.id === "viksit" ? "fetchpriority=\"high\"" : "loading=\"lazy\""}>` : ''}
+        <span class="newb">${g.badge}</span><h2 id="t-${g.id}">${g.title}</h2><p class="sub">${g.sub}</p>
+        <div class="meta"><span class="chip">⏱️ ${g.time}</span><span class="chip">👤 ${g.age}</span></div></div>
       <div class="body">
-        <p class="desc">${g.desc}</p>
-        <div class="meta"><span class="chip">⏱️ ${g.time}</span><span class="chip">🔁 ${g.turns}</span><span class="chip">👤 ${g.age}</span><span class="chip">✈️ Works offline</span></div>
-        <div class="learn"><h3>You'll learn</h3><ul>${g.learn.map(l => `<li>${l}</li>`).join('')}</ul></div>
         ${bestHtml}
         <div class="actions">
-          ${hasSave ? `<a class="btn cont" href="${g.path}?continue=1">⏯ Continue <span class="sr-meta">(${esc(g.saveLabel(save))})</span></a>` : ''}
-          <a class="btn ${hasSave ? 'ghost' : ''}" href="${g.path}?new=1" data-new="${g.id}">▶ ${hasSave ? 'New game' : 'Play'}</a>
+          ${hasSave ? `<a class="btn cont" href="${g.path}?continue=1"><span class="bt1">⏯ ${t('card.continue')}</span> <span class="sr-meta">${esc(g.saveLabel(save))}</span></a>` : ''}
+          <a class="btn ${hasSave ? 'ghost' : 'play'}" href="${g.path}?new=1" data-new="${g.id}">${hasSave ? '↻ ' + t('card.new') : '<span class="play-ico" aria-hidden="true">▶</span> ' + t('card.play')}</a>
         </div>
-        <p class="classic">🕰️ Earlier editions: ${g.editions.map(ed => { const sv = live(HRS.store.get(ed.save)); return `<a href="${ed.path}${sv ? '?continue=1' : ''}">${ed.label}${sv ? ' · continue saved game' : ''}</a>`; }).join(' · ')}</p>
+        <div class="more-row">
+          <details class="more"><summary>ⓘ ${t('card.about')}</summary><div class="in"><p class="desc">${g.desc}</p><div class="learn"><h3>${t('card.learn')}</h3><ul>${g.learn.map(l => `<li>${l}</li>`).join('')}</ul></div><div class="meta"><span class="chip">🔁 ${g.turns}</span><span class="chip">⏱️ ${g.time}</span><span class="chip">👤 ${g.age}</span></div></div></details>
+          <details class="eds"><summary>${t('card.eds')}</summary><div class="in"><p class="classic">${g.editions.map(ed => { const sv = live(HRS.store.get(ed.save)); return `<a href="${ed.path}${sv ? '?continue=1' : ''}">${ed.label}${sv ? ` <span class="sv">· ${t('card.contSaved')}</span>` : ''}</a>`; }).join('')}</p></div></details>
+        </div>
       </div></article>`;
   }).join('');
+  HRS.store.set(SEEN_BEST, sig);
+  [...new Set(fresh)].forEach((id, k) => setTimeout(() => celebrate(document.querySelector(`.game[data-game="${id}"]`)), 450 + k * 300));
 }
+/* a small confetti burst on a card (skipped entirely with reduced motion) */
+const PALETTE = { viksit: ['#ff9933', '#ffffff', '#138808', '#1f2f9e', '#ffd34d'], sdg: ['#e5243b', '#dda63a', '#4c9f38', '#26bde2', '#fcc30b', '#dd1367', '#fd6925', '#0a97d9'] };
+function celebrate(card) {
+  if (!card) return;
+  HRS.buzz('success'); HRS.sfx('milestone'); HRS.announce(t('card.newBestSr'));
+  if (HRS.reduceMotion()) return;
+  const box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden', 'true');
+  const pal = PALETTE[card.dataset.game] || PALETTE.sdg;
+  for (let n = 0; n < 34; n++) {
+    const i = document.createElement('i'), a = Math.random() * Math.PI * 2, r = 90 + Math.random() * 170;
+    i.style.cssText = `--c:${pal[n % pal.length]};--x:${Math.cos(a) * r}px;--y:${Math.sin(a) * r * .8 + 120}px;--r:${(Math.random() * 720 - 360) | 0}deg;--d:${(Math.random() * 120) | 0}ms`;
+    box.appendChild(i);
+  }
+  card.appendChild(box); setTimeout(() => box.remove(), 1900);
+}
+/* tactile cards: tilt toward the pointer (mouse/pen hover), press-scale on touch; light haptic on buttons */
+const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+document.addEventListener('pointermove', e => {
+  if (!finePointer || HRS.reduceMotion()) return;
+  const c = e.target.closest && e.target.closest('.game'); document.querySelectorAll('.game').forEach(x => { if (x !== c) { x.style.removeProperty('--rx'); x.style.removeProperty('--ry'); } });
+  if (!c) return; const r = c.getBoundingClientRect(), px = (e.clientX - r.left) / r.width - .5, py = (e.clientY - r.top) / r.height - .5;
+  c.style.setProperty('--rx', (-py * 5).toFixed(2) + 'deg'); c.style.setProperty('--ry', (px * 6).toFixed(2) + 'deg');
+}, { passive: true });
+document.addEventListener('pointerleave', () => document.querySelectorAll('.game').forEach(x => { x.style.removeProperty('--rx'); x.style.removeProperty('--ry'); }));
+document.addEventListener('pointerdown', e => {
+  const b = e.target.closest && e.target.closest('.btn,.ib,.classic a,summary'); if (b) HRS.buzz('light');
+  const c = e.target.closest && e.target.closest('.game'); if (c && !HRS.reduceMotion()) { c.classList.add('pressed'); const up = () => { c.classList.remove('pressed'); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); }; addEventListener('pointerup', up); addEventListener('pointercancel', up); }
+}, { passive: true });
+document.addEventListener('toggle', e => { if (e.target.matches && e.target.matches('.game details') && e.target.open) e.target.closest('.game').querySelectorAll('details').forEach(d => { if (d !== e.target) d.open = false; }); }, true);
+/* greeting by time of day */
+function greet() {
+  const h = new Date().getHours(), [k, e] = h < 5 ? ['night', '🦉'] : h < 12 ? ['morning', '☀️'] : h < 17 ? ['afternoon', '🌤️'] : h < 22 ? ['evening', '🌆'] : ['night', '🌙'];
+  $('#greet').textContent = t('greet.' + k); $('#greetE').textContent = e;
+}
+greet();
+window.addEventListener('hrs-lang-change', () => { greet(); if (cur === 'home') renderGames(); const r = (location.hash || '#').slice(1); if (r && r !== 'home') document.title = t('title.' + (r === 'settings' ? 'settings' : ROUTES.includes(r) ? r : 'about')) + ' · Harpreet Raj Singh Games'; });
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-new]'); if (!a) return;
   const g = GAMES.find(x => x.id === a.dataset.new); const save = g.getSave ? g.getSave() : HRS.store.get(g.save);
   if (save && save.S && !save.S.over) {
     e.preventDefault();
-    confirmDlg('Start a new game?', `You have a saved ${g.title} game (${esc(g.saveLabel(save))}). Starting a new game will replace it.`, 'Start new game', () => { location.href = a.href; });
+    confirmDlg(t('dlg.newT'), esc(t('dlg.newP', { title: g.title, label: g.saveLabel(save) })), t('dlg.newOk'), () => { location.href = a.href; });
   }
 });
 
@@ -71,27 +109,59 @@ document.addEventListener('click', e => {
 let dlgPrev = null;
 function confirmDlg(title, text, okLabel, onOk) {
   dlgPrev = document.activeElement;
-  $('#dlgBox').innerHTML = `<h2 id="dlgT">${title}</h2><p>${text}</p><div class="row-btns"><button class="btn ghost" id="dlgNo">Cancel</button><button class="btn" id="dlgOk">${okLabel}</button></div>`;
+  $('#dlgBox').innerHTML = `<h2 id="dlgT">${title}</h2><p>${text}</p><div class="row-btns"><button class="btn ghost" id="dlgNo">${t('dlg.cancel')}</button><button class="btn" id="dlgOk">${okLabel}</button></div>`;
   $('#dlg').classList.remove('hidden'); $('#dlgNo').focus();
   $('#dlgNo').onclick = closeDlg; $('#dlgOk').onclick = () => { closeDlg(); onOk(); };
 }
 function closeDlg() { $('#dlg').classList.add('hidden'); if (dlgPrev) dlgPrev.focus(); }
 HRS.dialog({ overlay: $('#dlg'), box: $('#dlgBox'), isOpen: () => !$('#dlg').classList.contains('hidden'), isDismissible: () => true, close: closeDlg });
 
-/* routing */
-const ROUTES = ['home', 'about', 'settings', 'privacy'];
+/* routing: home / about / privacy are pages; settings is a bottom sheet over home */
+const ROUTES = ['home', 'about', 'privacy'];
 const HOME_TITLE = document.title; // SEO title from <head> (tools/seo.js)
+const wrap = $('#page-settings'), sheet = $('#sheet');
+let cur = null;
 function route() {
-  const r = (location.hash || '#').slice(1) || 'home', page = ROUTES.includes(r) ? r : (r === 'disclaimers' ? 'about' : 'home');
-  ROUTES.forEach(p => { $('#page-' + p).hidden = p !== page; });
-  document.querySelectorAll('[data-route]').forEach(a => { if (a.dataset.route === page) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-  if (page === 'home') renderGames();
-  if (page === 'settings') loadSettings();
-  document.title = page === 'home' ? HOME_TITLE : page[0].toUpperCase() + page.slice(1) + ' · Harpreet Raj Singh Games';
-  if (route.started) { $('#page-' + page).querySelector('h1').setAttribute('tabindex', '-1'); $('#page-' + page).querySelector('h1').focus(); window.scrollTo(0, 0); }
+  const r = (location.hash || '#').slice(1) || 'home';
+  const page = ROUTES.includes(r) ? r : (r === 'disclaimers' || r === 'whats-new') ? 'about' : 'home';
+  const changed = page !== cur; cur = page;
+  ROUTES.forEach(p => { const el = $('#page-' + p); el.hidden = p !== page; if (changed && p === page) { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; } });
+  document.querySelectorAll('[data-route]').forEach(a => { const on = a.dataset.route === (r === 'settings' ? 'settings' : page); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  if (page === 'home' && changed) renderGames();
+  if (r === 'settings') openSheet(); else if (!wrap.hidden) shutSheet();
+  document.title = page === 'home' && r !== 'settings' ? HOME_TITLE : t('title.' + (r === 'settings' ? 'settings' : page)) + ' · Harpreet Raj Singh Games';
+  if (route.started && changed) { const h = $('#page-' + page).querySelector('h1'); h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); window.scrollTo(0, 0); }
   route.started = true;
-  if (r === 'disclaimers') $('#disclaimers').scrollIntoView();
+  if (r === 'disclaimers' || r === 'whats-new') { $('#' + r).scrollIntoView(); if (r === 'whats-new') { HRS.store.set(SEEN_VER, VER); newDot(); } }
 }
+/* sheet */
+let shutT = 0;
+function openSheet() {
+  clearTimeout(shutT); loadSettings();
+  if (!wrap.hidden && wrap.classList.contains('open')) return;
+  wrap.hidden = false; wrap.style.removeProperty('--drag'); requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add('open')));
+  document.body.style.overflow = 'hidden';
+}
+function shutSheet() {
+  wrap.classList.remove('open', 'dragging'); sheet.style.removeProperty('--drag'); document.body.style.overflow = '';
+  clearTimeout(shutT); shutT = setTimeout(() => { wrap.hidden = true; }, HRS.reduceMotion() ? 0 : 320);
+}
+function closeSheet() { if ((location.hash || '') === '#settings') location.hash = ''; else shutSheet(); }
+wrap.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeSheet));
+HRS.dialog({ overlay: wrap, box: sheet, isOpen: () => !wrap.hidden && wrap.classList.contains('open'), isDismissible: () => true, close: closeSheet });
+// swipe down on the handle / header to dismiss
+(function drag() {
+  let y0 = null, dy = 0;
+  const start = e => { if (e.target.closest('button')) return; y0 = e.clientY; dy = 0; wrap.classList.add('dragging'); };
+  const move = e => { if (y0 == null) return; dy = Math.max(0, e.clientY - y0); sheet.style.setProperty('--drag', dy + 'px'); };
+  const end = () => { if (y0 == null) return; y0 = null; wrap.classList.remove('dragging'); sheet.style.removeProperty('--drag'); if (dy > 90) { HRS.buzz('light'); closeSheet(); } };
+  [$('#grab'), sheet.querySelector('.sheet-h')].forEach(h => { h.addEventListener('pointerdown', start); });
+  addEventListener('pointermove', move, { passive: true }); addEventListener('pointerup', end); addEventListener('pointercancel', end);
+})();
+/* "What's new" dot until the 1.3 notes are opened */
+const VER = ($('#ver') || {}).textContent || '', SEEN_VER = 'hrs_seen_whatsnew';
+function newDot() { $('#newBtn .dot').hidden = HRS.store.get(SEEN_VER) === VER; }
+newDot();
 window.addEventListener('hashchange', route);
 HRS.onBack(() => { if ((location.hash || '#') !== '#' && location.hash !== '#home') { location.hash = ''; return true; } return false; });
 
@@ -109,10 +179,13 @@ $('#s-motion').onchange = e => HRS.setSetting('reduceMotion', e.target.value ===
 $('#s-text').onchange = e => HRS.setSetting('textSize', e.target.value);
 $('#t-sound').onclick = () => { if (!HRS.settings().sound) { $('#dataMsg').textContent = ''; HRS.setSetting('sound', true); $('#s-sound').checked = true; } HRS.sfx('milestone'); };
 $('#t-vib').onclick = () => HRS.buzz('success');
-$('#resetTut').onclick = () => { ['hrs_tut_viksit_done', 'hrs_tut_sdg_done'].forEach(HRS.store.del); $('#dataMsg').textContent = 'Tutorials will show again the next time you start each game.'; };
-$('#wipe').onclick = () => confirmDlg('Delete saves & scores?', 'This removes in-progress games, best scores and tutorial progress from this device. Settings are kept. This cannot be undone.', 'Delete', () => {
-  ['hrs_save_viksit_v1', 'hrs_save_sdg_v1', 'hrs_best_viksit_v1', 'sdg2030_best_v1', 'hrs_tut_viksit_done', 'hrs_tut_sdg_done'].forEach(HRS.store.del);
-  $('#dataMsg').textContent = 'Deleted. Your device holds no game data now.';
+const DATA_KEY = /^(hrs_(save|best|tut)_|hrs_viksit_v2_imported$|hrs_seen_best$|sdg2030_best_v1$|sdg2030v2_(best|seen))/;
+const TUT_KEY = /^(hrs_tut_|sdg2030v2_seen)/;
+const keys = re => { const out = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (re.test(k)) out.push(k); } } catch (e) {} return out; };
+$('#resetTut').onclick = () => { keys(TUT_KEY).forEach(HRS.store.del); $('#dataMsg').textContent = t('msg.tut'); };
+$('#wipe').onclick = () => confirmDlg(t('dlg.delT'), t('dlg.delP'), t('dlg.delOk'), () => {
+  keys(DATA_KEY).forEach(HRS.store.del);
+  $('#dataMsg').textContent = t('msg.deleted'); renderGames();
 });
 /* iOS Safari install hint: only in Safari on iPhone/iPad, only when not already installed; dismissible (re-shows after 30 days) */
 (function iosHint() {
@@ -125,7 +198,7 @@ $('#wipe').onclick = () => confirmDlg('Delete saves & scores?', 'This removes in
 if (!HRS.canVibrate()) {
   const row = $('#s-vibration').closest('.set'); row.classList.add('unsupported');
   $('#s-vibration').disabled = true; $('#t-vib').disabled = true;
-  row.querySelector('small').textContent = HRS.isIOS ? 'Not available on iPhone/iPad browsers (Apple does not allow web vibration).' : 'Not supported on this device or browser.';
+  const old = row.querySelector('small'), sm = document.createElement('small'), k = HRS.isIOS ? 'vib.ios' : 'vib.no'; sm.dataset.i18n = k; sm.textContent = HRSI18N.D[k].en; old.replaceWith(sm); HRSI18N.apply(row);
 }
 route();
 })();

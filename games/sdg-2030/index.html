@@ -53,6 +53,7 @@
 <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="../../assets/splash/splash-1668x2388.png">
 <link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="../../assets/splash/splash-2048x2732.png">
 <!-- ios:end -->
+<meta name="hrs-langs" content="en,hi,pa">
 <link rel="manifest" href="../../manifest.webmanifest">
 <link rel="icon" href="../../assets/icons/icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../../css/hrs-common.css">
@@ -259,6 +260,54 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
   .mode{min-height:84px}.mode .me{font-size:28px}#intro{min-height:0}.sub{font-size:13.5px}
   .ov{padding:12px 14px 10px}.etitle{font-size:20px}.eline{font-size:12.5px}.erow .badge{font-size:40px}.estats{font-size:12.5px;margin-top:2px}.ghost{min-height:48px;margin-top:2px}.big{margin-top:6px}
 }
+/* ---------- languages (en / hi / pa): system fonts only, script-first stacks, room for matras ---------- */
+body{font-family:ui-rounded,"SF Pro Rounded","Nunito","Segoe UI",system-ui,-apple-system,Roboto,"Noto Sans Devanagari","Mukta","Hind","Kohinoor Devanagari","Nirmala UI","Mangal","Noto Sans Gurmukhi","Mukta Mahee","Gurmukhi MN","Raavi",sans-serif}
+html:lang(hi) body{font-family:ui-rounded,"SF Pro Rounded","Nunito","Noto Sans Devanagari","Mukta","Hind","Kohinoor Devanagari","Devanagari Sangam MN","Nirmala UI","Mangal","Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+html:lang(pa) body{font-family:ui-rounded,"SF Pro Rounded","Nunito","Noto Sans Gurmukhi","Mukta Mahee","Gurmukhi MN","Gurmukhi Sangam MN","Nirmala UI","Raavi","Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+[lang="hi"]{font-family:"Noto Sans Devanagari","Mukta","Hind","Kohinoor Devanagari","Nirmala UI","Mangal",sans-serif}
+[lang="pa"]{font-family:"Noto Sans Gurmukhi","Mukta Mahee","Gurmukhi MN","Nirmala UI","Raavi",sans-serif}
+/* letter-spacing breaks conjuncts and matras: none for Indic scripts */
+html:lang(hi) *,html:lang(pa) *{letter-spacing:0!important}
+html:lang(hi) .brand,html:lang(pa) .brand{font-size:12px;text-transform:none} /* brand name stays exactly "Harpreet Raj Singh™" */
+html:lang(hi) #qbox .ql,html:lang(pa) #qbox .ql{font-size:12px}
+html:lang(hi) .card .ti,html:lang(pa) .card .ti{line-height:1.3}
+html:lang(hi) .card .hi,html:lang(pa) .card .hi{line-height:1.35}
+html:lang(hi) #qbox .qq,html:lang(pa) #qbox .qq,html:lang(hi) #coach,html:lang(pa) #coach{line-height:1.45}
+html:lang(hi) #toast .tc,html:lang(pa) #toast .tc,html:lang(hi) .eline,html:lang(pa) .eline,html:lang(hi) #intro,html:lang(pa) #intro{line-height:1.4}
+html:lang(hi) .card .tag,html:lang(pa) .card .tag{font-size:10px;padding:1px 7px}
+html:lang(hi) .etitle,html:lang(pa) .etitle{line-height:1.25}
+/* longer strings wrap instead of overflowing */
+.card .ti,.card .hi,.card .later,.mode .mn,.mode .ma,#toast .tt,#toast .tc,.estats span,.etitle,.eline,#qbox .qq{overflow-wrap:anywhere}
+.card .later{max-width:100%}
+.mode .mn{line-height:1.15;text-align:center}
+.pop{max-width:92vw}
+.pop.k{white-space:normal;text-align:center;width:max-content;max-width:min(92vw,340px)}
+#tip{width:max-content}
+/* ---------- language picker (standalone only; hidden inside HRS Games) ---------- */
+#langBtn{font-size:14px;font-weight:900}
+#langMenu{position:absolute;top:calc(max(8px,env(safe-area-inset-top)) + 52px);right:max(10px,env(safe-area-inset-right));z-index:45;display:flex;flex-direction:column;gap:4px;padding:6px;background:#fff;border-radius:18px;box-shadow:0 10px 30px rgba(22,50,63,.25);animation:pin .25s cubic-bezier(.2,1.4,.4,1)}
+#langMenu.hide{display:none}
+#langMenu button{display:flex;align-items:center;gap:10px;min-height:48px;min-width:150px;padding:0 14px;border-radius:12px;font-size:16px;text-align:left}
+#langMenu button b{min-width:30px;font-weight:900}
+#langMenu button.on{background:#dcf8e3;color:#1c6b37}
+#langs[hidden]{display:none}
+#langs{display:inline-flex;gap:3px;vertical-align:top;margin-top:10px;height:48px}
+#langs button{min-width:48px;height:48px;padding:0 9px;border-radius:24px;font-size:15px;font-weight:900;background:#f2f6f8;color:rgba(22,50,63,.75)}
+#langs button.on{background:#fff;opacity:1;box-shadow:0 0 0 2px #1f9a4b}
+/* narrow phones: 4 round buttons in the top bar; the date wraps to two short lines */
+@media (max-width:420px){
+  body.has-lang #top{gap:6px}
+  body.has-lang #date{font-size:14px;line-height:1.1;min-width:0;max-width:5.6em}
+}
+@media (max-height:700px) and (orientation:portrait){#langs{margin-top:6px}}
+.relang .card{animation:none}
+#langs{align-self:center}
+@media (orientation:landscape) and (max-height:500px){#langs{display:none!important}} /* short landscape: the top-bar language button stays visible above the title */
+/* Indic kids cards: titles often wrap to two lines, so trim the emoji and keep everything inside the card */
+html:lang(hi) .mode-kids .card .em,html:lang(pa) .mode-kids .card .em{font-size:44px}
+html:lang(hi) .mode-kids .card .ti,html:lang(pa) .mode-kids .card .ti{font-size:16px;line-height:1.25}
+html:lang(hi) .mode-kids .card .hi,html:lang(pa) .mode-kids .card .hi{font-size:12.5px}
+html:lang(hi) .card .later,html:lang(pa) .card .later{line-height:1.3}
 
 /* ---- HRS app additions ---- */
 .ibtn.hrs-home{text-decoration:none;color:inherit;font-size:16px;min-width:0;min-height:0}
@@ -268,8 +317,8 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
 #help .ghostb{margin-top:14px;padding:11px 22px;border-radius:30px;border:2px solid #1f9a4b;color:#1f7a3f;font-weight:800;font-size:16px}
 .big.cont{background:linear-gradient(180deg,#3aa0ff,#1f6fd1);box-shadow:0 6px 0 #1857a8,0 10px 20px rgba(31,111,209,.35);margin-left:6px}
 .big.cont.hide{display:none}
-.tlinks{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:6px;font-size:12.5px;font-weight:700}
-.tlinks a{color:inherit;opacity:.7;padding:6px 2px}
+.tlinks{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px;font-size:12.5px;font-weight:700}
+.tlinks a{display:inline-flex;align-items:center;gap:5px;min-height:44px;padding:0 11px;border-radius:999px;background:rgba(106,43,255,.08);border:1px solid rgba(106,43,255,.2);color:#4a1fb8;text-decoration:none}.tlinks a:first-child{background:linear-gradient(115deg,#5b21e6,#d1146b);color:#fff;border-color:transparent}.tlinks a:active{transform:scale(.96)}
 .disc{font-size:10.5px;opacity:.55;margin-top:2px}
 .dot img.emoji,.ibtn img.emoji{pointer-events:none}
 </style>
@@ -280,10 +329,12 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     <a class="ibtn hrs-home" href="../../index.html" id="homeBtn" aria-label="Home: all games" title="All games">🏠</a>
     <div id="date">Jan 2026</div>
     <div id="timeline" aria-hidden="true"></div>
+    <button class="ibtn" id="langBtn" aria-label="Language" aria-haspopup="true" aria-expanded="false" hidden>EN</button>
     <button class="ibtn" id="hapBtn" aria-label="Vibration" hidden>📳</button>
     <button class="ibtn" id="sndBtn" aria-label="Sound">🔇</button>
     <button class="ibtn" id="helpBtn" aria-label="How to play">?</button>
   </header>
+  <div id="langMenu" class="hide" role="group" aria-label="Language"></div>
   <div id="meters"></div>
   <div id="stage">
     <canvas id="world" aria-label="Your world"></canvas>
@@ -305,8 +356,9 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     <button class="big pulse" id="playBtn">▶ Play</button><button class="big cont hide" id="contBtn">⏯ Continue</button>
     <div class="best" id="bestT"></div>
     <button class="link" id="howBtn">How to play</button>
-    <div class="tlinks"><a href="../../index.html">🏠 All games</a><a href="../sdg-2030-classic/">Classic edition</a><a href="../../about.html">About</a><a href="../../privacy.html">Privacy</a></div>
+    <div class="tlinks"><a href="../../index.html">🏠 All games</a><a href="../sdg-2030-classic/">🕰️ Classic</a><a href="../../about.html">About</a><a href="../../privacy.html">Privacy</a></div>
     <div class="disc">Independent educational game. Not affiliated with the United Nations.</div>
+    <div id="langs" role="group" aria-label="Language" hidden></div>
   </section>
   <section class="ov hide" id="end" aria-live="polite"></section>
 </div>
@@ -788,6 +840,667 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
+<script id="i18n">
+/* SDG 2030 — i18n core (en / hi / pa). English data comes straight from the engine (single source of truth);
+   UI strings live here. Hindi and Punjabi dictionaries are added by lang-hi.js / lang-pa.js.
+   Keys are stable IDs; game state never stores translated text. A game by Harpreet Raj Singh™. */
+(function (root) {
+  'use strict';
+  const LANGS = ['en', 'hi', 'pa'];
+  const UI_EN = {
+    'brand.presents': 'Harpreet Raj Singh™ presents', 'brand.by': 'A game by Harpreet Raj Singh™', 'foot': 'SDG 2030 · a game by Harpreet Raj Singh™',
+    'doc.desc': 'Heal the world by 2030: a tiny, playful game about the 17 UN Sustainable Development Goals. A game by Harpreet Raj Singh™.',
+    'sub': 'Heal the world. Who\'s playing?', 'play': '▶ Play', 'how': 'How to play',
+    'aria.modes': 'Choose an age mode', 'aria.hap': 'Vibration', 'aria.snd': 'Sound', 'aria.help': 'How to play', 'aria.world': 'Your world', 'aria.lang': 'Language', 'aria.close': 'Close',
+    'hap.on': 'Vibration on', 'hap.off': 'Vibration off',
+    'best': '🏆 Best: {g}/17 · {title}', 'best.none': 'No best score yet',
+    'tip.meter': '{e} {name}: {v}', 'tip.keep': ' · keep it above zero',
+    'aria.goal': 'Goal {n}: {name}', 'tip.goalpct': '(goal {g}%)', 'pop.goal': '🎯 Goal {n}!', 'pop.lost': 'lost',
+    'el.now': 'now', 'el.tip.now': '🗳️ Election at the end of this season', 'el.tip.in': '🗳️ Election in {n} seasons', 'el.tip.in_1': '🗳️ Election in 1 season',
+    'el.tip.bar': 'Public trust must be {bar}+ or you are voted out',
+    'tipped.chip': 'tipped', 'tipped.tip': '🧊 Tipping point crossed: ecosystems now degrade on their own and climate shocks hit harder',
+    'vague.tip': '⛈️ {n} shortcuts will come back to bite…', 'vague.tip_1': '⛈️ 1 shortcut will come back to bite…', 'vague.sub': 'You won\'t know when or how until it lands',
+    'aria.storm': 'Storm in {n}', 'aria.reward': 'Reward in {n}',
+    'chip.in': '{e} <b>{t}</b> in {n} seasons', 'chip.in_1': '{e} <b>{t}</b> next season', 'chip.in.k': '{e} <b>{t}</b> in {n} turns', 'chip.in.k_1': '{e} <b>{t}</b> next turn',
+    'chip.why': 'because you chose {e} {t}', 'chip.why.k': 'because you picked {e} {t}',
+    'tag.quick': '⚡ Quick win', 'tag.sus': '🌱 Sustainable', 'tag.fun': '⚡ Fun now', 'tag.earth': '🌱 Good for Earth',
+    'stamp.storm': '⏳ {e} in {n}', 'stamp.seed': '🌱 {e} in {n}', 'stamp.kwarn': '⚠️ Might cause a problem later!', 'stamp.kbonus': '🎁 {e} bonus soon',
+    'stamp.risk': '⚠️ risk later', 'stamp.pays': '🌱 pays back later', 'need': 'Need {e}{n}',
+    'aria.card.short': 'Shortcut: something bad may happen later.', 'aria.card.sus': 'Sustainable.',
+    'mo.quiz': '🧠 Quick quiz', 'mo.eq': '💛 Feelings moment', 'mo.hard': '⚖️ Hard call', 'mo.dil': '⚖️ Dilemma',
+    'nomoney': 'Not enough {e}: try a card that raises money',
+    'pop.bonus': '🎁 Bonus in {n} turns!', 'pop.bonus_1': '🎁 Bonus next turn!', 'pop.pays': '🌱 pays back later',
+    'pop.kid0': 'Great choice! 🌟', 'pop.kid1': 'Nice! 💚', 'pop.kid2': 'Super kind! 🌈', 'pop.kid3': 'The planet says thanks! 🌍',
+    'pop.uhoh': '⛈️ Uh-oh… {e} {t} in {n} turns', 'pop.uhoh_1': '⛈️ Uh-oh… {e} {t} next turn', 'pop.mayback': '⚠️ That may come back…',
+    'ans.correct': 'Correct!', 'ans.timeup': 'Time\'s up!', 'ans.notquite': 'Not quite', 'ans.answer': 'Answer: <b>{a}</b>.',
+    'ans.kind': 'That was kind!', 'ans.principled': 'Principled call', 'ans.hmm': 'Hmm…', 'ans.expedient': 'Expedient call',
+    'storm.why': 'because you chose {e} <b>{t}</b> · {d}', 'storm.why.k': 'because you picked {e} <b>{t}</b> · {d}', 'storm.why.a': 'consequence of {e} <b>{t}</b> · {d}',
+    'storm.kid': 'Choices can cause problems later. Try a 🌱 one next time!', 'bloom.why': 'thanks to {e} <b>{t}</b> · {d}',
+    'tipping.t': 'Tipping point crossed', 'tipping.b': 'Ecosystems now degrade on their own, and climate shocks hit harder. There is no undo.',
+    'elsoon.t': 'Election this season', 'elsoon.b': 'Public trust must be <b>{bar}+</b> when the season ends.',
+    'el.won': 'Re-elected!', 'el.lost': 'Election lost', 'el.b': 'Public trust {h} (needed {bar})',
+    'reck.k': 'Last turn: leftover surprises!', 'reck': '2030: the bills arrive', 'reck.b': '{n} delayed effects land now', 'reck.b_1': '1 delayed effect lands now',
+    'end.over': 'Game over in {d}.', 'end.goals': ' / 17 goals',
+    'st.good': '🌱 {n} sustainable', 'st.quick': '⚡ {n} shortcuts', 'st.storms': '⛈️ {n} storms', 'st.quiz': '🧠 {a}/{b} quiz', 'st.kind': '💛 {a}/{b} kind', 'st.princ': '🧭 {a}/{b} principled',
+    'end.newbest': '★ New {m} best!', 'again': '↻ Play again', 'end.change': '{e} {m} · change',
+    'coach.kids': '👆 <b>Tap a card</b> to choose. You get 2 choices each turn.<br>⚠️ Some fun choices cause problems later.<br>🎯 Fill the <b>17 coloured dots</b> to help the planet!',
+    'coach.college': '👆 <b>Tap or swipe up</b> a card: one choice per season.<br>⚡ Quick wins pay now, but you won\'t know <i>when</i> the bill lands.<br>🎯 Fill the <b>17 SDG dots</b> (70%) by 2030.',
+    'coach.adults': '👆 <b>Tap or swipe up</b> a card each quarter.<br>No labels, no warnings: read the trade-offs.<br>🗳️ Elections in 2028 and 2030. 🎯 17 goals at 70%.',
+    'help.kids.0.t': 'Help your planet', 'help.kids.0.b': 'You have 10 turns. Each turn, tap one of 2 cards and watch your planet change!',
+    'help.kids.1.t': 'Fun now, problem later', 'help.kids.1.b': 'Some cards are fun right now but cause a problem a little later. 🌱 cards help the Earth.',
+    'help.kids.2.t': 'Be kind and clever', 'help.kids.2.b': 'Answer feelings questions and quick quizzes. Fill the 17 coloured dots to become an Earth Superhero!',
+    'help.college.0.t': '16 seasons to 2030', 'help.college.0.b': 'Each season, pick one of 3 cards. Your planet shows the result.',
+    'help.college.1.t': 'Hidden bills', 'help.college.1.b': 'Quick wins pay now and land a consequence later. You only learn when and how when it hits.',
+    'help.college.2.t': 'Quizzes and dilemmas', 'help.college.2.b': 'Answer timed SDG quizzes for bonuses, and make ethical calls. Fill 11+ of 17 goals (70%) to win.',
+    'help.adults.0.t': 'Full mandate', 'help.adults.0.b': '20 quarters, 3 options each. No labels: every option has costs, and some costs are delayed.',
+    'help.adults.1.t': 'Stakes', 'help.adults.1.b': 'Elections in 2028 and 2030 need public trust 38+. Let ecosystems fall below 30 and a permanent tipping point kicks in.',
+    'help.adults.2.t': 'Deliver Agenda 2030', 'help.adults.2.b': 'Reach 11+ of 17 goals at 70% without collapsing the treasury, trust, ecosystems or stability.',
+    'help.next': 'Next', 'help.got': 'Got it',
+    'date': '{m} {y}',
+    'mon.0': 'Jan', 'mon.1': 'Feb', 'mon.2': 'Mar', 'mon.3': 'Apr', 'mon.4': 'May', 'mon.5': 'Jun', 'mon.6': 'Jul', 'mon.7': 'Aug', 'mon.8': 'Sep', 'mon.9': 'Oct', 'mon.10': 'Nov', 'mon.11': 'Dec',
+    // strings for the HRS Games layer (the game shims them in; the app may also use __sdg2i18n.t directly)
+    'hrs.continue': '⏯ Continue', 'hrs.new': '▶ New', 'hrs.welcome': '💾 Welcome back! {d}, {unit} {n} of {T}', 'hrs.turn': 'turn', 'hrs.season': 'season',
+    'hrs.startq': 'Start a new game?', 'hrs.replaced': 'Your saved game ({d}) will be replaced.', 'hrs.cancel': 'Cancel', 'hrs.startnew': 'Start new',
+    'hrs.allgames': '🏠 All games', 'hrs.classic': '🕰️ Classic', 'hrs.about': 'About', 'hrs.privacy': 'Privacy', 'hrs.home': 'Home: all games',
+    'hrs.disc': 'Independent educational game. Not affiliated with the United Nations.',
+    'mode.classic.name': 'Classic', // pre-modes saves (engine name, shown on the end screen)
+  };
+  // language picker labels are the same in every language (each in its own script)
+  const SAME = { 'lang.en': 'EN', 'lang.hi': 'हिं', 'lang.pa': 'ਪੰ', 'lang.en.n': 'English', 'lang.hi.n': 'हिन्दी', 'lang.pa.n': 'ਪੰਜਾਬੀ' };
+
+  // every translatable string the engine shows, keyed by stable IDs
+  function engineStrings(E) {
+    const o = {};
+    E.SDG.forEach((g, i) => { o['sdg.' + (i + 1)] = g[0]; o['sdgl.' + (i + 1)] = g[3]; o['sdgk.' + (i + 1)] = E.SDG_KID[i]; });
+    o['met.base.m'] = E.METERS.m[1]; o['met.base.h'] = E.METERS.h[1]; o['met.base.p'] = E.METERS.p[1]; o['met.base.w'] = E.METERS.w[1];
+    for (const k of E.MODE_KEYS.concat(['classic'])) {
+      const m = E.MODES[k];
+      if (k !== 'classic') { o[`mode.${k}.name`] = m.name; o[`mode.${k}.ages`] = m.ages; }
+      o[`mode.${k}.intro`] = m.intro;
+      if (m.meters !== E.METERS) for (const q of ['m', 'h', 'p', 'w']) o[`met.${k}.${q}`] = m.meters[q][1];
+      for (const e in m.endings) { o[`end.${k}.${e}.t`] = m.endings[e][1]; o[`end.${k}.${e}.l`] = m.endings[e][2]; }
+    }
+    for (const id in E.CARD) {
+      const c = E.CARD[id]; o[`c.${id}.t`] = c.t; o[`c.${id}.h`] = c.h;
+      const base = id.startsWith('a_') && E.CARD[id.slice(2)];
+      if (c.later && !(base && base.later === c.later)) o[`c.${id}.l`] = c.later.t;
+    }
+    for (const p in E.MOMENT_POOL) for (const mo of E.MOMENT_POOL[p]) {
+      o[`m.${mo.id}.q`] = mo.q;
+      mo.opts.forEach((op, i) => { o[`m.${mo.id}.o${i}`] = op[1]; if (op[5]) o[`m.${mo.id}.f${i}`] = op[5]; });
+      if (mo.fact) o[`m.${mo.id}.fact`] = mo.fact;
+    }
+    // world events: title + every "why" line (run with a struggling and a thriving world to enumerate variants)
+    const fake = v => ({ m: v, h: v, p: v, w: v, sdg: new Array(17).fill(v), mode: 'college' });
+    for (const ev of E.EVENTS) {
+      o[`ev.${ev.id}.t`] = ev.t;
+      const seen = [];
+      for (const v of [10, 90]) { const r = ev.run(fake(v)); for (const s of [r.why, r.kid]) if (s && !seen.includes(s)) seen.push(s); }
+      seen.forEach((s, i) => { o[`ev.${ev.id}.w${i}`] = s; });
+    }
+    return o;
+  }
+
+  const I = root.SDG2_I18N = root.SDG2_I18N || {};
+  I.LANGS = LANGS; I.UI_EN = UI_EN; I.SAME = SAME; I.engineStrings = engineStrings; I.L = I.L || {};
+  let EN = null;
+  I.en = E => (EN = EN || Object.assign({}, UI_EN, engineStrings(E || root.SDG2), SAME));
+  I.make = function (E) {
+    const en = I.en(E);
+    let lang = 'en';
+    const fill = (s, v) => (v ? String(s).replace(/\{(\w+)\}/g, (m, k) => (v[k] != null ? v[k] : m)) : s);
+    const raw = key => { const d = I.L[lang]; let s = d && d[key]; if (s == null) s = SAME[key]; if (s == null) s = en[key]; return s == null ? key : s; };
+    const t = (key, v) => fill(raw(key), v);
+    const tn = (key, n, v) => t(n === 1 && en[key + '_1'] != null ? key + '_1' : key, Object.assign({ n }, v));
+    const has = key => en[key] != null;
+    // reverse lookup for English text produced by the engine (event "why" lines, stored best-score titles)
+    const back = (prefix, s) => { for (const k in en) if (k.startsWith(prefix) && en[k] === s) return k; return null; };
+    return { t, tn, has, back, en, get lang() { return lang; }, set lang(l) { lang = LANGS.includes(l) ? l : 'en'; } };
+  };
+  if (typeof module !== 'undefined') module.exports = I;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* SDG 2030 — हिन्दी (hi). Natural, conversational Hindi; kids mode uses "तुम" and very simple words, college/adults use "आप". */
+(function (root) {
+  const I = root.SDG2_I18N = root.SDG2_I18N || {}; I.L = I.L || {};
+  I.L.hi = {
+    // ---- UI ----
+    "brand.presents": "Harpreet Raj Singh™ प्रस्तुत करते हैं", "brand.by": "Harpreet Raj Singh™ का एक गेम", "foot": "SDG 2030 · Harpreet Raj Singh™ का एक गेम",
+    "doc.desc": "2030 तक दुनिया को ठीक करो: संयुक्त राष्ट्र के 17 सतत विकास लक्ष्यों पर एक छोटा, मज़ेदार गेम। Harpreet Raj Singh™ का एक गेम।",
+    "sub": "दुनिया को ठीक करो। कौन खेल रहा है?", "play": "▶ खेलें", "how": "कैसे खेलें",
+    "aria.modes": "उम्र के हिसाब से मोड चुनें", "aria.hap": "कंपन", "aria.snd": "आवाज़", "aria.help": "कैसे खेलें", "aria.world": "आपकी दुनिया", "aria.lang": "भाषा", "aria.close": "बंद करें",
+    "hap.on": "कंपन चालू", "hap.off": "कंपन बंद",
+    "best": "🏆 सबसे अच्छा: {g}/17 · {title}", "best.none": "अभी कोई रिकॉर्ड नहीं",
+    "tip.meter": "{e} {name}: {v}", "tip.keep": " · इसे शून्य से ऊपर रखें",
+    "aria.goal": "लक्ष्य {n}: {name}", "tip.goalpct": "(लक्ष्य {g}%)", "pop.goal": "🎯 लक्ष्य {n}!", "pop.lost": "छूट गया",
+    "el.now": "अभी", "el.tip.now": "🗳️ इस सीज़न के आख़िर में चुनाव", "el.tip.in": "🗳️ {n} सीज़न बाद चुनाव", "el.tip.in_1": "🗳️ अगले सीज़न चुनाव",
+    "el.tip.bar": "जनता का भरोसा {bar}+ होना चाहिए, वरना आप चुनाव हार जाएँगे",
+    "tipped.chip": "सीमा पार", "tipped.tip": "🧊 टिपिंग पॉइंट पार: पारितंत्र अब अपने-आप बिगड़ रहे हैं और जलवायु के झटके ज़्यादा ज़ोरदार हैं",
+    "vague.tip": "⛈️ {n} शॉर्टकट पलटकर वार करेंगे…", "vague.tip_1": "⛈️ 1 शॉर्टकट पलटकर वार करेगा…", "vague.sub": "कब और कैसे, यह तभी पता चलेगा जब असर होगा",
+    "aria.storm": "{n} में तूफ़ान", "aria.reward": "{n} में इनाम",
+    "chip.in": "{e} <b>{t}</b>: {n} सीज़न बाद", "chip.in_1": "{e} <b>{t}</b>: अगले सीज़न", "chip.in.k": "{e} <b>{t}</b>: {n} बारी बाद", "chip.in.k_1": "{e} <b>{t}</b>: अगली बारी",
+    "chip.why": "क्योंकि आपने {e} {t} चुना", "chip.why.k": "क्योंकि तुमने {e} {t} चुना",
+    "tag.quick": "⚡ झटपट फ़ायदा", "tag.sus": "🌱 टिकाऊ", "tag.fun": "⚡ अभी मज़ा", "tag.earth": "🌱 धरती के लिए अच्छा",
+    "stamp.storm": "⏳ {n} में {e}", "stamp.seed": "🌱 {n} में {e}", "stamp.kwarn": "⚠️ बाद में मुसीबत आ सकती है!", "stamp.kbonus": "🎁 जल्द {e} बोनस",
+    "stamp.risk": "⚠️ बाद में ख़तरा", "stamp.pays": "🌱 बाद में फ़ायदा", "need": "{e}{n} चाहिए",
+    "aria.card.short": "शॉर्टकट: बाद में कुछ बुरा हो सकता है।", "aria.card.sus": "टिकाऊ।",
+    "mo.quiz": "🧠 झटपट क्विज़", "mo.eq": "💛 दिल की बात", "mo.hard": "⚖️ कठिन फ़ैसला", "mo.dil": "⚖️ दुविधा",
+    "nomoney": "{e} कम है: ऐसा कार्ड चुनें जिससे पैसा आए",
+    "pop.bonus": "🎁 {n} बारी में बोनस!", "pop.bonus_1": "🎁 अगली बारी में बोनस!", "pop.pays": "🌱 बाद में फ़ायदा",
+    "pop.kid0": "बढ़िया चुनाव! 🌟", "pop.kid1": "वाह! 💚", "pop.kid2": "बहुत अच्छे! 🌈", "pop.kid3": "धरती कहती है शुक्रिया! 🌍",
+    "pop.uhoh": "⛈️ अरे… {n} बारी में {e} {t}", "pop.uhoh_1": "⛈️ अरे… अगली बारी में {e} {t}", "pop.mayback": "⚠️ यह पलटकर आ सकता है…",
+    "ans.correct": "सही जवाब!", "ans.timeup": "समय ख़त्म!", "ans.notquite": "सही नहीं", "ans.answer": "जवाब: <b>{a}</b>।",
+    "ans.kind": "कितना अच्छा किया!", "ans.principled": "उसूलों वाला फ़ैसला", "ans.hmm": "हम्म…", "ans.expedient": "सुविधा वाला फ़ैसला",
+    "storm.why": "क्योंकि आपने {e} <b>{t}</b> चुना था · {d}", "storm.why.k": "क्योंकि तुमने {e} <b>{t}</b> चुना था · {d}", "storm.why.a": "{e} <b>{t}</b> का नतीजा · {d}",
+    "storm.kid": "कुछ फ़ैसलों से बाद में मुसीबत आती है। अगली बार 🌱 वाला चुनो!", "bloom.why": "{e} <b>{t}</b> की बदौलत · {d}",
+    "tipping.t": "टिपिंग पॉइंट पार", "tipping.b": "पारितंत्र अब अपने-आप बिगड़ेंगे और जलवायु के झटके ज़्यादा ज़ोरदार होंगे। इसे पलटा नहीं जा सकता।",
+    "elsoon.t": "इस सीज़न चुनाव है", "elsoon.b": "सीज़न ख़त्म होने पर जनता का भरोसा <b>{bar}+</b> होना चाहिए।",
+    "el.won": "फिर से चुने गए!", "el.lost": "चुनाव हार गए", "el.b": "जनता का भरोसा {h} (ज़रूरी {bar})",
+    "reck.k": "आख़िरी बारी: बचे हुए सरप्राइज़!", "reck": "2030: अब बिल चुकाने की बारी", "reck.b": "{n} रुके हुए असर अब सामने आ रहे हैं", "reck.b_1": "1 रुका हुआ असर अब सामने आ रहा है",
+    "end.over": "{d} में खेल ख़त्म।", "end.goals": " / 17 लक्ष्य",
+    "st.good": "🌱 {n} टिकाऊ", "st.quick": "⚡ {n} शॉर्टकट", "st.storms": "⛈️ {n} तूफ़ान", "st.quiz": "🧠 {a}/{b} क्विज़", "st.kind": "💛 {a}/{b} दयालु", "st.princ": "🧭 {a}/{b} उसूली",
+    "end.newbest": "★ {m} का नया रिकॉर्ड!", "again": "↻ फिर से खेलें", "end.change": "{e} {m} · बदलें",
+    "coach.kids": "👆 चुनने के लिए <b>कार्ड पर टैप करो</b>। हर बारी में 2 विकल्प मिलेंगे।<br>⚠️ कुछ मज़ेदार कार्ड बाद में मुसीबत लाते हैं।<br>🎯 धरती की मदद के लिए <b>17 रंगीन बिंदु</b> भरो!",
+    "coach.college": "👆 कार्ड पर <b>टैप करें या ऊपर स्वाइप करें</b>: हर सीज़न एक फ़ैसला।<br>⚡ झटपट फ़ायदे अभी मिलते हैं, पर बिल <i>कब</i> आएगा, पता नहीं।<br>🎯 2030 तक <b>17 SDG बिंदु</b> (70%) भरें।",
+    "coach.adults": "👆 हर तिमाही एक कार्ड पर <b>टैप करें या ऊपर स्वाइप करें</b>।<br>न लेबल, न चेतावनी: फ़ायदे-नुक़सान ख़ुद परखें।<br>🗳️ 2028 और 2030 में चुनाव। 🎯 17 लक्ष्य, 70% पर।",
+    "help.kids.0.t": "अपनी धरती की मदद करो", "help.kids.0.b": "तुम्हारे पास 10 बारी हैं। हर बारी में 2 में से 1 कार्ड पर टैप करो और देखो धरती कैसे बदलती है!",
+    "help.kids.1.t": "अभी मज़ा, बाद में मुसीबत", "help.kids.1.b": "कुछ कार्ड अभी मज़ेदार हैं, पर थोड़ी देर बाद मुसीबत लाते हैं। 🌱 वाले कार्ड धरती की मदद करते हैं।",
+    "help.kids.2.t": "दयालु और समझदार बनो", "help.kids.2.b": "दिल की बातों और झटपट क्विज़ के जवाब दो। 17 रंगीन बिंदु भरो और धरती के सुपरहीरो बनो!",
+    "help.college.0.t": "2030 तक 16 सीज़न", "help.college.0.b": "हर सीज़न 3 में से 1 कार्ड चुनें। आपकी धरती नतीजा दिखाएगी।",
+    "help.college.1.t": "छिपे हुए बिल", "help.college.1.b": "झटपट फ़ायदे अभी पैसा देते हैं और बाद में नतीजा भुगतवाते हैं। कब और कैसे, यह असर होने पर ही पता चलेगा।",
+    "help.college.2.t": "क्विज़ और दुविधाएँ", "help.college.2.b": "बोनस के लिए समय-सीमा वाले SDG क्विज़ हल करें और नैतिक फ़ैसले लें। जीतने के लिए 17 में से 11+ लक्ष्य (70%) भरें।",
+    "help.adults.0.t": "पूरा कार्यकाल", "help.adults.0.b": "20 तिमाहियाँ, हर बार 3 विकल्प। कोई लेबल नहीं: हर विकल्प की क़ीमत है, और कुछ क़ीमतें बाद में चुकानी पड़ती हैं।",
+    "help.adults.1.t": "दाँव पर क्या है", "help.adults.1.b": "2028 और 2030 के चुनावों में जनता का भरोसा 38+ चाहिए। पारितंत्र 30 से नीचे गए तो स्थायी टिपिंग पॉइंट शुरू हो जाएगा।",
+    "help.adults.2.t": "एजेंडा 2030 पूरा करें", "help.adults.2.b": "ख़ज़ाना, भरोसा, पारितंत्र या स्थिरता को ढहाए बिना 17 में से 11+ लक्ष्य 70% पर पहुँचाएँ।",
+    "help.next": "आगे", "help.got": "ठीक है",
+    "date": "{m} {y}",
+    "mon.0": "जनवरी", "mon.1": "फ़रवरी", "mon.2": "मार्च", "mon.3": "अप्रैल", "mon.4": "मई", "mon.5": "जून", "mon.6": "जुलाई", "mon.7": "अगस्त", "mon.8": "सितंबर", "mon.9": "अक्टूबर", "mon.10": "नवंबर", "mon.11": "दिसंबर",
+    "hrs.continue": "⏯ जारी रखें", "hrs.new": "▶ नया गेम", "hrs.welcome": "💾 फिर से स्वागत है! {d}, {unit} {n}/{T}", "hrs.turn": "बारी", "hrs.season": "सीज़न",
+    "hrs.startq": "नया गेम शुरू करें?", "hrs.replaced": "आपका सेव किया गेम ({d}) हट जाएगा।", "hrs.cancel": "रद्द करें", "hrs.startnew": "नया शुरू करें",
+    "hrs.allgames": "🏠 सभी गेम", "hrs.classic": "🕰️ क्लासिक", "hrs.about": "परिचय", "hrs.privacy": "गोपनीयता", "hrs.home": "होम: सभी गेम",
+    "hrs.disc": "स्वतंत्र शैक्षिक गेम। संयुक्त राष्ट्र से संबद्ध नहीं।", "mode.classic.name": "क्लासिक",
+
+    // ---- 17 goals (official Hindi names, shortened where the English is short) ----
+    "sdg.1": "गरीबी उन्मूलन", "sdg.2": "शून्य भुखमरी", "sdg.3": "उत्तम स्वास्थ्य", "sdg.4": "गुणवत्तापूर्ण शिक्षा", "sdg.5": "लैंगिक समानता", "sdg.6": "स्वच्छ जल",
+    "sdg.7": "स्वच्छ ऊर्जा", "sdg.8": "सम्मानजनक काम", "sdg.9": "उद्योग और नवाचार", "sdg.10": "असमानता में कमी", "sdg.11": "टिकाऊ शहर", "sdg.12": "ज़िम्मेदार उपभोग",
+    "sdg.13": "जलवायु कार्रवाई", "sdg.14": "जलीय जीवन", "sdg.15": "भूमि पर जीवन", "sdg.16": "शांति और न्याय", "sdg.17": "लक्ष्यों के लिए साझेदारी",
+    "sdgl.1": "किसी के पास ज़रूरत से कम न हो", "sdgl.2": "सबके लिए भरपूर अच्छा खाना", "sdgl.3": "हर उम्र में स्वस्थ जीवन", "sdgl.4": "हर बच्चा अच्छे स्कूल में",
+    "sdgl.5": "महिलाओं और लड़कियों को बराबर अधिकार", "sdgl.6": "सबके लिए सुरक्षित पानी और शौचालय", "sdgl.7": "सस्ती, साफ़ बिजली", "sdgl.8": "अच्छी नौकरियाँ और न्यायसंगत विकास",
+    "sdgl.9": "आधुनिक, हरित बुनियादी ढाँचा", "sdgl.10": "सबको उचित हिस्सा", "sdgl.11": "सुरक्षित, साफ़, रहने लायक़ शहर", "sdgl.12": "कम बर्बादी, समझदारी से इस्तेमाल",
+    "sdgl.13": "उत्सर्जन घटाओ, गर्मी से निपटो", "sdgl.14": "स्वस्थ समुद्र और तट", "sdgl.15": "जंगल और वन्यजीव फलें-फूलें", "sdgl.16": "शांति, निष्पक्ष अदालतें, भ्रष्टाचार नहीं", "sdgl.17": "देश मिलकर काम करें",
+    "sdgk.1": "कोई ग़रीब न हो", "sdgk.2": "कोई भूखा न रहे", "sdgk.3": "सब स्वस्थ रहें", "sdgk.4": "हर बच्चा स्कूल जाए", "sdgk.5": "लड़के-लड़कियों को बराबर मौका",
+    "sdgk.6": "सबके लिए साफ़ पानी", "sdgk.7": "सूरज और हवा से साफ़ बिजली", "sdgk.8": "बड़ों के लिए अच्छा काम", "sdgk.9": "नए-नए अच्छे आइडिया और सड़कें", "sdgk.10": "सबके साथ बराबरी",
+    "sdgk.11": "सुंदर, सुरक्षित शहर", "sdgk.12": "कम इस्तेमाल, कम बर्बादी", "sdgk.13": "धरती को ठंडा रखो", "sdgk.14": "ख़ुश मछलियाँ, साफ़ समुद्र", "sdgk.15": "ख़ुश जंगल और जानवर",
+    "sdgk.16": "शांति और सही नियम", "sdgk.17": "देश एक-दूसरे की मदद करें",
+
+    // ---- meters & modes ----
+    "met.base.m": "पैसा", "met.base.h": "ख़ुशी", "met.base.p": "धरती", "met.base.w": "शांति",
+    "met.kids.m": "सिक्के", "met.kids.h": "मुस्कान", "met.kids.p": "प्रकृति", "met.kids.w": "दोस्ती",
+    "met.adults.m": "ख़ज़ाना", "met.adults.h": "जनता का भरोसा", "met.adults.p": "पारितंत्र", "met.adults.w": "स्थिरता",
+    "mode.kids.name": "स्कूली बच्चे", "mode.kids.ages": "8–13 साल", "mode.kids.intro": "अपनी धरती को मुस्कुराने में मदद करो! 10 बारी। अच्छा और समझदारी वाला कार्ड चुनो।",
+    "mode.college.name": "कॉलेज", "mode.college.ages": "17–22 साल", "mode.college.intro": "16 सीज़न। असली फ़ायदे-नुक़सान। हर बिल समय पर नहीं आता।",
+    "mode.adults.name": "वयस्क", "mode.adults.ages": "23+ साल", "mode.adults.intro": "पूरा कार्यकाल, 2026–2030। चुनाव, लॉबी, टिपिंग पॉइंट। कोई उँगली पकड़कर नहीं चलाएगा।",
+    "mode.classic.intro": "दुनिया को ठीक करो। हर सीज़न एक फ़ैसला।",
+
+    // ---- endings ----
+    "end.kids.hero.t": "धरती के सुपरहीरो!", "end.kids.hero.l": "तुमने पूरी दुनिया को मुस्कुरा दिया। कमाल!",
+    "end.kids.helper.t": "धरती के मददगार", "end.kids.helper.l": "शाबाश! तुम्हारी धरती अब ज़्यादा ख़ुश और हरी-भरी है।",
+    "end.kids.sprout.t": "नन्हा हरा अंकुर", "end.kids.sprout.l": "अच्छी शुरुआत! अगली बार और अच्छे काम चुनना।",
+    "end.kids.explorer.t": "कोशिश करते रहो, खोजी!", "end.kids.explorer.l": "हर हीरो कहीं से शुरू करता है। फिर से खेलो!",
+    "end.college.summa.t": "धरती के टॉपर", "end.college.summa.l": "क्लास में अव्वल: फलती-फूलती, न्यायपूर्ण दुनिया।",
+    "end.college.changer.t": "बदलाव लाने वाले", "end.college.changer.l": "आपने हालात का रुख़ मोड़ दिया। ज़्यादातर लक्ष्य पूरे।",
+    "end.college.wip.t": "काम अभी जारी है", "end.college.wip.l": "अच्छी कोशिश, पर बहुत से लक्ष्य अधूरे रह गए।",
+    "end.college.gap.t": "गैप ईयर", "end.college.gap.l": "शॉर्टकट और झटकों ने पूरा दशक खा लिया।",
+    "end.college.fail.t": "परीक्षा में फ़ेल", "end.college.fail.l": "लगभग कोई लक्ष्य पूरा नहीं। 2031 में दोबारा परीक्षा?",
+    "end.college.war.t": "युद्ध से तबाह", "end.college.war.l": "शांति टूट गई। युद्ध हर लक्ष्य मिटा देता है।",
+    "end.college.hothouse.t": "तपती धरती", "end.college.hothouse.l": "गर्मी से धरती बेहाल हो गई।",
+    "end.college.toppled.t": "जन-आंदोलन", "end.college.toppled.l": "लोगों की उम्मीद टूट गई और वे सड़कों पर उतर आए।",
+    "end.college.broke.t": "दिवालिया", "end.college.broke.l": "पैसा ख़त्म। क़र्ज़दाताओं ने कमान सँभाल ली।",
+    "end.adults.states.t": "दशक के राजनेता", "end.adults.states.l": "एजेंडा 2030 पूरा, और उससे भी आगे।",
+    "end.adults.delivered.t": "एजेंडा 2030 पूरा", "end.adults.delivered.l": "मुश्किल हालात में भी ज़्यादातर लक्ष्य हासिल।",
+    "end.adults.partial.t": "अधूरा काम", "end.adults.partial.l": "प्रगति हुई, पर लक्ष्य फिसल गए।",
+    "end.adults.missed.t": "लक्ष्य चूक गए", "end.adults.missed.l": "अल्पकालिक सोच जीत गई। 2030 आया और चला गया।",
+    "end.adults.broken.t": "टूटे वादे", "end.adults.broken.l": "लगभग कुछ भी पूरा नहीं हुआ। इतिहास फ़ैसला करेगा।",
+    "end.adults.voted.t": "चुनाव हारकर बाहर", "end.adults.voted.l": "चुनाव के दिन भरोसा ज़रूरी सीमा से नीचे था।",
+    "end.adults.war.t": "युद्ध से तबाह", "end.adults.war.l": "स्थिरता टूटकर खुले संघर्ष में बदल गई।",
+    "end.adults.hothouse.t": "टिपिंग-पॉइंट पतन", "end.adults.hothouse.l": "पारितंत्र वापसी की सीमा पार कर गए।",
+    "end.adults.toppled.t": "सत्ता से बेदख़ल", "end.adults.toppled.l": "भारी अशांति ने आपको कुर्सी से हटा दिया।",
+    "end.adults.broke.t": "सरकारी डिफ़ॉल्ट", "end.adults.broke.l": "अब आपका बजट क़र्ज़दाता तय करते हैं।",
+    "end.classic.hero.t": "धरती के हीरो", "end.classic.hero.l": "फलती-फूलती, शांत दुनिया। 2030 का वादा निभाया।",
+    "end.classic.champion.t": "हरित चैंपियन", "end.classic.champion.l": "ज़्यादातर लक्ष्य पूरे। दुनिया ठीक हो रही है।",
+    "end.classic.onway.t": "सही राह पर", "end.classic.onway.l": "असली प्रगति, पर बहुत से वादे अभी अधूरे।",
+    "end.classic.lost.t": "खोया हुआ दशक", "end.classic.lost.l": "शॉर्टकट और झटकों ने पूरा दशक खा लिया।",
+    "end.classic.broken.t": "टूटे वादे", "end.classic.broken.l": "लगभग कोई लक्ष्य पूरा नहीं। बिल भविष्य भरेगा।",
+    "end.classic.war.t": "युद्ध से तबाह", "end.classic.war.l": "शांति टूट गई। युद्ध हर लक्ष्य मिटा देता है।",
+    "end.classic.hothouse.t": "तपती धरती", "end.classic.hothouse.l": "गर्मी से धरती बेहाल हो गई।",
+    "end.classic.toppled.t": "सत्ता से बेदख़ल", "end.classic.toppled.l": "आपके लोगों की उम्मीद टूट गई और वे सड़कों पर उतर आए।",
+    "end.classic.broke.t": "दिवालिया", "end.classic.broke.l": "पैसा ख़त्म। क़र्ज़दाताओं ने कमान सँभाल ली।",
+
+    // ---- cards: college / classic ----
+    "c.solar.t": "सबके लिए सौर ऊर्जा", "c.solar.h": "धूप से घरों में बिजली", "c.solar.l": "सोलर से कमाई",
+    "c.school.t": "मुफ़्त स्कूल", "c.school.h": "हर बच्चा पढ़े", "c.school.l": "पढ़े-लिखे युवा काम पर",
+    "c.clinic.t": "हर जगह क्लिनिक", "c.clinic.h": "स्वस्थ लोग, मज़बूत देश",
+    "c.forest.t": "जंगल फिर से लगाओ", "c.forest.h": "पेड़ धरती को ठंडा रखते हैं", "c.forest.l": "जंगल लौट आए",
+    "c.water.t": "साफ़ पानी", "c.water.h": "हर गाँव में नल",
+    "c.transit.t": "हरित परिवहन", "c.transit.h": "साइकिल, ट्राम, साफ़ हवा",
+    "c.farm.t": "स्मार्ट खेती", "c.farm.h": "ज़्यादा अनाज, कम बर्बादी",
+    "c.equal.t": "बराबर अधिकार", "c.equal.h": "आधी प्रतिभा को आगे आने दो", "c.equal.l": "महिलाओं के कारोबार चमके",
+    "c.talks.t": "शांति वार्ता", "c.talks.h": "दुश्मनों को साथी बनाओ",
+    "c.ocean.t": "समुद्र बचाओ", "c.ocean.h": "मछलियों को लौटने दो", "c.ocean.l": "मछलियाँ फिर बढ़ीं",
+    "c.taxrich.t": "अमीरों पर टैक्स", "c.taxrich.h": "अरबपति अपना हिस्सा दें",
+    "c.carbon.t": "कार्बन की क़ीमत", "c.carbon.h": "प्रदूषण करने वाले भरें",
+    "c.allies.t": "हरित साझेदार", "c.allies.h": "साथी देश ख़र्च में हाथ बँटाएँ",
+    "c.jobs.t": "हरित रोज़गार", "c.jobs.h": "स्वच्छ अर्थव्यवस्था बनाओ", "c.jobs.l": "नए उद्योग टैक्स भरने लगे",
+    "c.honest.t": "भ्रष्टाचार से लड़ो", "c.honest.h": "चोरी रोको", "c.honest.l": "चोरी का पैसा वापस आया",
+    "c.recycle.t": "कचरा-मुक्त शहर", "c.recycle.h": "मरम्मत, दोबारा इस्तेमाल, रीसाइक्लिंग",
+    "c.safety.t": "सामाजिक सुरक्षा", "c.safety.h": "कोई पीछे न छूटे",
+    "c.labs.t": "नवाचार प्रयोगशालाएँ", "c.labs.h": "विचारों से उद्योग", "c.labs.l": "स्टार्ट-अप की बहार",
+    "c.welcome.t": "शरणार्थियों का स्वागत", "c.welcome.h": "आज आसरा, कल हुनर", "c.welcome.l": "नए लोगों ने कारोबार खोले",
+    "c.oil.t": "तेल की खुदाई", "c.oil.h": "जल्दी पैसा, तपता भविष्य।", "c.oil.l": "महातूफ़ान",
+    "c.chop.t": "वर्षावन बेच दो", "c.chop.h": "अभी लकड़ी का पैसा", "c.chop.l": "बाढ़ और भूस्खलन",
+    "c.war.t": "सीमा पर युद्ध", "c.war.h": "देश को एकजुट करो!", "c.war.l": "युद्ध लंबा खिंच गया",
+    "c.crack.t": "विरोध प्रदर्शन कुचलो", "c.crack.h": "सड़कें जल्दी शांत", "c.crack.l": "जन-विद्रोह",
+    "c.stadium.t": "क़र्ज़ से बड़ा प्रोजेक्ट", "c.stadium.h": "एक चमचमाता स्टेडियम!", "c.stadium.l": "क़र्ज़ संकट",
+    "c.fuel.t": "सस्ता पेट्रोल", "c.fuel.h": "वोटरों को बहुत पसंद", "c.fuel.l": "जानलेवा लू",
+    "c.dereg.t": "प्रदूषण नियम ख़त्म", "c.dereg.h": "कारख़ानों की चाँदी", "c.dereg.l": "ज़हरीला स्मॉग",
+    "c.fish.t": "मछली पकड़ने के अधिकार बेचो", "c.fish.h": "विदेशी जहाज़ अच्छा पैसा देते हैं", "c.fish.l": "मछली उद्योग ढह गया",
+    "c.crony.t": "दोस्तों को ठेके", "c.crony.h": "सौदे फटाफट", "c.crony.l": "भ्रष्टाचार घोटाला",
+    "c.arms.t": "हथियारों की होड़", "c.arms.h": "टैंक ख़रीदो, सुरक्षित महसूस करो", "c.arms.l": "पड़ोसी भी हथियार जुटाने लगे",
+    "c.cuts.t": "स्कूल-अस्पताल में कटौती", "c.cuts.h": "हिसाब बराबर करो", "c.cuts.l": "महामारी फैल गई",
+    "c.coal.t": "नया कोयला बिजलीघर", "c.coal.h": "आज सस्ती बिजली", "c.coal.l": "जंगल की आग",
+    "c.walls.t": "सीमाएँ बंद करो", "c.walls.h": "उन्हें बाहर रखो!", "c.walls.l": "व्यापारिक साथी दूर हो गए",
+
+    // ---- cards: kids ----
+    "c.k_trees.t": "पेड़ लगाओ", "c.k_trees.h": "पेड़ हवा साफ़ करते हैं", "c.k_trees.l": "चिड़ियाँ लौट आईं!",
+    "c.k_school.t": "स्कूल बनाओ", "c.k_school.h": "सबको पढ़ने का मौका",
+    "c.k_lunch.t": "सेहतमंद टिफ़िन", "c.k_lunch.h": "हर बच्चे के लिए अच्छा खाना",
+    "c.k_recycle.t": "रीसाइक्लिंग डिब्बे", "c.k_recycle.h": "कचरा अलग-अलग करो",
+    "c.k_well.t": "साफ़ पानी का कुआँ", "c.k_well.h": "गाँव के लिए साफ़ पानी",
+    "c.k_solar.t": "सोलर पैनल", "c.k_solar.h": "सूरज से बिजली", "c.k_solar.l": "धूप से सिक्के बचे!",
+    "c.k_share.t": "सबके साथ बाँटो", "c.k_share.h": "सबके साथ अच्छाई",
+    "c.k_equal.t": "सबको बराबर मौका", "c.k_equal.h": "लड़के-लड़कियाँ बराबर",
+    "c.k_bikes.t": "साइकिल रास्ते", "c.k_bikes.h": "गाड़ी नहीं, साइकिल चलाओ",
+    "c.k_clinic.t": "बच्चों का दवाखाना", "c.k_clinic.h": "सबके लिए डॉक्टर",
+    "c.k_beach.t": "समुद्र तट साफ़ करो", "c.k_beach.h": "कछुओं की मदद करो",
+    "c.k_bake.t": "अच्छे काम के लिए केक सेल", "c.k_bake.h": "मिलकर सिक्के जुटाओ",
+    "c.k_garden.t": "स्कूल का बगीचा", "c.k_garden.h": "अपनी सब्ज़ियाँ ख़ुद उगाओ",
+    "c.k_friends.t": "दोस्त बनाओ", "c.k_friends.h": "पड़ोसियों से प्यार से मिलो",
+    "c.k_jobs.t": "मरम्मत की कार्यशाला", "c.k_jobs.h": "चीज़ें ठीक करना सीखो",
+    "c.k_candy.t": "ढेर सारी टॉफ़ी ख़रीदो", "c.k_candy.h": "वाह! अभी तो मज़ा", "c.k_candy.l": "पेट में दर्द!",
+    "c.k_chop.t": "पार्क के पेड़ काटो", "c.k_chop.h": "कार पार्किंग के लिए जगह", "c.k_chop.l": "तपती गर्मी, कोई छाँव नहीं",
+    "c.k_car.t": "हर जगह गाड़ी से जाओ", "c.k_car.h": "तेज़ और आरामदायक", "c.k_car.l": "धुएँ वाली हवा",
+    "c.k_litter.t": "कचरा कहीं भी फेंको", "c.k_litter.h": "छाँटने से जल्दी", "c.k_litter.l": "नदी कचरे से भर गई",
+    "c.k_keep.t": "सब कुछ अपने पास रखो", "c.k_keep.h": "किसी से कुछ मत बाँटो", "c.k_keep.l": "पड़ोसी अकेला महसूस कर रहे हैं",
+    "c.k_tv.t": "स्कूल छोड़कर टीवी देखो", "c.k_tv.h": "होमवर्क नहीं!", "c.k_tv.l": "अच्छी नौकरी मिलना मुश्किल",
+    "c.k_plastic.t": "हर चीज़ प्लास्टिक की", "c.k_plastic.h": "आसान और सस्ता", "c.k_plastic.l": "समुद्र में प्लास्टिक",
+
+    // ---- cards: adults (policy vocabulary) ----
+    "c.a_solar.t": "बड़े पैमाने पर नवीकरणीय ऊर्जा", "c.a_solar.h": "ग्रिड अपग्रेड; कोयला इलाक़ों का विरोध",
+    "c.a_school.t": "सबके लिए माध्यमिक शिक्षा", "c.a_school.h": "फ़ायदा दस साल में दिखेगा",
+    "c.a_clinic.t": "सार्वभौमिक स्वास्थ्य कवरेज", "c.a_clinic.h": "लोकप्रिय, महँगा, स्थायी",
+    "c.a_forest.t": "वनीकरण और REDD+", "c.a_forest.h": "किसानों की चराई की ज़मीन घटेगी",
+    "c.a_water.t": "जल-स्वच्छता (WASH) ढाँचा", "c.a_water.h": "चमक-दमक नहीं, पर ज़रूरी",
+    "c.a_transit.t": "जन परिवहन और EV बदलाव", "c.a_transit.h": "कार लॉबी भड़की हुई है",
+    "c.a_farm.t": "जलवायु-स्मार्ट खेती", "c.a_farm.h": "पैदावार धीरे-धीरे बढ़ेगी",
+    "c.a_equal.t": "लैंगिक बराबरी क़ानून", "c.a_equal.h": "कुछ जगहों पर सामाजिक विरोध",
+    "c.a_talks.t": "बहुपक्षीय शांति प्रक्रिया", "c.a_talks.h": "आक्रामक नेता इसे कमज़ोरी बताएँगे",
+    "c.a_ocean.t": "30×30 समुद्री संरक्षण", "c.a_ocean.h": "मछुआरा क़स्बों की आमदनी घटेगी",
+    "c.a_taxrich.t": "संपत्ति और अप्रत्याशित-लाभ कर", "c.a_taxrich.h": "पूँजी के बाहर जाने का ख़तरा",
+    "c.a_carbon.t": "कार्बन मूल्य निर्धारण (ETS)", "c.a_carbon.h": "फ़ायदे से पहले दाम बढ़ेंगे",
+    "c.a_allies.t": "जलवायु-वित्त साझेदारी", "c.a_allies.h": "शर्तें जुड़ी हैं",
+    "c.a_jobs.t": "न्यायसंगत बदलाव रोज़गार योजना", "c.a_jobs.h": "खनिकों और ड्राइवरों को नया हुनर",
+    "c.a_honest.t": "स्वतंत्र भ्रष्टाचार-रोधी एजेंसी", "c.a_honest.h": "आपके अपने साथी भी फँस सकते हैं",
+    "c.a_recycle.t": "सर्कुलर इकॉनमी अनिवार्य", "c.a_recycle.h": "उद्योग पर पालन का ख़र्च",
+    "c.a_safety.t": "न्यूनतम सामाजिक सुरक्षा", "c.a_safety.h": "घाटे से डरने वाले विरोध में",
+    "c.a_labs.t": "हरित औद्योगिक नीति", "c.a_labs.h": "नतीजे आने में बरसों लगेंगे",
+    "c.a_welcome.t": "शरणार्थी एकीकरण कार्यक्रम", "c.a_welcome.h": "लोकलुभावन नेता इसका फ़ायदा उठाएँगे",
+    "c.a_oil.t": "नए तेल और गैस लाइसेंस", "c.a_oil.h": "ऊर्जा सुरक्षा, निर्यात से कमाई",
+    "c.a_chop.t": "कृषि-व्यवसाय को ज़मीन रियायतें", "c.a_chop.h": "निर्यात में उछाल, गाँवों में रोज़गार",
+    "c.a_war.t": "सीमा पर पहले हमला", "c.a_war.h": "झंडे के इर्द-गिर्द एकजुटता",
+    "c.a_crack.t": "आपातकालीन शक्तियों का अध्यादेश", "c.a_crack.h": "व्यवस्था जल्दी बहाल",
+    "c.a_stadium.t": "क़र्ज़ से बना मेगाप्रोजेक्ट", "c.a_stadium.h": "दिखने वाली विरासत, अभी रोज़गार",
+    "c.a_fuel.t": "ईंधन सब्सिडी का विस्तार", "c.a_fuel.h": "महँगाई से राहत",
+    "c.a_dereg.t": "पर्यावरण नियमों में ढील", "c.a_dereg.h": "लालफ़ीताशाही घटे, विदेशी निवेश आए",
+    "c.a_fish.t": "दूर-समुद्री मछली पकड़ने का सौदा", "c.a_fish.h": "लाइसेंस फ़ीस पहले ही मिल जाएगी",
+    "c.a_crony.t": "बिना टेंडर ठेके", "c.a_crony.h": "तेज़ काम, वफ़ादार चंदादाता",
+    "c.a_arms.t": "रक्षा ख़रीद में तेज़ी", "c.a_arms.h": "प्रतिरोधक क्षमता और उद्योग में रोज़गार",
+    "c.a_cuts.t": "मितव्ययिता पैकेज", "c.a_cuts.h": "बॉन्ड बाज़ार को भरोसा दिलाओ",
+    "c.a_coal.t": "कोयला बेसलोड का विस्तार", "c.a_coal.h": "बत्तियाँ जलती रहें",
+    "c.a_walls.t": "सीमा बंदी और टैरिफ़", "c.a_walls.h": "घरेलू उद्योग को बचाओ",
+    "c.a_debtswap.t": "क़र्ज़ के बदले प्रकृति संरक्षण", "c.a_debtswap.h": "क़र्ज़दाता संरक्षण की शर्तें तय करेंगे",
+    "c.a_gas.t": "प्राकृतिक गैस “पुल” सौदा", "c.a_gas.h": "कोयले से साफ़… फ़िलहाल", "c.a_gas.l": "बेकार पड़ी गैस परिसंपत्तियाँ",
+
+    // ---- moments: kids feelings ----
+    "m.flood.q": "पड़ोसी के गाँव में बाढ़ आई है। तुम क्या करोगे?", "m.flood.o0": "मदद और कंबल भेजो", "m.flood.f0": "वे फिर से सुरक्षित महसूस करते हैं। दया से दोस्त बनते हैं!", "m.flood.o1": "हमें क्या लेना", "m.flood.f1": "वे अकेले पड़ गए। दूसरों की मदद से सबका भला होता है।",
+    "m.newkid.q": "स्कूल में एक नया बच्चा अकेला दिख रहा है।", "m.newkid.o0": "उसे खेलने बुलाओ", "m.newkid.f0": "अब उसका एक दोस्त है। कितना अच्छा लगता है!", "m.newkid.o1": "आगे निकल जाओ", "m.newkid.f1": "अकेले छूट जाना बुरा लगता है। अगली बार “हाय” बोलना!",
+    "m.sandwich.q": "एक सैंडविच, दो भूखे दोस्त।", "m.sandwich.o0": "आधा-आधा बाँट लो", "m.sandwich.f0": "बाँटने से कोई भूखा नहीं रहता!", "m.sandwich.o1": "पूरा ख़ुद खा लो", "m.sandwich.f1": "तुम्हारा दोस्त अब भी भूखा है। बाँटना ही प्यार है।",
+    "m.bird.q": "तुम्हें एक चिड़िया मिली जिसका पंख घायल है।", "m.bird.o0": "किसी बड़े से मदद माँगो", "m.bird.f0": "चिड़िया ठीक होकर उड़ गई!", "m.bird.o1": "खेलने भाग जाओ", "m.bird.f1": "जानवरों को भी हमारी मदद चाहिए।",
+    "m.argue.q": "दो टोलियाँ खेल के मैदान को लेकर झगड़ रही हैं।", "m.argue.o0": "बारी-बारी खेलने में मदद करो", "m.argue.f0": "बात करने से शांति आती है!", "m.argue.o1": "एक तरफ़ हो जाओ", "m.argue.f1": "तरफ़ लेने से झगड़ा और बढ़ गया।",
+    "m.grandma.q": "एक बुज़ुर्ग पड़ोसन अपना सामान नहीं उठा पा रहीं।", "m.grandma.o0": "सामान उठाने में मदद करो", "m.grandma.f0": "वे मुस्कुराईं। छोटी-सी मदद, बड़ा फ़र्क़!", "m.grandma.o1": "गेम खेलते रहो", "m.grandma.f1": "उन्हें अकेले मुश्किल हुई। मदद करके अच्छा लगता है!",
+    "m.sad.q": "खेल हारने के बाद तुम्हारा दोस्त रो रहा है।", "m.sad.o0": "पूछो कि उसे कैसा लग रहा है", "m.sad.f0": "सुनने से मन हल्का होता है।", "m.sad.o1": "उस पर हँसो", "m.sad.f1": "इससे उसे और बुरा लगा। पहले दया!",
+    // ---- moments: kids quiz ----
+    "m.kq_water.q": "किसमें कम पानी लगता है?", "m.kq_water.o0": "जल्दी से शावर", "m.kq_water.o1": "भरे टब में नहाना", "m.kq_water.fact": "जल्दी शावर लेने में टब से बहुत कम पानी लगता है!",
+    "m.kq_peel.q": "केले का छिलका कहाँ जाना चाहिए?", "m.kq_peel.o0": "नदी में", "m.kq_peel.o1": "खाद (कम्पोस्ट) में", "m.kq_peel.fact": "खाद छिलकों को पौधों का खाना बना देती है!",
+    "m.kq_light.q": "कमरे से बाहर जा रहे हो। धरती के लिए क्या अच्छा है?", "m.kq_light.o0": "बत्ती बंद करो", "m.kq_light.o1": "बत्ती जलती छोड़ दो", "m.kq_light.fact": "बत्ती बंद करने से बिजली बचती है और धरती ठंडी रहती है।",
+    "m.kq_goals.q": "दुनिया के कितने बड़े लक्ष्य (ग्लोबल गोल्स) हैं?", "m.kq_goals.o0": "17", "m.kq_goals.o1": "100", "m.kq_goals.fact": "2030 तक दुनिया को बेहतर बनाने के लिए 17 लक्ष्य हैं!",
+    "m.kq_tree.q": "पेड़ हमें क्या देते हैं?", "m.kq_tree.o0": "साँस लेने को साफ़ हवा", "m.kq_tree.o1": "टॉफ़ी", "m.kq_tree.fact": "पेड़ हवा साफ़ करते हैं और जानवरों को घर देते हैं।",
+    // ---- moments: college quiz ----
+    "m.q_count.q": "कितने सतत विकास लक्ष्य (SDG) हैं?", "m.q_count.o0": "15", "m.q_count.o1": "17", "m.q_count.o2": "20", "m.q_count.fact": "17 लक्ष्य, 169 टारगेट; 2015 में संयुक्त राष्ट्र के सभी 193 सदस्यों ने अपनाए।",
+    "m.q_paris.q": "पेरिस समझौता तापमान बढ़ोतरी को किससे काफ़ी नीचे रखना चाहता है…", "m.q_paris.o0": "1 °C", "m.q_paris.o1": "2 °C (कोशिश 1.5 °C की)", "m.q_paris.o2": "3 °C", "m.q_paris.fact": "पेरिस (2015): 2 °C से काफ़ी नीचे, कोशिश 1.5 °C की।",
+    "m.q_sector.q": "दुनिया में सबसे ज़्यादा ग्रीनहाउस गैस किससे निकलती है?", "m.q_sector.o0": "ऊर्जा उपयोग (बिजली, गर्मी, परिवहन)", "m.q_sector.o1": "सिर्फ़ हवाई यात्रा", "m.q_sector.o2": "कचरा भराव (लैंडफ़िल)", "m.q_sector.fact": "दुनिया के लगभग तीन-चौथाई उत्सर्जन ऊर्जा उपयोग से आते हैं।",
+    "m.q_ctax.q": "कार्बन टैक्स मुख्य रूप से कैसे काम करता है?", "m.q_ctax.o0": "कारों पर पाबंदी लगाकर", "m.q_ctax.o1": "प्रदूषण की क़ीमत तय करके", "m.q_ctax.o2": "पेड़ लगाकर", "m.q_ctax.fact": "कार्बन की क़ीमत तय होने से साफ़ विकल्प तुलना में सस्ते पड़ते हैं।",
+    "m.q_food.q": "दुनिया का लगभग कितना खाना नष्ट या बर्बाद होता है?", "m.q_food.o0": "लगभग 5%", "m.q_food.o1": "लगभग एक-तिहाई", "m.q_food.o2": "लगभग दो-तिहाई", "m.q_food.fact": "FAO के अनुमान से लगभग एक-तिहाई खाना नष्ट या बर्बाद होता है।",
+    "m.q_water.q": "लगभग कितने लोगों को सुरक्षित पीने का पानी नहीं मिलता?", "m.q_water.o0": "20 में से 1", "m.q_water.o1": "4 में से 1", "m.q_water.o2": "2 में से 1", "m.q_water.fact": "WHO/UNICEF: लगभग 2.2 अरब लोग, यानी क़रीब 4 में से 1।",
+    "m.q_just.q": "“न्यायसंगत बदलाव” (जस्ट ट्रांज़िशन) का मतलब है…", "m.q_just.o0": "नौकरियों की परवाह किए बिना हरित बनना", "m.q_just.o1": "मज़दूरों और समुदायों की रक्षा करते हुए हरित बनना", "m.q_just.o2": "कारख़ाने विदेश ले जाना", "m.q_just.fact": "प्रभावित इलाक़ों के लिए नया हुनर, सामाजिक सुरक्षा और नई नौकरियाँ।",
+    "m.q_ncqg.q": "COP29 (2024) में अमीर देशों ने 2035 तक हर साल कम से कम कितना जलवायु वित्त जुटाने का वादा किया?", "m.q_ncqg.o0": "100 अरब डॉलर", "m.q_ncqg.o1": "300 अरब डॉलर", "m.q_ncqg.o2": "10 लाख करोड़ डॉलर", "m.q_ncqg.fact": "नया लक्ष्य: 2035 तक हर साल कम से कम 300 अरब डॉलर, 1.3 लाख करोड़ डॉलर की बड़ी महत्वाकांक्षा के भीतर।",
+    "m.q_methane.q": "20 साल में कौन-सी गैस CO₂ से लगभग 80 गुना ज़्यादा गर्मी बढ़ाती है?", "m.q_methane.o0": "मीथेन", "m.q_methane.o1": "ऑक्सीजन", "m.q_methane.o2": "नाइट्रोजन", "m.q_methane.fact": "मीथेन घटाना तापमान बढ़ोतरी धीमी करने के सबसे तेज़ तरीक़ों में से एक है।",
+    "m.q_solar.q": "ज़्यादातर जगहों पर नवीकरणीय ऊर्जा सबसे सस्ती नई बिजली क्यों बन गई?", "m.q_solar.o0": "सौर और पवन की लागत बहुत घट गई", "m.q_solar.o1": "तेल कम पड़ गया", "m.q_solar.o2": "फ़्यूज़न आ गया", "m.q_solar.fact": "2010 के दशक में सोलर मॉड्यूल के दाम लगभग 90% गिरे।",
+    "m.q_sdg5.q": "SDG 5 किस बारे में है?", "m.q_sdg5.o0": "स्वच्छ ऊर्जा", "m.q_sdg5.o1": "लैंगिक समानता", "m.q_sdg5.o2": "जलीय जीवन", "m.q_sdg5.fact": "SDG 5: महिलाओं और लड़कियों के लिए बराबर अधिकार और अवसर।",
+    // ---- moments: college dilemmas ----
+    "m.d_protest.q": "जलवायु प्रदर्शनकारियों ने हाईवे जाम कर दिया है।", "m.d_protest.o0": "उनसे मिलो और सुनो", "m.d_protest.f0": "बातचीत से तनाव घटा और भरोसा बना।", "m.d_protest.o1": "सबको गिरफ़्तार करो", "m.d_protest.f1": "गिरफ़्तारियाँ सुर्ख़ियों में आईं और ग़ुस्सा और भड़का।",
+    "m.d_factory.q": "एक कारख़ाना अच्छी तनख़्वाह देता है, पर एक ग़रीब बस्ती को ज़हरीला कर रहा है।", "m.d_factory.o0": "सफ़ाई करवाओ, चाहे महँगी पड़े", "m.d_factory.f0": "सेहत सुधरी। पर्यावरणीय न्याय मायने रखता है।", "m.d_factory.o1": "नज़रअंदाज़ कर दो", "m.d_factory.f1": "इसका बिल बस्ती को बाद में चुकाना पड़ेगा।",
+    "m.d_fake.q": "एक दोस्त ने अपराध के लिए शरणार्थियों को दोषी बताने वाली झूठी पोस्ट शेयर की।", "m.d_fake.o0": "प्यार से सही तथ्य बताओ", "m.d_fake.f0": "शांत तथ्य ग़लत जानकारी की रफ़्तार धीमी करते हैं।", "m.d_fake.o1": "घुलने-मिलने के लिए लाइक कर दो", "m.d_fake.f1": "ग़लत जानकारी डर और फूट फैलाती है।",
+    "m.d_sponsor.q": "एक फ़ैशन ब्रांड बड़ी स्पॉन्सरशिप दे रहा है, पर वह बाल मज़दूरी करवाता है।", "m.d_sponsor.o0": "विनम्रता से मना करो", "m.d_sponsor.f0": "ईमानदारी की क़ीमत अभी चुकानी पड़ती है, पर भरोसा बनता है।", "m.d_sponsor.o1": "पैसा ले लो", "m.d_sponsor.f1": "यह घोटाला देर-सबेर सामने आएगा।",
+    "m.d_meals.q": "छात्र बजट: ग़रीब छात्रों के लिए मुफ़्त खाना, या स्टेडियम की नई स्क्रीन?", "m.d_meals.o0": "मुफ़्त खाना", "m.d_meals.f0": "ख़ाली पेट कोई अच्छे से नहीं पढ़ पाता।", "m.d_meals.o1": "बड़ी स्क्रीन", "m.d_meals.f1": "मज़ा तो आया, पर सबसे भूखे छात्रों को कुछ नहीं मिला।",
+    // ---- moments: adult dilemmas ----
+    "m.ad_lobby.q": "जीवाश्म-ईंधन लॉबी चुनावी चंदा देगी, अगर आप कोयला बंद करने में देरी करें।", "m.ad_lobby.o0": "चंदा ले लो", "m.ad_lobby.f0": "चंदादाता ख़ुश हैं। पत्रकार खोजबीन में जुट गए।", "m.ad_lobby.o1": "सबके सामने मना करो", "m.ad_lobby.f1": "वे आपके ख़िलाफ़ विज्ञापनों पर पैसा लगाते हैं।",
+    "m.ad_imf.q": "IMF से क़र्ज़ मिल रहा है, पर मितव्ययिता की शर्तों के साथ।", "m.ad_imf.o0": "क़र्ज़ ले लो", "m.ad_imf.f0": "अभी नक़दी; क्लिनिक और स्कूलों पर दबाव।", "m.ad_imf.o1": "मना कर दो", "m.ad_imf.f1": "बॉन्ड पर ब्याज बढ़ा; नीति आपके हाथ में रही।",
+    "m.ad_lithium.q": "एक संरक्षित जंगल के नीचे लिथियम मिला है।", "m.ad_lithium.o0": "खनन करो", "m.ad_lithium.f0": "बदलाव के लिए बैटरियाँ, पर प्रकृति की क़ीमत पर।", "m.ad_lithium.o1": "संरक्षित रहने दो", "m.ad_lithium.f1": "निवेशक नाराज़; जंगल खड़ा रहा।",
+    "m.ad_sanction.q": "एक पड़ोसी देश ने अपने ही सहयोगी पर हमला कर दिया। प्रतिबंधों में शामिल हों?", "m.ad_sanction.o0": "प्रतिबंध लगाओ", "m.ad_sanction.f0": "व्यापार का नुक़सान चुभता है; सहयोगी आपके साथ हैं।", "m.ad_sanction.o1": "तटस्थ रहो, व्यापार जारी रखो", "m.ad_sanction.f1": "मुनाफ़ा तो है, पर विदेश में भरोसा घटता है।",
+    "m.ad_blackout.q": "लू से बिजली कटौती का ख़तरा। आपात कोयला या बारी-बारी से कटौती?", "m.ad_blackout.o0": "पुराने कोयला बिजलीघर चालू करो", "m.ad_blackout.f0": "बत्तियाँ जलती रहीं; उत्सर्जन उछल गया।", "m.ad_blackout.o1": "बारी-बारी कटौती + जल्दी बैटरियाँ", "m.ad_blackout.f1": "मुश्किल गर्मी; ज़्यादा मज़बूत ग्रिड।",
+    "m.ad_leak.q": "लीक हुई रिपोर्ट कहती है कि आपके मंत्री ने रिश्वत ली।", "m.ad_leak.o0": "बर्ख़ास्त करो और मुक़दमा चलाओ", "m.ad_leak.f0": "अभी थोड़ा नुक़सान, लंबे समय में भरोसा।", "m.ad_leak.o1": "रिपोर्ट दबा दो", "m.ad_leak.f1": "यह फिर लीक होगी, और ज़ोर से।",
+    "m.ad_finance.q": "दानदाता जलवायु वित्त देंगे, अगर आप वनों की कटाई आधी कर दें।", "m.ad_finance.o0": "शर्तें मान लो", "m.ad_finance.f0": "पशुपालक विरोध में; पैसा आने लगा।", "m.ad_finance.o1": "मना करो: “संप्रभुता”", "m.ad_finance.f1": "देश में लोकप्रिय, दुनिया में अकेले।",
+    "m.ad_coalition.q": "आपकी गठबंधन सहयोगी पार्टी सरकार में बने रहने के लिए ईंधन सब्सिडी माँग रही है।", "m.ad_coalition.o0": "उनकी माँग मान लो", "m.ad_coalition.f0": "गठबंधन बचा; जलवायु का बिल बढ़ा।", "m.ad_coalition.o1": "अपनी बात पर डटे रहो", "m.ad_coalition.f1": "डगमगाता बहुमत, नीति बरक़रार।",
+
+    // ---- world events ----
+    "ev.cyclone.t": "चक्रवात!", "ev.cyclone.w0": "गर्म धरती पर तूफ़ान ज़्यादा आते हैं", "ev.cyclone.w1": "गर्म धरती पर बड़े तूफ़ान आते हैं",
+    "ev.drought.t": "सूखा", "ev.drought.w0": "जलवायु गर्म हो रही है", "ev.drought.w1": "बहुत दिनों से बारिश नहीं हुई",
+    "ev.pandemic.t": "महामारी", "ev.pandemic.w0": "कमज़ोर स्वास्थ्य सेवा से हालत बिगड़ी", "ev.pandemic.w1": "आपके क्लिनिकों ने झटका कम किया",
+    "ev.cold.t": "सबको सर्दी-ज़ुकाम हो गया", "ev.cold.w0": "अगली बार दवाखाना मदद करेगा", "ev.cold.w1": "तुम्हारे दवाखाने ने सबको जल्दी ठीक किया",
+    "ev.recession.t": "वैश्विक मंदी", "ev.recession.w0": "दुनिया भर में बाज़ार गिर गए",
+    "ev.riots.t": "दंगे", "ev.riots.w0": "लोग नाख़ुश हैं",
+    "ev.tech.t": "स्वच्छ तकनीक में बड़ी खोज", "ev.tech.w0": "दुनिया भर के वैज्ञानिकों ने इसे साझा किया", "ev.tech.w1": "वैज्ञानिकों ने कुछ कमाल का बनाया",
+    "ev.investors.t": "हरित निवेशक आए", "ev.investors.w0": "आपकी धरती स्वस्थ दिखती है",
+    "ev.visitors.t": "सैलानियों को तुम्हारा शहर पसंद आया!", "ev.visitors.w0": "तुम्हारा शहर कितना हरा-भरा और साफ़ है",
+    "ev.tourism.t": "पर्यटन में उछाल", "ev.tourism.w0": "साफ़, शांत जगहें सैलानियों को खींचती हैं",
+    "ev.treaty.t": "पड़ोसियों ने संधि का प्रस्ताव दिया", "ev.treaty.w0": "आपने शांति बनाए रखी", "ev.treaty.w1": "तुम अच्छे दोस्त बने",
+    "ev.tradewar.t": "व्यापार युद्ध", "ev.tradewar.w0": "बड़ी ताक़तों ने टैरिफ़ थोप दिए",
+    "ev.refugees.t": "पड़ोस में गृहयुद्ध", "ev.refugees.w0": "इलाक़े की अस्थिरता हम तक फैल गई",
+    "ev.ratings.t": "क्रेडिट रेटिंग घटी", "ev.ratings.w0": "ख़ज़ाना ख़ाली हो रहा है",
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* SDG 2030 — ਪੰਜਾਬੀ (pa, Gurmukhi). Natural, conversational Punjabi; kids mode uses very simple words. */
+(function (root) {
+  const I = root.SDG2_I18N = root.SDG2_I18N || {}; I.L = I.L || {};
+  I.L.pa = {
+    // ---- UI ----
+    "brand.presents": "Harpreet Raj Singh™ ਪੇਸ਼ ਕਰਦੇ ਹਨ", "brand.by": "Harpreet Raj Singh™ ਦੀ ਇੱਕ ਗੇਮ", "foot": "SDG 2030 · Harpreet Raj Singh™ ਦੀ ਇੱਕ ਗੇਮ",
+    "doc.desc": "2030 ਤੱਕ ਦੁਨੀਆ ਨੂੰ ਠੀਕ ਕਰੋ: ਸੰਯੁਕਤ ਰਾਸ਼ਟਰ ਦੇ 17 ਟਿਕਾਊ ਵਿਕਾਸ ਟੀਚਿਆਂ ਬਾਰੇ ਇੱਕ ਛੋਟੀ, ਮਜ਼ੇਦਾਰ ਗੇਮ। Harpreet Raj Singh™ ਦੀ ਇੱਕ ਗੇਮ।",
+    "sub": "ਦੁਨੀਆ ਨੂੰ ਠੀਕ ਕਰੋ। ਕੌਣ ਖੇਡ ਰਿਹਾ ਹੈ?", "play": "▶ ਖੇਡੋ", "how": "ਕਿਵੇਂ ਖੇਡੀਏ",
+    "aria.modes": "ਉਮਰ ਮੁਤਾਬਕ ਮੋਡ ਚੁਣੋ", "aria.hap": "ਵਾਈਬ੍ਰੇਸ਼ਨ", "aria.snd": "ਆਵਾਜ਼", "aria.help": "ਕਿਵੇਂ ਖੇਡੀਏ", "aria.world": "ਤੁਹਾਡੀ ਦੁਨੀਆ", "aria.lang": "ਭਾਸ਼ਾ", "aria.close": "ਬੰਦ ਕਰੋ",
+    "hap.on": "ਵਾਈਬ੍ਰੇਸ਼ਨ ਚਾਲੂ", "hap.off": "ਵਾਈਬ੍ਰੇਸ਼ਨ ਬੰਦ",
+    "best": "🏆 ਸਭ ਤੋਂ ਵਧੀਆ: {g}/17 · {title}", "best.none": "ਅਜੇ ਕੋਈ ਰਿਕਾਰਡ ਨਹੀਂ",
+    "tip.meter": "{e} {name}: {v}", "tip.keep": " · ਇਸ ਨੂੰ ਸਿਫ਼ਰ ਤੋਂ ਉੱਪਰ ਰੱਖੋ",
+    "aria.goal": "ਟੀਚਾ {n}: {name}", "tip.goalpct": "(ਟੀਚਾ {g}%)", "pop.goal": "🎯 ਟੀਚਾ {n}!", "pop.lost": "ਖੁੰਝ ਗਿਆ",
+    "el.now": "ਹੁਣ", "el.tip.now": "🗳️ ਇਸ ਸੀਜ਼ਨ ਦੇ ਅਖ਼ੀਰ ਵਿੱਚ ਚੋਣ", "el.tip.in": "🗳️ {n} ਸੀਜ਼ਨਾਂ ਬਾਅਦ ਚੋਣ", "el.tip.in_1": "🗳️ ਅਗਲੇ ਸੀਜ਼ਨ ਚੋਣ",
+    "el.tip.bar": "ਲੋਕਾਂ ਦਾ ਭਰੋਸਾ {bar}+ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ, ਨਹੀਂ ਤਾਂ ਤੁਸੀਂ ਚੋਣ ਹਾਰ ਜਾਓਗੇ",
+    "tipped.chip": "ਹੱਦ ਪਾਰ", "tipped.tip": "🧊 ਟਿਪਿੰਗ ਪੁਆਇੰਟ ਪਾਰ: ਈਕੋਸਿਸਟਮ ਹੁਣ ਆਪਣੇ-ਆਪ ਵਿਗੜ ਰਹੇ ਹਨ ਅਤੇ ਜਲਵਾਯੂ ਦੇ ਝਟਕੇ ਹੋਰ ਜ਼ੋਰਦਾਰ ਹਨ",
+    "vague.tip": "⛈️ {n} ਸ਼ਾਰਟਕੱਟ ਮੁੜ ਕੇ ਡੰਗ ਮਾਰਨਗੇ…", "vague.tip_1": "⛈️ 1 ਸ਼ਾਰਟਕੱਟ ਮੁੜ ਕੇ ਡੰਗ ਮਾਰੇਗਾ…", "vague.sub": "ਕਦੋਂ ਅਤੇ ਕਿਵੇਂ, ਇਹ ਤਦ ਹੀ ਪਤਾ ਲੱਗੇਗਾ ਜਦੋਂ ਅਸਰ ਹੋਵੇਗਾ",
+    "aria.storm": "{n} ਵਿੱਚ ਤੂਫ਼ਾਨ", "aria.reward": "{n} ਵਿੱਚ ਇਨਾਮ",
+    "chip.in": "{e} <b>{t}</b>: {n} ਸੀਜ਼ਨਾਂ ਬਾਅਦ", "chip.in_1": "{e} <b>{t}</b>: ਅਗਲੇ ਸੀਜ਼ਨ", "chip.in.k": "{e} <b>{t}</b>: {n} ਵਾਰੀਆਂ ਬਾਅਦ", "chip.in.k_1": "{e} <b>{t}</b>: ਅਗਲੀ ਵਾਰੀ",
+    "chip.why": "ਕਿਉਂਕਿ ਤੁਸੀਂ {e} {t} ਚੁਣਿਆ", "chip.why.k": "ਕਿਉਂਕਿ ਤੁਸੀਂ {e} {t} ਚੁਣਿਆ",
+    "tag.quick": "⚡ ਫਟਾਫਟ ਫ਼ਾਇਦਾ", "tag.sus": "🌱 ਟਿਕਾਊ", "tag.fun": "⚡ ਹੁਣੇ ਮਜ਼ਾ", "tag.earth": "🌱 ਧਰਤੀ ਲਈ ਚੰਗਾ",
+    "stamp.storm": "⏳ {n} ਵਿੱਚ {e}", "stamp.seed": "🌱 {n} ਵਿੱਚ {e}", "stamp.kwarn": "⚠️ ਬਾਅਦ ਵਿੱਚ ਮੁਸੀਬਤ ਆ ਸਕਦੀ ਹੈ!", "stamp.kbonus": "🎁 ਜਲਦੀ {e} ਬੋਨਸ",
+    "stamp.risk": "⚠️ ਬਾਅਦ ਵਿੱਚ ਖ਼ਤਰਾ", "stamp.pays": "🌱 ਬਾਅਦ ਵਿੱਚ ਫ਼ਾਇਦਾ", "need": "{e}{n} ਚਾਹੀਦੇ ਹਨ",
+    "aria.card.short": "ਸ਼ਾਰਟਕੱਟ: ਬਾਅਦ ਵਿੱਚ ਕੁਝ ਬੁਰਾ ਹੋ ਸਕਦਾ ਹੈ।", "aria.card.sus": "ਟਿਕਾਊ।",
+    "mo.quiz": "🧠 ਫਟਾਫਟ ਕੁਇਜ਼", "mo.eq": "💛 ਦਿਲ ਦੀ ਗੱਲ", "mo.hard": "⚖️ ਔਖਾ ਫ਼ੈਸਲਾ", "mo.dil": "⚖️ ਦੁਬਿਧਾ",
+    "nomoney": "{e} ਘੱਟ ਹਨ: ਅਜਿਹਾ ਕਾਰਡ ਚੁਣੋ ਜਿਸ ਨਾਲ ਪੈਸਾ ਆਵੇ",
+    "pop.bonus": "🎁 {n} ਵਾਰੀਆਂ ਵਿੱਚ ਬੋਨਸ!", "pop.bonus_1": "🎁 ਅਗਲੀ ਵਾਰੀ ਬੋਨਸ!", "pop.pays": "🌱 ਬਾਅਦ ਵਿੱਚ ਫ਼ਾਇਦਾ",
+    "pop.kid0": "ਵਧੀਆ ਚੋਣ! 🌟", "pop.kid1": "ਵਾਹ! 💚", "pop.kid2": "ਬਹੁਤ ਪਿਆਰਾ! 🌈", "pop.kid3": "ਧਰਤੀ ਕਹਿੰਦੀ ਹੈ ਸ਼ੁਕਰੀਆ! 🌍",
+    "pop.uhoh": "⛈️ ਓ ਹੋ… {n} ਵਾਰੀਆਂ ਵਿੱਚ {e} {t}", "pop.uhoh_1": "⛈️ ਓ ਹੋ… ਅਗਲੀ ਵਾਰੀ {e} {t}", "pop.mayback": "⚠️ ਇਹ ਮੁੜ ਕੇ ਆ ਸਕਦਾ ਹੈ…",
+    "ans.correct": "ਸਹੀ ਜਵਾਬ!", "ans.timeup": "ਸਮਾਂ ਖ਼ਤਮ!", "ans.notquite": "ਸਹੀ ਨਹੀਂ", "ans.answer": "ਜਵਾਬ: <b>{a}</b>।",
+    "ans.kind": "ਕਿੰਨਾ ਚੰਗਾ ਕੀਤਾ!", "ans.principled": "ਅਸੂਲਾਂ ਵਾਲਾ ਫ਼ੈਸਲਾ", "ans.hmm": "ਹੂੰ…", "ans.expedient": "ਸੌਖ ਵਾਲਾ ਫ਼ੈਸਲਾ",
+    "storm.why": "ਕਿਉਂਕਿ ਤੁਸੀਂ {e} <b>{t}</b> ਚੁਣਿਆ ਸੀ · {d}", "storm.why.k": "ਕਿਉਂਕਿ ਤੁਸੀਂ {e} <b>{t}</b> ਚੁਣਿਆ ਸੀ · {d}", "storm.why.a": "{e} <b>{t}</b> ਦਾ ਨਤੀਜਾ · {d}",
+    "storm.kid": "ਕੁਝ ਫ਼ੈਸਲੇ ਬਾਅਦ ਵਿੱਚ ਮੁਸੀਬਤ ਲਿਆਉਂਦੇ ਹਨ। ਅਗਲੀ ਵਾਰ 🌱 ਵਾਲਾ ਚੁਣੋ!", "bloom.why": "{e} <b>{t}</b> ਸਦਕਾ · {d}",
+    "tipping.t": "ਟਿਪਿੰਗ ਪੁਆਇੰਟ ਪਾਰ", "tipping.b": "ਈਕੋਸਿਸਟਮ ਹੁਣ ਆਪਣੇ-ਆਪ ਵਿਗੜਨਗੇ ਅਤੇ ਜਲਵਾਯੂ ਦੇ ਝਟਕੇ ਹੋਰ ਜ਼ੋਰਦਾਰ ਹੋਣਗੇ। ਇਸ ਨੂੰ ਪਲਟਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ।",
+    "elsoon.t": "ਇਸ ਸੀਜ਼ਨ ਚੋਣ ਹੈ", "elsoon.b": "ਸੀਜ਼ਨ ਖ਼ਤਮ ਹੋਣ ’ਤੇ ਲੋਕਾਂ ਦਾ ਭਰੋਸਾ <b>{bar}+</b> ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।",
+    "el.won": "ਮੁੜ ਚੁਣੇ ਗਏ!", "el.lost": "ਚੋਣ ਹਾਰ ਗਏ", "el.b": "ਲੋਕਾਂ ਦਾ ਭਰੋਸਾ {h} (ਲੋੜੀਂਦਾ {bar})",
+    "reck.k": "ਆਖ਼ਰੀ ਵਾਰੀ: ਬਚੇ ਹੋਏ ਸਰਪ੍ਰਾਈਜ਼!", "reck": "2030: ਹੁਣ ਬਿੱਲ ਭਰਨ ਦੀ ਵਾਰੀ", "reck.b": "{n} ਰੁਕੇ ਹੋਏ ਅਸਰ ਹੁਣ ਸਾਹਮਣੇ ਆ ਰਹੇ ਹਨ", "reck.b_1": "1 ਰੁਕਿਆ ਹੋਇਆ ਅਸਰ ਹੁਣ ਸਾਹਮਣੇ ਆ ਰਿਹਾ ਹੈ",
+    "end.over": "{d} ਵਿੱਚ ਖੇਡ ਖ਼ਤਮ।", "end.goals": " / 17 ਟੀਚੇ",
+    "st.good": "🌱 {n} ਟਿਕਾਊ", "st.quick": "⚡ {n} ਸ਼ਾਰਟਕੱਟ", "st.storms": "⛈️ {n} ਤੂਫ਼ਾਨ", "st.quiz": "🧠 {a}/{b} ਕੁਇਜ਼", "st.kind": "💛 {a}/{b} ਦਇਆਵਾਨ", "st.princ": "🧭 {a}/{b} ਅਸੂਲੀ",
+    "end.newbest": "★ {m} ਦਾ ਨਵਾਂ ਰਿਕਾਰਡ!", "again": "↻ ਫਿਰ ਖੇਡੋ", "end.change": "{e} {m} · ਬਦਲੋ",
+    "coach.kids": "👆 ਚੁਣਨ ਲਈ <b>ਕਾਰਡ ’ਤੇ ਟੈਪ ਕਰੋ</b>। ਹਰ ਵਾਰੀ 2 ਵਿਕਲਪ ਮਿਲਣਗੇ।<br>⚠️ ਕੁਝ ਮਜ਼ੇਦਾਰ ਕਾਰਡ ਬਾਅਦ ਵਿੱਚ ਮੁਸੀਬਤ ਲਿਆਉਂਦੇ ਹਨ।<br>🎯 ਧਰਤੀ ਦੀ ਮਦਦ ਲਈ <b>17 ਰੰਗਦਾਰ ਬਿੰਦੀਆਂ</b> ਭਰੋ!",
+    "coach.college": "👆 ਕਾਰਡ ’ਤੇ <b>ਟੈਪ ਕਰੋ ਜਾਂ ਉੱਪਰ ਸਵਾਈਪ ਕਰੋ</b>: ਹਰ ਸੀਜ਼ਨ ਇੱਕ ਫ਼ੈਸਲਾ।<br>⚡ ਫਟਾਫਟ ਫ਼ਾਇਦੇ ਹੁਣੇ ਮਿਲਦੇ ਹਨ, ਪਰ ਬਿੱਲ <i>ਕਦੋਂ</i> ਆਵੇਗਾ, ਪਤਾ ਨਹੀਂ।<br>🎯 2030 ਤੱਕ <b>17 SDG ਬਿੰਦੀਆਂ</b> (70%) ਭਰੋ।",
+    "coach.adults": "👆 ਹਰ ਤਿਮਾਹੀ ਇੱਕ ਕਾਰਡ ’ਤੇ <b>ਟੈਪ ਕਰੋ ਜਾਂ ਉੱਪਰ ਸਵਾਈਪ ਕਰੋ</b>।<br>ਨਾ ਲੇਬਲ, ਨਾ ਚੇਤਾਵਨੀ: ਨਫ਼ਾ-ਨੁਕਸਾਨ ਆਪ ਪਰਖੋ।<br>🗳️ 2028 ਅਤੇ 2030 ਵਿੱਚ ਚੋਣਾਂ। 🎯 17 ਟੀਚੇ, 70% ’ਤੇ।",
+    "help.kids.0.t": "ਆਪਣੀ ਧਰਤੀ ਦੀ ਮਦਦ ਕਰੋ", "help.kids.0.b": "ਤੁਹਾਡੇ ਕੋਲ 10 ਵਾਰੀਆਂ ਹਨ। ਹਰ ਵਾਰੀ 2 ਵਿੱਚੋਂ 1 ਕਾਰਡ ’ਤੇ ਟੈਪ ਕਰੋ ਅਤੇ ਵੇਖੋ ਧਰਤੀ ਕਿਵੇਂ ਬਦਲਦੀ ਹੈ!",
+    "help.kids.1.t": "ਹੁਣੇ ਮਜ਼ਾ, ਬਾਅਦ ਵਿੱਚ ਮੁਸੀਬਤ", "help.kids.1.b": "ਕੁਝ ਕਾਰਡ ਹੁਣੇ ਮਜ਼ੇਦਾਰ ਹਨ, ਪਰ ਥੋੜ੍ਹੀ ਦੇਰ ਬਾਅਦ ਮੁਸੀਬਤ ਲਿਆਉਂਦੇ ਹਨ। 🌱 ਵਾਲੇ ਕਾਰਡ ਧਰਤੀ ਦੀ ਮਦਦ ਕਰਦੇ ਹਨ।",
+    "help.kids.2.t": "ਦਇਆਵਾਨ ਅਤੇ ਸਿਆਣੇ ਬਣੋ", "help.kids.2.b": "ਦਿਲ ਦੀਆਂ ਗੱਲਾਂ ਅਤੇ ਫਟਾਫਟ ਕੁਇਜ਼ ਦੇ ਜਵਾਬ ਦਿਓ। 17 ਰੰਗਦਾਰ ਬਿੰਦੀਆਂ ਭਰੋ ਅਤੇ ਧਰਤੀ ਦੇ ਸੁਪਰਹੀਰੋ ਬਣੋ!",
+    "help.college.0.t": "2030 ਤੱਕ 16 ਸੀਜ਼ਨ", "help.college.0.b": "ਹਰ ਸੀਜ਼ਨ 3 ਵਿੱਚੋਂ 1 ਕਾਰਡ ਚੁਣੋ। ਤੁਹਾਡੀ ਧਰਤੀ ਨਤੀਜਾ ਵਿਖਾਏਗੀ।",
+    "help.college.1.t": "ਲੁਕੇ ਹੋਏ ਬਿੱਲ", "help.college.1.b": "ਫਟਾਫਟ ਫ਼ਾਇਦੇ ਹੁਣੇ ਪੈਸਾ ਦਿੰਦੇ ਹਨ ਅਤੇ ਬਾਅਦ ਵਿੱਚ ਨਤੀਜਾ ਭੁਗਤਾਉਂਦੇ ਹਨ। ਕਦੋਂ ਅਤੇ ਕਿਵੇਂ, ਇਹ ਅਸਰ ਹੋਣ ’ਤੇ ਹੀ ਪਤਾ ਲੱਗੇਗਾ।",
+    "help.college.2.t": "ਕੁਇਜ਼ ਅਤੇ ਦੁਬਿਧਾਵਾਂ", "help.college.2.b": "ਬੋਨਸ ਲਈ ਸਮਾਂ-ਸੀਮਾ ਵਾਲੇ SDG ਕੁਇਜ਼ ਹੱਲ ਕਰੋ ਅਤੇ ਨੈਤਿਕ ਫ਼ੈਸਲੇ ਲਓ। ਜਿੱਤਣ ਲਈ 17 ਵਿੱਚੋਂ 11+ ਟੀਚੇ (70%) ਭਰੋ।",
+    "help.adults.0.t": "ਪੂਰਾ ਕਾਰਜਕਾਲ", "help.adults.0.b": "20 ਤਿਮਾਹੀਆਂ, ਹਰ ਵਾਰ 3 ਵਿਕਲਪ। ਕੋਈ ਲੇਬਲ ਨਹੀਂ: ਹਰ ਵਿਕਲਪ ਦੀ ਕੀਮਤ ਹੈ, ਅਤੇ ਕੁਝ ਕੀਮਤਾਂ ਬਾਅਦ ਵਿੱਚ ਚੁਕਾਉਣੀਆਂ ਪੈਂਦੀਆਂ ਹਨ।",
+    "help.adults.1.t": "ਦਾਅ ’ਤੇ ਕੀ ਹੈ", "help.adults.1.b": "2028 ਅਤੇ 2030 ਦੀਆਂ ਚੋਣਾਂ ਵਿੱਚ ਲੋਕਾਂ ਦਾ ਭਰੋਸਾ 38+ ਚਾਹੀਦਾ ਹੈ। ਈਕੋਸਿਸਟਮ 30 ਤੋਂ ਹੇਠਾਂ ਗਏ ਤਾਂ ਪੱਕਾ ਟਿਪਿੰਗ ਪੁਆਇੰਟ ਸ਼ੁਰੂ ਹੋ ਜਾਵੇਗਾ।",
+    "help.adults.2.t": "ਏਜੰਡਾ 2030 ਪੂਰਾ ਕਰੋ", "help.adults.2.b": "ਖ਼ਜ਼ਾਨਾ, ਭਰੋਸਾ, ਈਕੋਸਿਸਟਮ ਜਾਂ ਸਥਿਰਤਾ ਨੂੰ ਢਹਿਣ ਦਿੱਤੇ ਬਿਨਾਂ 17 ਵਿੱਚੋਂ 11+ ਟੀਚੇ 70% ’ਤੇ ਪਹੁੰਚਾਓ।",
+    "help.next": "ਅੱਗੇ", "help.got": "ਠੀਕ ਹੈ",
+    "date": "{m} {y}",
+    "mon.0": "ਜਨਵਰੀ", "mon.1": "ਫ਼ਰਵਰੀ", "mon.2": "ਮਾਰਚ", "mon.3": "ਅਪ੍ਰੈਲ", "mon.4": "ਮਈ", "mon.5": "ਜੂਨ", "mon.6": "ਜੁਲਾਈ", "mon.7": "ਅਗਸਤ", "mon.8": "ਸਤੰਬਰ", "mon.9": "ਅਕਤੂਬਰ", "mon.10": "ਨਵੰਬਰ", "mon.11": "ਦਸੰਬਰ",
+    "hrs.continue": "⏯ ਜਾਰੀ ਰੱਖੋ", "hrs.new": "▶ ਨਵੀਂ ਗੇਮ", "hrs.welcome": "💾 ਜੀ ਆਇਆਂ ਨੂੰ, ਫਿਰ ਤੋਂ! {d}, {unit} {n}/{T}", "hrs.turn": "ਵਾਰੀ", "hrs.season": "ਸੀਜ਼ਨ",
+    "hrs.startq": "ਨਵੀਂ ਗੇਮ ਸ਼ੁਰੂ ਕਰੀਏ?", "hrs.replaced": "ਤੁਹਾਡੀ ਸੇਵ ਕੀਤੀ ਗੇਮ ({d}) ਹਟ ਜਾਵੇਗੀ।", "hrs.cancel": "ਰੱਦ ਕਰੋ", "hrs.startnew": "ਨਵੀਂ ਸ਼ੁਰੂ ਕਰੋ",
+    "hrs.allgames": "🏠 ਸਾਰੀਆਂ ਗੇਮਾਂ", "hrs.classic": "🕰️ ਕਲਾਸਿਕ", "hrs.about": "ਜਾਣ-ਪਛਾਣ", "hrs.privacy": "ਪਰਦੇਦਾਰੀ", "hrs.home": "ਹੋਮ: ਸਾਰੀਆਂ ਗੇਮਾਂ",
+    "hrs.disc": "ਸੁਤੰਤਰ ਵਿਦਿਅਕ ਗੇਮ। ਸੰਯੁਕਤ ਰਾਸ਼ਟਰ ਨਾਲ ਸੰਬੰਧਿਤ ਨਹੀਂ।", "mode.classic.name": "ਕਲਾਸਿਕ",
+
+    // ---- 17 goals ----
+    "sdg.1": "ਗਰੀਬੀ ਦਾ ਖ਼ਾਤਮਾ", "sdg.2": "ਭੁੱਖਮਰੀ ਦਾ ਖ਼ਾਤਮਾ", "sdg.3": "ਚੰਗੀ ਸਿਹਤ", "sdg.4": "ਮਿਆਰੀ ਸਿੱਖਿਆ", "sdg.5": "ਲਿੰਗ ਸਮਾਨਤਾ", "sdg.6": "ਸਾਫ਼ ਪਾਣੀ",
+    "sdg.7": "ਸਾਫ਼ ਊਰਜਾ", "sdg.8": "ਵਧੀਆ ਰੁਜ਼ਗਾਰ", "sdg.9": "ਉਦਯੋਗ ਅਤੇ ਨਵੀਨਤਾ", "sdg.10": "ਨਾ-ਬਰਾਬਰੀ ਵਿੱਚ ਕਮੀ", "sdg.11": "ਟਿਕਾਊ ਸ਼ਹਿਰ", "sdg.12": "ਜ਼ਿੰਮੇਵਾਰ ਖਪਤ",
+    "sdg.13": "ਜਲਵਾਯੂ ਕਾਰਵਾਈ", "sdg.14": "ਪਾਣੀ ਹੇਠ ਜੀਵਨ", "sdg.15": "ਧਰਤੀ ’ਤੇ ਜੀਵਨ", "sdg.16": "ਸ਼ਾਂਤੀ ਅਤੇ ਨਿਆਂ", "sdg.17": "ਟੀਚਿਆਂ ਲਈ ਭਾਈਵਾਲੀ",
+    "sdgl.1": "ਕਿਸੇ ਕੋਲ ਲੋੜ ਤੋਂ ਘੱਟ ਨਾ ਹੋਵੇ", "sdgl.2": "ਸਭ ਲਈ ਭਰਪੂਰ ਚੰਗਾ ਖਾਣਾ", "sdgl.3": "ਹਰ ਉਮਰ ਵਿੱਚ ਤੰਦਰੁਸਤ ਜੀਵਨ", "sdgl.4": "ਹਰ ਬੱਚਾ ਚੰਗੇ ਸਕੂਲ ਵਿੱਚ",
+    "sdgl.5": "ਔਰਤਾਂ ਅਤੇ ਕੁੜੀਆਂ ਨੂੰ ਬਰਾਬਰ ਹੱਕ", "sdgl.6": "ਸਭ ਲਈ ਸੁਰੱਖਿਅਤ ਪਾਣੀ ਅਤੇ ਪਖ਼ਾਨੇ", "sdgl.7": "ਸਸਤੀ, ਸਾਫ਼ ਬਿਜਲੀ", "sdgl.8": "ਚੰਗੀਆਂ ਨੌਕਰੀਆਂ ਅਤੇ ਨਿਆਂਪੂਰਨ ਵਿਕਾਸ",
+    "sdgl.9": "ਆਧੁਨਿਕ, ਹਰਿਆ-ਭਰਿਆ ਬੁਨਿਆਦੀ ਢਾਂਚਾ", "sdgl.10": "ਸਭ ਨੂੰ ਵਾਜਬ ਹਿੱਸਾ", "sdgl.11": "ਸੁਰੱਖਿਅਤ, ਸਾਫ਼, ਰਹਿਣਯੋਗ ਸ਼ਹਿਰ", "sdgl.12": "ਘੱਟ ਬਰਬਾਦੀ, ਸਿਆਣੀ ਵਰਤੋਂ",
+    "sdgl.13": "ਨਿਕਾਸ ਘਟਾਓ, ਗਰਮੀ ਨਾਲ ਨਜਿੱਠੋ", "sdgl.14": "ਤੰਦਰੁਸਤ ਸਮੁੰਦਰ ਅਤੇ ਤਟ", "sdgl.15": "ਜੰਗਲ ਅਤੇ ਜੰਗਲੀ ਜੀਵ ਵਧਣ-ਫੁੱਲਣ", "sdgl.16": "ਸ਼ਾਂਤੀ, ਨਿਰਪੱਖ ਅਦਾਲਤਾਂ, ਭ੍ਰਿਸ਼ਟਾਚਾਰ ਨਹੀਂ", "sdgl.17": "ਦੇਸ਼ ਮਿਲ ਕੇ ਕੰਮ ਕਰਨ",
+    "sdgk.1": "ਕੋਈ ਗਰੀਬ ਨਾ ਹੋਵੇ", "sdgk.2": "ਕੋਈ ਭੁੱਖਾ ਨਾ ਰਹੇ", "sdgk.3": "ਸਾਰੇ ਤੰਦਰੁਸਤ ਰਹਿਣ", "sdgk.4": "ਹਰ ਬੱਚਾ ਸਕੂਲ ਜਾਵੇ", "sdgk.5": "ਮੁੰਡੇ-ਕੁੜੀਆਂ ਨੂੰ ਬਰਾਬਰ ਮੌਕਾ",
+    "sdgk.6": "ਸਭ ਲਈ ਸਾਫ਼ ਪਾਣੀ", "sdgk.7": "ਸੂਰਜ ਅਤੇ ਹਵਾ ਤੋਂ ਸਾਫ਼ ਬਿਜਲੀ", "sdgk.8": "ਵੱਡਿਆਂ ਲਈ ਚੰਗਾ ਕੰਮ", "sdgk.9": "ਨਵੇਂ ਸੋਹਣੇ ਵਿਚਾਰ ਅਤੇ ਸੜਕਾਂ", "sdgk.10": "ਸਭ ਨਾਲ ਬਰਾਬਰੀ",
+    "sdgk.11": "ਸੋਹਣੇ, ਸੁਰੱਖਿਅਤ ਸ਼ਹਿਰ", "sdgk.12": "ਘੱਟ ਵਰਤੋ, ਘੱਟ ਬਰਬਾਦ ਕਰੋ", "sdgk.13": "ਧਰਤੀ ਨੂੰ ਠੰਢਾ ਰੱਖੋ", "sdgk.14": "ਖ਼ੁਸ਼ ਮੱਛੀਆਂ, ਸਾਫ਼ ਸਮੁੰਦਰ", "sdgk.15": "ਖ਼ੁਸ਼ ਜੰਗਲ ਅਤੇ ਜਾਨਵਰ",
+    "sdgk.16": "ਸ਼ਾਂਤੀ ਅਤੇ ਸਹੀ ਨਿਯਮ", "sdgk.17": "ਦੇਸ਼ ਇੱਕ-ਦੂਜੇ ਦੀ ਮਦਦ ਕਰਨ",
+
+    // ---- meters & modes ----
+    "met.base.m": "ਪੈਸਾ", "met.base.h": "ਖ਼ੁਸ਼ੀ", "met.base.p": "ਧਰਤੀ", "met.base.w": "ਸ਼ਾਂਤੀ",
+    "met.kids.m": "ਸਿੱਕੇ", "met.kids.h": "ਮੁਸਕਾਨ", "met.kids.p": "ਕੁਦਰਤ", "met.kids.w": "ਦੋਸਤੀ",
+    "met.adults.m": "ਖ਼ਜ਼ਾਨਾ", "met.adults.h": "ਲੋਕਾਂ ਦਾ ਭਰੋਸਾ", "met.adults.p": "ਈਕੋਸਿਸਟਮ", "met.adults.w": "ਸਥਿਰਤਾ",
+    "mode.kids.name": "ਸਕੂਲੀ ਬੱਚੇ", "mode.kids.ages": "8–13 ਸਾਲ", "mode.kids.intro": "ਆਪਣੀ ਧਰਤੀ ਨੂੰ ਮੁਸਕਰਾਉਣ ਵਿੱਚ ਮਦਦ ਕਰੋ! 10 ਵਾਰੀਆਂ। ਚੰਗਾ ਅਤੇ ਸਿਆਣਾ ਕਾਰਡ ਚੁਣੋ।",
+    "mode.college.name": "ਕਾਲਜ", "mode.college.ages": "17–22 ਸਾਲ", "mode.college.intro": "16 ਸੀਜ਼ਨ। ਅਸਲੀ ਨਫ਼ਾ-ਨੁਕਸਾਨ। ਹਰ ਬਿੱਲ ਸਮੇਂ ਸਿਰ ਨਹੀਂ ਆਉਂਦਾ।",
+    "mode.adults.name": "ਬਾਲਗ", "mode.adults.ages": "23+ ਸਾਲ", "mode.adults.intro": "ਪੂਰਾ ਕਾਰਜਕਾਲ, 2026–2030। ਚੋਣਾਂ, ਲਾਬੀਆਂ, ਟਿਪਿੰਗ ਪੁਆਇੰਟ। ਕੋਈ ਉਂਗਲ ਫੜ ਕੇ ਨਹੀਂ ਤੋਰੇਗਾ।",
+    "mode.classic.intro": "ਦੁਨੀਆ ਨੂੰ ਠੀਕ ਕਰੋ। ਹਰ ਸੀਜ਼ਨ ਇੱਕ ਫ਼ੈਸਲਾ।",
+
+    // ---- endings ----
+    "end.kids.hero.t": "ਧਰਤੀ ਦੇ ਸੁਪਰਹੀਰੋ!", "end.kids.hero.l": "ਤੁਸੀਂ ਪੂਰੀ ਦੁਨੀਆ ਨੂੰ ਮੁਸਕਰਾ ਦਿੱਤਾ। ਕਮਾਲ!",
+    "end.kids.helper.t": "ਧਰਤੀ ਦੇ ਮਦਦਗਾਰ", "end.kids.helper.l": "ਸ਼ਾਬਾਸ਼! ਤੁਹਾਡੀ ਧਰਤੀ ਹੁਣ ਹੋਰ ਖ਼ੁਸ਼ ਅਤੇ ਹਰੀ-ਭਰੀ ਹੈ।",
+    "end.kids.sprout.t": "ਨਿੱਕਾ ਹਰਾ ਪੁੰਗਰ", "end.kids.sprout.l": "ਵਧੀਆ ਸ਼ੁਰੂਆਤ! ਅਗਲੀ ਵਾਰ ਹੋਰ ਚੰਗੇ ਕੰਮ ਚੁਣਨਾ।",
+    "end.kids.explorer.t": "ਕੋਸ਼ਿਸ਼ ਜਾਰੀ ਰੱਖੋ, ਖੋਜੀ!", "end.kids.explorer.l": "ਹਰ ਹੀਰੋ ਕਿਤੋਂ ਤਾਂ ਸ਼ੁਰੂ ਕਰਦਾ ਹੈ। ਫਿਰ ਖੇਡੋ!",
+    "end.college.summa.t": "ਧਰਤੀ ਦੇ ਟਾਪਰ", "end.college.summa.l": "ਜਮਾਤ ਵਿੱਚ ਅੱਵਲ: ਵਧਦੀ-ਫੁੱਲਦੀ, ਨਿਆਂਪੂਰਨ ਦੁਨੀਆ।",
+    "end.college.changer.t": "ਬਦਲਾਅ ਲਿਆਉਣ ਵਾਲੇ", "end.college.changer.l": "ਤੁਸੀਂ ਹਾਲਾਤ ਦਾ ਰੁਖ਼ ਮੋੜ ਦਿੱਤਾ। ਬਹੁਤੇ ਟੀਚੇ ਪੂਰੇ।",
+    "end.college.wip.t": "ਕੰਮ ਅਜੇ ਜਾਰੀ ਹੈ", "end.college.wip.l": "ਚੰਗੀ ਕੋਸ਼ਿਸ਼, ਪਰ ਬਹੁਤ ਸਾਰੇ ਟੀਚੇ ਅਧੂਰੇ ਰਹਿ ਗਏ।",
+    "end.college.gap.t": "ਗੈਪ ਯੀਅਰ", "end.college.gap.l": "ਸ਼ਾਰਟਕੱਟਾਂ ਅਤੇ ਝਟਕਿਆਂ ਨੇ ਪੂਰਾ ਦਹਾਕਾ ਖਾ ਲਿਆ।",
+    "end.college.fail.t": "ਇਮਤਿਹਾਨ ਵਿੱਚ ਫ਼ੇਲ੍ਹ", "end.college.fail.l": "ਲਗਭਗ ਕੋਈ ਟੀਚਾ ਪੂਰਾ ਨਹੀਂ। 2031 ਵਿੱਚ ਦੁਬਾਰਾ ਇਮਤਿਹਾਨ?",
+    "end.college.war.t": "ਜੰਗ ਨਾਲ ਤਬਾਹ", "end.college.war.l": "ਸ਼ਾਂਤੀ ਟੁੱਟ ਗਈ। ਜੰਗ ਹਰ ਟੀਚਾ ਮਿਟਾ ਦਿੰਦੀ ਹੈ।",
+    "end.college.hothouse.t": "ਤਪਦੀ ਧਰਤੀ", "end.college.hothouse.l": "ਗਰਮੀ ਨਾਲ ਧਰਤੀ ਬੇਹਾਲ ਹੋ ਗਈ।",
+    "end.college.toppled.t": "ਜਨ-ਅੰਦੋਲਨ", "end.college.toppled.l": "ਲੋਕਾਂ ਦੀ ਉਮੀਦ ਟੁੱਟ ਗਈ ਅਤੇ ਉਹ ਸੜਕਾਂ ’ਤੇ ਉੱਤਰ ਆਏ।",
+    "end.college.broke.t": "ਦੀਵਾਲੀਆ", "end.college.broke.l": "ਪੈਸਾ ਖ਼ਤਮ। ਕਰਜ਼ਦਾਤਿਆਂ ਨੇ ਕਮਾਨ ਸੰਭਾਲ ਲਈ।",
+    "end.adults.states.t": "ਦਹਾਕੇ ਦੇ ਰਾਜਨੇਤਾ", "end.adults.states.l": "ਏਜੰਡਾ 2030 ਪੂਰਾ, ਅਤੇ ਉਸ ਤੋਂ ਵੀ ਅੱਗੇ।",
+    "end.adults.delivered.t": "ਏਜੰਡਾ 2030 ਪੂਰਾ", "end.adults.delivered.l": "ਔਖੇ ਹਾਲਾਤ ਵਿੱਚ ਵੀ ਬਹੁਤੇ ਟੀਚੇ ਹਾਸਲ।",
+    "end.adults.partial.t": "ਅਧੂਰਾ ਕੰਮ", "end.adults.partial.l": "ਤਰੱਕੀ ਹੋਈ, ਪਰ ਟੀਚੇ ਖਿਸਕ ਗਏ।",
+    "end.adults.missed.t": "ਟੀਚੇ ਖੁੰਝ ਗਏ", "end.adults.missed.l": "ਥੋੜ੍ਹੇ ਸਮੇਂ ਦੀ ਸੋਚ ਜਿੱਤ ਗਈ। 2030 ਆਇਆ ਅਤੇ ਲੰਘ ਗਿਆ।",
+    "end.adults.broken.t": "ਟੁੱਟੇ ਵਾਅਦੇ", "end.adults.broken.l": "ਲਗਭਗ ਕੁਝ ਵੀ ਪੂਰਾ ਨਹੀਂ ਹੋਇਆ। ਇਤਿਹਾਸ ਫ਼ੈਸਲਾ ਕਰੇਗਾ।",
+    "end.adults.voted.t": "ਚੋਣ ਹਾਰ ਕੇ ਬਾਹਰ", "end.adults.voted.l": "ਚੋਣ ਵਾਲੇ ਦਿਨ ਭਰੋਸਾ ਲੋੜੀਂਦੀ ਹੱਦ ਤੋਂ ਹੇਠਾਂ ਸੀ।",
+    "end.adults.war.t": "ਜੰਗ ਨਾਲ ਤਬਾਹ", "end.adults.war.l": "ਸਥਿਰਤਾ ਟੁੱਟ ਕੇ ਖੁੱਲ੍ਹੀ ਜੰਗ ਵਿੱਚ ਬਦਲ ਗਈ।",
+    "end.adults.hothouse.t": "ਟਿਪਿੰਗ-ਪੁਆਇੰਟ ਤਬਾਹੀ", "end.adults.hothouse.l": "ਈਕੋਸਿਸਟਮ ਵਾਪਸੀ ਦੀ ਹੱਦ ਪਾਰ ਕਰ ਗਏ।",
+    "end.adults.toppled.t": "ਸੱਤਾ ਤੋਂ ਬੇਦਖ਼ਲ", "end.adults.toppled.l": "ਭਾਰੀ ਅਸ਼ਾਂਤੀ ਨੇ ਤੁਹਾਨੂੰ ਕੁਰਸੀ ਤੋਂ ਹਟਾ ਦਿੱਤਾ।",
+    "end.adults.broke.t": "ਸਰਕਾਰੀ ਡਿਫ਼ਾਲਟ", "end.adults.broke.l": "ਹੁਣ ਤੁਹਾਡਾ ਬਜਟ ਕਰਜ਼ਦਾਤੇ ਤੈਅ ਕਰਦੇ ਹਨ।",
+    "end.classic.hero.t": "ਧਰਤੀ ਦੇ ਹੀਰੋ", "end.classic.hero.l": "ਵਧਦੀ-ਫੁੱਲਦੀ, ਸ਼ਾਂਤ ਦੁਨੀਆ। 2030 ਦਾ ਵਾਅਦਾ ਨਿਭਾਇਆ।",
+    "end.classic.champion.t": "ਹਰਿਤ ਚੈਂਪੀਅਨ", "end.classic.champion.l": "ਬਹੁਤੇ ਟੀਚੇ ਪੂਰੇ। ਦੁਨੀਆ ਠੀਕ ਹੋ ਰਹੀ ਹੈ।",
+    "end.classic.onway.t": "ਸਹੀ ਰਾਹ ’ਤੇ", "end.classic.onway.l": "ਅਸਲੀ ਤਰੱਕੀ, ਪਰ ਬਹੁਤੇ ਵਾਅਦੇ ਅਜੇ ਅਧੂਰੇ।",
+    "end.classic.lost.t": "ਗੁਆਚਿਆ ਦਹਾਕਾ", "end.classic.lost.l": "ਸ਼ਾਰਟਕੱਟਾਂ ਅਤੇ ਝਟਕਿਆਂ ਨੇ ਪੂਰਾ ਦਹਾਕਾ ਖਾ ਲਿਆ।",
+    "end.classic.broken.t": "ਟੁੱਟੇ ਵਾਅਦੇ", "end.classic.broken.l": "ਲਗਭਗ ਕੋਈ ਟੀਚਾ ਪੂਰਾ ਨਹੀਂ। ਬਿੱਲ ਭਵਿੱਖ ਭਰੇਗਾ।",
+    "end.classic.war.t": "ਜੰਗ ਨਾਲ ਤਬਾਹ", "end.classic.war.l": "ਸ਼ਾਂਤੀ ਟੁੱਟ ਗਈ। ਜੰਗ ਹਰ ਟੀਚਾ ਮਿਟਾ ਦਿੰਦੀ ਹੈ।",
+    "end.classic.hothouse.t": "ਤਪਦੀ ਧਰਤੀ", "end.classic.hothouse.l": "ਗਰਮੀ ਨਾਲ ਧਰਤੀ ਬੇਹਾਲ ਹੋ ਗਈ।",
+    "end.classic.toppled.t": "ਸੱਤਾ ਤੋਂ ਬੇਦਖ਼ਲ", "end.classic.toppled.l": "ਤੁਹਾਡੇ ਲੋਕਾਂ ਦੀ ਉਮੀਦ ਟੁੱਟ ਗਈ ਅਤੇ ਉਹ ਸੜਕਾਂ ’ਤੇ ਉੱਤਰ ਆਏ।",
+    "end.classic.broke.t": "ਦੀਵਾਲੀਆ", "end.classic.broke.l": "ਪੈਸਾ ਖ਼ਤਮ। ਕਰਜ਼ਦਾਤਿਆਂ ਨੇ ਕਮਾਨ ਸੰਭਾਲ ਲਈ।",
+
+    // ---- cards: college / classic ----
+    "c.solar.t": "ਸਭ ਲਈ ਸੂਰਜੀ ਊਰਜਾ", "c.solar.h": "ਧੁੱਪ ਨਾਲ ਘਰਾਂ ਵਿੱਚ ਬਿਜਲੀ", "c.solar.l": "ਸੋਲਰ ਤੋਂ ਕਮਾਈ",
+    "c.school.t": "ਮੁਫ਼ਤ ਸਕੂਲ", "c.school.h": "ਹਰ ਬੱਚਾ ਪੜ੍ਹੇ", "c.school.l": "ਪੜ੍ਹੇ-ਲਿਖੇ ਨੌਜਵਾਨ ਕੰਮ ’ਤੇ",
+    "c.clinic.t": "ਹਰ ਥਾਂ ਕਲੀਨਿਕ", "c.clinic.h": "ਤੰਦਰੁਸਤ ਲੋਕ, ਮਜ਼ਬੂਤ ਦੇਸ਼",
+    "c.forest.t": "ਜੰਗਲ ਮੁੜ ਲਾਓ", "c.forest.h": "ਰੁੱਖ ਧਰਤੀ ਨੂੰ ਠੰਢਾ ਰੱਖਦੇ ਹਨ", "c.forest.l": "ਜੰਗਲ ਮੁੜ ਆਏ",
+    "c.water.t": "ਸਾਫ਼ ਪਾਣੀ", "c.water.h": "ਹਰ ਪਿੰਡ ਵਿੱਚ ਟੂਟੀ",
+    "c.transit.t": "ਹਰਿਤ ਆਵਾਜਾਈ", "c.transit.h": "ਸਾਈਕਲ, ਟਰਾਮ, ਸਾਫ਼ ਹਵਾ",
+    "c.farm.t": "ਸਮਾਰਟ ਖੇਤੀ", "c.farm.h": "ਵੱਧ ਅਨਾਜ, ਘੱਟ ਬਰਬਾਦੀ",
+    "c.equal.t": "ਬਰਾਬਰ ਹੱਕ", "c.equal.h": "ਅੱਧੀ ਪ੍ਰਤਿਭਾ ਨੂੰ ਅੱਗੇ ਆਉਣ ਦਿਓ", "c.equal.l": "ਔਰਤਾਂ ਦੇ ਕਾਰੋਬਾਰ ਚਮਕੇ",
+    "c.talks.t": "ਸ਼ਾਂਤੀ ਵਾਰਤਾ", "c.talks.h": "ਦੁਸ਼ਮਣਾਂ ਨੂੰ ਸਾਥੀ ਬਣਾਓ",
+    "c.ocean.t": "ਸਮੁੰਦਰ ਬਚਾਓ", "c.ocean.h": "ਮੱਛੀਆਂ ਨੂੰ ਮੁੜਨ ਦਿਓ", "c.ocean.l": "ਮੱਛੀਆਂ ਫਿਰ ਵਧੀਆਂ",
+    "c.taxrich.t": "ਅਮੀਰਾਂ ’ਤੇ ਟੈਕਸ", "c.taxrich.h": "ਅਰਬਪਤੀ ਆਪਣਾ ਹਿੱਸਾ ਦੇਣ",
+    "c.carbon.t": "ਕਾਰਬਨ ਦੀ ਕੀਮਤ", "c.carbon.h": "ਪ੍ਰਦੂਸ਼ਣ ਕਰਨ ਵਾਲੇ ਭਰਨ",
+    "c.allies.t": "ਹਰਿਤ ਭਾਈਵਾਲ", "c.allies.h": "ਸਾਥੀ ਦੇਸ਼ ਖ਼ਰਚੇ ਵਿੱਚ ਹੱਥ ਵੰਡਾਉਣ",
+    "c.jobs.t": "ਹਰਿਤ ਰੁਜ਼ਗਾਰ", "c.jobs.h": "ਸਾਫ਼ ਅਰਥਚਾਰਾ ਬਣਾਓ", "c.jobs.l": "ਨਵੇਂ ਉਦਯੋਗ ਟੈਕਸ ਭਰਨ ਲੱਗੇ",
+    "c.honest.t": "ਭ੍ਰਿਸ਼ਟਾਚਾਰ ਨਾਲ ਲੜੋ", "c.honest.h": "ਚੋਰੀ ਰੋਕੋ", "c.honest.l": "ਚੋਰੀ ਦਾ ਪੈਸਾ ਵਾਪਸ ਆਇਆ",
+    "c.recycle.t": "ਕੂੜਾ-ਮੁਕਤ ਸ਼ਹਿਰ", "c.recycle.h": "ਮੁਰੰਮਤ, ਮੁੜ ਵਰਤੋਂ, ਰੀਸਾਈਕਲਿੰਗ",
+    "c.safety.t": "ਸਮਾਜਿਕ ਸੁਰੱਖਿਆ", "c.safety.h": "ਕੋਈ ਪਿੱਛੇ ਨਾ ਰਹੇ",
+    "c.labs.t": "ਨਵੀਨਤਾ ਲੈਬਾਂ", "c.labs.h": "ਵਿਚਾਰਾਂ ਤੋਂ ਉਦਯੋਗ", "c.labs.l": "ਸਟਾਰਟ-ਅੱਪਾਂ ਦੀ ਬਹਾਰ",
+    "c.welcome.t": "ਸ਼ਰਨਾਰਥੀਆਂ ਦਾ ਸਵਾਗਤ", "c.welcome.h": "ਅੱਜ ਆਸਰਾ, ਕੱਲ੍ਹ ਹੁਨਰ", "c.welcome.l": "ਨਵੇਂ ਆਏ ਲੋਕਾਂ ਨੇ ਕਾਰੋਬਾਰ ਖੋਲ੍ਹੇ",
+    "c.oil.t": "ਤੇਲ ਦੀ ਖੁਦਾਈ", "c.oil.h": "ਛੇਤੀ ਪੈਸਾ, ਤਪਦਾ ਭਵਿੱਖ।", "c.oil.l": "ਮਹਾਂ-ਤੂਫ਼ਾਨ",
+    "c.chop.t": "ਬਰਸਾਤੀ ਜੰਗਲ ਵੇਚ ਦਿਓ", "c.chop.h": "ਹੁਣੇ ਲੱਕੜ ਦਾ ਪੈਸਾ", "c.chop.l": "ਹੜ੍ਹ ਅਤੇ ਢਿੱਗਾਂ ਡਿੱਗੀਆਂ",
+    "c.war.t": "ਸਰਹੱਦੀ ਜੰਗ", "c.war.h": "ਦੇਸ਼ ਨੂੰ ਇੱਕਜੁੱਟ ਕਰੋ!", "c.war.l": "ਜੰਗ ਲੰਮੀ ਖਿੱਚੀ ਗਈ",
+    "c.crack.t": "ਮੁਜ਼ਾਹਰੇ ਕੁਚਲ ਦਿਓ", "c.crack.h": "ਸੜਕਾਂ ਛੇਤੀ ਸ਼ਾਂਤ", "c.crack.l": "ਬਗ਼ਾਵਤ",
+    "c.stadium.t": "ਕਰਜ਼ੇ ਨਾਲ ਵੱਡਾ ਪ੍ਰੋਜੈਕਟ", "c.stadium.h": "ਇੱਕ ਚਮਕਦਾ ਸਟੇਡੀਅਮ!", "c.stadium.l": "ਕਰਜ਼ਾ ਸੰਕਟ",
+    "c.fuel.t": "ਸਸਤਾ ਪੈਟਰੋਲ", "c.fuel.h": "ਵੋਟਰਾਂ ਨੂੰ ਬਹੁਤ ਪਸੰਦ", "c.fuel.l": "ਜਾਨਲੇਵਾ ਲੂ",
+    "c.dereg.t": "ਪ੍ਰਦੂਸ਼ਣ ਨਿਯਮ ਖ਼ਤਮ", "c.dereg.h": "ਕਾਰਖ਼ਾਨਿਆਂ ਦੀ ਚਾਂਦੀ", "c.dereg.l": "ਜ਼ਹਿਰੀਲਾ ਧੂੰਆਂ",
+    "c.fish.t": "ਮੱਛੀ ਫੜਨ ਦੇ ਹੱਕ ਵੇਚੋ", "c.fish.h": "ਵਿਦੇਸ਼ੀ ਜਹਾਜ਼ ਚੰਗਾ ਪੈਸਾ ਦਿੰਦੇ ਹਨ", "c.fish.l": "ਮੱਛੀ ਕਾਰੋਬਾਰ ਢਹਿ ਗਿਆ",
+    "c.crony.t": "ਯਾਰਾਂ ਨੂੰ ਠੇਕੇ", "c.crony.h": "ਸੌਦੇ ਫਟਾਫਟ", "c.crony.l": "ਭ੍ਰਿਸ਼ਟਾਚਾਰ ਘੁਟਾਲਾ",
+    "c.arms.t": "ਹਥਿਆਰਾਂ ਦੀ ਦੌੜ", "c.arms.h": "ਟੈਂਕ ਖ਼ਰੀਦੋ, ਸੁਰੱਖਿਅਤ ਮਹਿਸੂਸ ਕਰੋ", "c.arms.l": "ਗੁਆਂਢੀ ਵੀ ਹਥਿਆਰ ਇਕੱਠੇ ਕਰਨ ਲੱਗੇ",
+    "c.cuts.t": "ਸਕੂਲਾਂ-ਹਸਪਤਾਲਾਂ ’ਚ ਕਟੌਤੀ", "c.cuts.h": "ਹਿਸਾਬ ਬਰਾਬਰ ਕਰੋ", "c.cuts.l": "ਮਹਾਂਮਾਰੀ ਫੈਲ ਗਈ",
+    "c.coal.t": "ਨਵਾਂ ਕੋਲਾ ਬਿਜਲੀਘਰ", "c.coal.h": "ਅੱਜ ਸਸਤੀ ਬਿਜਲੀ", "c.coal.l": "ਜੰਗਲਾਂ ਦੀ ਅੱਗ",
+    "c.walls.t": "ਸਰਹੱਦਾਂ ਬੰਦ ਕਰੋ", "c.walls.h": "ਉਨ੍ਹਾਂ ਨੂੰ ਬਾਹਰ ਰੱਖੋ!", "c.walls.l": "ਵਪਾਰਕ ਭਾਈਵਾਲ ਦੂਰ ਹੋ ਗਏ",
+
+    // ---- cards: kids ----
+    "c.k_trees.t": "ਰੁੱਖ ਲਾਓ", "c.k_trees.h": "ਰੁੱਖ ਹਵਾ ਸਾਫ਼ ਕਰਦੇ ਹਨ", "c.k_trees.l": "ਚਿੜੀਆਂ ਮੁੜ ਆਈਆਂ!",
+    "c.k_school.t": "ਸਕੂਲ ਬਣਾਓ", "c.k_school.h": "ਸਭ ਨੂੰ ਪੜ੍ਹਨ ਦਾ ਮੌਕਾ",
+    "c.k_lunch.t": "ਸਿਹਤਮੰਦ ਟਿਫ਼ਨ", "c.k_lunch.h": "ਹਰ ਬੱਚੇ ਲਈ ਚੰਗਾ ਖਾਣਾ",
+    "c.k_recycle.t": "ਰੀਸਾਈਕਲਿੰਗ ਡੱਬੇ", "c.k_recycle.h": "ਕੂੜਾ ਵੱਖ-ਵੱਖ ਕਰੋ",
+    "c.k_well.t": "ਸਾਫ਼ ਪਾਣੀ ਦਾ ਖੂਹ", "c.k_well.h": "ਪਿੰਡ ਲਈ ਸਾਫ਼ ਪਾਣੀ",
+    "c.k_solar.t": "ਸੋਲਰ ਪੈਨਲ", "c.k_solar.h": "ਸੂਰਜ ਤੋਂ ਬਿਜਲੀ", "c.k_solar.l": "ਧੁੱਪ ਨੇ ਸਿੱਕੇ ਬਚਾਏ!",
+    "c.k_share.t": "ਸਭ ਨਾਲ ਵੰਡੋ", "c.k_share.h": "ਸਭ ਨਾਲ ਪਿਆਰ",
+    "c.k_equal.t": "ਸਭ ਨੂੰ ਬਰਾਬਰ ਮੌਕਾ", "c.k_equal.h": "ਮੁੰਡੇ-ਕੁੜੀਆਂ ਬਰਾਬਰ",
+    "c.k_bikes.t": "ਸਾਈਕਲ ਰਸਤੇ", "c.k_bikes.h": "ਕਾਰ ਨਹੀਂ, ਸਾਈਕਲ ਚਲਾਓ",
+    "c.k_clinic.t": "ਬੱਚਿਆਂ ਦਾ ਦਵਾਖ਼ਾਨਾ", "c.k_clinic.h": "ਸਭ ਲਈ ਡਾਕਟਰ",
+    "c.k_beach.t": "ਸਮੁੰਦਰੀ ਕੰਢਾ ਸਾਫ਼ ਕਰੋ", "c.k_beach.h": "ਕੱਛੂਆਂ ਦੀ ਮਦਦ ਕਰੋ",
+    "c.k_bake.t": "ਚੰਗੇ ਕੰਮ ਲਈ ਕੇਕ ਸੇਲ", "c.k_bake.h": "ਮਿਲ ਕੇ ਸਿੱਕੇ ਇਕੱਠੇ ਕਰੋ",
+    "c.k_garden.t": "ਸਕੂਲ ਦਾ ਬਗੀਚਾ", "c.k_garden.h": "ਆਪਣੀਆਂ ਸਬਜ਼ੀਆਂ ਆਪ ਉਗਾਓ",
+    "c.k_friends.t": "ਦੋਸਤ ਬਣਾਓ", "c.k_friends.h": "ਗੁਆਂਢੀਆਂ ਨੂੰ ਪਿਆਰ ਨਾਲ ਮਿਲੋ",
+    "c.k_jobs.t": "ਮੁਰੰਮਤ ਵਰਕਸ਼ਾਪ", "c.k_jobs.h": "ਚੀਜ਼ਾਂ ਠੀਕ ਕਰਨੀਆਂ ਸਿੱਖੋ",
+    "c.k_candy.t": "ਢੇਰ ਸਾਰੀਆਂ ਟਾਫ਼ੀਆਂ ਖ਼ਰੀਦੋ", "c.k_candy.h": "ਵਾਹ! ਹੁਣੇ ਮਜ਼ਾ", "c.k_candy.l": "ਢਿੱਡ ਵਿੱਚ ਦਰਦ!",
+    "c.k_chop.t": "ਪਾਰਕ ਦੇ ਰੁੱਖ ਵੱਢੋ", "c.k_chop.h": "ਕਾਰ ਪਾਰਕਿੰਗ ਲਈ ਥਾਂ", "c.k_chop.l": "ਤਪਦੀ ਗਰਮੀ, ਕੋਈ ਛਾਂ ਨਹੀਂ",
+    "c.k_car.t": "ਹਰ ਥਾਂ ਕਾਰ ’ਤੇ ਜਾਓ", "c.k_car.h": "ਤੇਜ਼ ਅਤੇ ਆਰਾਮਦਾਇਕ", "c.k_car.l": "ਧੂੰਏਂ ਵਾਲੀ ਹਵਾ",
+    "c.k_litter.t": "ਕੂੜਾ ਕਿਤੇ ਵੀ ਸੁੱਟੋ", "c.k_litter.h": "ਛਾਂਟਣ ਨਾਲੋਂ ਛੇਤੀ", "c.k_litter.l": "ਨਦੀ ਕੂੜੇ ਨਾਲ ਭਰ ਗਈ",
+    "c.k_keep.t": "ਸਭ ਕੁਝ ਆਪਣੇ ਕੋਲ ਰੱਖੋ", "c.k_keep.h": "ਕਿਸੇ ਨਾਲ ਕੁਝ ਨਾ ਵੰਡੋ", "c.k_keep.l": "ਗੁਆਂਢੀ ਇਕੱਲੇ ਮਹਿਸੂਸ ਕਰਦੇ ਹਨ",
+    "c.k_tv.t": "ਸਕੂਲ ਛੱਡ ਕੇ ਟੀਵੀ ਵੇਖੋ", "c.k_tv.h": "ਕੋਈ ਹੋਮਵਰਕ ਨਹੀਂ!", "c.k_tv.l": "ਚੰਗੀ ਨੌਕਰੀ ਮਿਲਣੀ ਔਖੀ",
+    "c.k_plastic.t": "ਹਰ ਚੀਜ਼ ਪਲਾਸਟਿਕ ਦੀ", "c.k_plastic.h": "ਸੌਖਾ ਅਤੇ ਸਸਤਾ", "c.k_plastic.l": "ਸਮੁੰਦਰ ਵਿੱਚ ਪਲਾਸਟਿਕ",
+
+    // ---- cards: adults ----
+    "c.a_solar.t": "ਵੱਡੇ ਪੱਧਰ ’ਤੇ ਨਵਿਆਉਣਯੋਗ ਊਰਜਾ", "c.a_solar.h": "ਗਰਿੱਡ ਅੱਪਗ੍ਰੇਡ; ਕੋਲਾ ਇਲਾਕਿਆਂ ਦਾ ਵਿਰੋਧ",
+    "c.a_school.t": "ਸਭ ਲਈ ਸੈਕੰਡਰੀ ਸਿੱਖਿਆ", "c.a_school.h": "ਫ਼ਾਇਦਾ ਦਸ ਸਾਲਾਂ ਵਿੱਚ ਦਿਸੇਗਾ",
+    "c.a_clinic.t": "ਸਰਬ-ਵਿਆਪੀ ਸਿਹਤ ਕਵਰੇਜ", "c.a_clinic.h": "ਹਰਮਨਪਿਆਰਾ, ਮਹਿੰਗਾ, ਪੱਕਾ",
+    "c.a_forest.t": "ਜੰਗਲ ਬਹਾਲੀ ਅਤੇ REDD+", "c.a_forest.h": "ਕਿਸਾਨਾਂ ਦੀ ਚਰਾਂਦ ਘਟੇਗੀ",
+    "c.a_water.t": "ਪਾਣੀ-ਸਫ਼ਾਈ (WASH) ਢਾਂਚਾ", "c.a_water.h": "ਚਮਕ-ਦਮਕ ਨਹੀਂ, ਪਰ ਜ਼ਰੂਰੀ",
+    "c.a_transit.t": "ਜਨਤਕ ਆਵਾਜਾਈ ਅਤੇ EV ਵੱਲ ਬਦਲਾਅ", "c.a_transit.h": "ਕਾਰ ਲਾਬੀ ਭੜਕੀ ਹੋਈ ਹੈ",
+    "c.a_farm.t": "ਜਲਵਾਯੂ-ਸਮਾਰਟ ਖੇਤੀ", "c.a_farm.h": "ਝਾੜ ਹੌਲੀ-ਹੌਲੀ ਵਧੇਗਾ",
+    "c.a_equal.t": "ਲਿੰਗ ਬਰਾਬਰੀ ਕਾਨੂੰਨ", "c.a_equal.h": "ਕੁਝ ਥਾਵਾਂ ’ਤੇ ਸਮਾਜਿਕ ਵਿਰੋਧ",
+    "c.a_talks.t": "ਬਹੁ-ਪੱਖੀ ਸ਼ਾਂਤੀ ਪ੍ਰਕਿਰਿਆ", "c.a_talks.h": "ਹਮਲਾਵਰ ਸੋਚ ਵਾਲੇ ਇਸ ਨੂੰ ਕਮਜ਼ੋਰੀ ਕਹਿਣਗੇ",
+    "c.a_ocean.t": "30×30 ਸਮੁੰਦਰੀ ਸੁਰੱਖਿਆ", "c.a_ocean.h": "ਮਛੇਰਿਆਂ ਦੇ ਕਸਬਿਆਂ ਦੀ ਆਮਦਨ ਘਟੇਗੀ",
+    "c.a_taxrich.t": "ਦੌਲਤ ਅਤੇ ਅਚਾਨਕ-ਮੁਨਾਫ਼ਾ ਟੈਕਸ", "c.a_taxrich.h": "ਪੂੰਜੀ ਦੇ ਬਾਹਰ ਜਾਣ ਦਾ ਖ਼ਤਰਾ",
+    "c.a_carbon.t": "ਕਾਰਬਨ ਕੀਮਤ (ETS)", "c.a_carbon.h": "ਫ਼ਾਇਦਿਆਂ ਤੋਂ ਪਹਿਲਾਂ ਭਾਅ ਵਧਣਗੇ",
+    "c.a_allies.t": "ਜਲਵਾਯੂ-ਵਿੱਤ ਭਾਈਵਾਲੀ", "c.a_allies.h": "ਸ਼ਰਤਾਂ ਨਾਲ ਜੁੜੀ",
+    "c.a_jobs.t": "ਨਿਆਂਪੂਰਨ ਬਦਲਾਅ ਰੁਜ਼ਗਾਰ ਯੋਜਨਾ", "c.a_jobs.h": "ਖਾਣ-ਮਜ਼ਦੂਰਾਂ ਅਤੇ ਡਰਾਈਵਰਾਂ ਨੂੰ ਨਵਾਂ ਹੁਨਰ",
+    "c.a_honest.t": "ਆਜ਼ਾਦ ਭ੍ਰਿਸ਼ਟਾਚਾਰ-ਰੋਕੂ ਏਜੰਸੀ", "c.a_honest.h": "ਤੁਹਾਡੇ ਆਪਣੇ ਸਾਥੀ ਵੀ ਫਸ ਸਕਦੇ ਹਨ",
+    "c.a_recycle.t": "ਸਰਕੂਲਰ ਅਰਥਚਾਰਾ ਲਾਜ਼ਮੀ", "c.a_recycle.h": "ਉਦਯੋਗ ’ਤੇ ਪਾਲਣਾ ਦਾ ਖ਼ਰਚਾ",
+    "c.a_safety.t": "ਘੱਟੋ-ਘੱਟ ਸਮਾਜਿਕ ਸੁਰੱਖਿਆ", "c.a_safety.h": "ਘਾਟੇ ਤੋਂ ਡਰਨ ਵਾਲੇ ਵਿਰੋਧ ਵਿੱਚ",
+    "c.a_labs.t": "ਹਰਿਤ ਉਦਯੋਗਿਕ ਨੀਤੀ", "c.a_labs.h": "ਨਤੀਜਿਆਂ ਨੂੰ ਸਾਲ ਲੱਗਣਗੇ",
+    "c.a_welcome.t": "ਸ਼ਰਨਾਰਥੀ ਏਕੀਕਰਨ ਪ੍ਰੋਗਰਾਮ", "c.a_welcome.h": "ਲੋਕ-ਲੁਭਾਊ ਆਗੂ ਇਸ ਦਾ ਫ਼ਾਇਦਾ ਚੁੱਕਣਗੇ",
+    "c.a_oil.t": "ਨਵੇਂ ਤੇਲ ਅਤੇ ਗੈਸ ਲਾਇਸੈਂਸ", "c.a_oil.h": "ਊਰਜਾ ਸੁਰੱਖਿਆ, ਬਰਾਮਦ ਤੋਂ ਕਮਾਈ",
+    "c.a_chop.t": "ਖੇਤੀ-ਕਾਰੋਬਾਰ ਨੂੰ ਜ਼ਮੀਨੀ ਰਿਆਇਤਾਂ", "c.a_chop.h": "ਬਰਾਮਦ ਵਿੱਚ ਉਛਾਲ, ਪਿੰਡਾਂ ਵਿੱਚ ਰੁਜ਼ਗਾਰ",
+    "c.a_war.t": "ਸਰਹੱਦ ’ਤੇ ਪਹਿਲਾਂ ਹਮਲਾ", "c.a_war.h": "ਝੰਡੇ ਦੁਆਲੇ ਇੱਕਜੁੱਟਤਾ",
+    "c.a_crack.t": "ਐਮਰਜੈਂਸੀ ਸ਼ਕਤੀਆਂ ਦਾ ਆਰਡੀਨੈਂਸ", "c.a_crack.h": "ਛੇਤੀ ਵਿਵਸਥਾ ਬਹਾਲ",
+    "c.a_stadium.t": "ਕਰਜ਼ੇ ਨਾਲ ਬਣਿਆ ਮੈਗਾ-ਪ੍ਰੋਜੈਕਟ", "c.a_stadium.h": "ਦਿਸਦੀ ਵਿਰਾਸਤ, ਹੁਣੇ ਰੁਜ਼ਗਾਰ",
+    "c.a_fuel.t": "ਬਾਲਣ ਸਬਸਿਡੀ ਦਾ ਵਿਸਥਾਰ", "c.a_fuel.h": "ਮਹਿੰਗਾਈ ਤੋਂ ਰਾਹਤ",
+    "c.a_dereg.t": "ਵਾਤਾਵਰਣ ਨਿਯਮਾਂ ਵਿੱਚ ਢਿੱਲ", "c.a_dereg.h": "ਲਾਲ-ਫ਼ੀਤਾਸ਼ਾਹੀ ਘਟੇ, ਵਿਦੇਸ਼ੀ ਨਿਵੇਸ਼ ਆਵੇ",
+    "c.a_fish.t": "ਦੂਰ-ਸਮੁੰਦਰੀ ਮੱਛੀ ਫੜਨ ਦਾ ਸੌਦਾ", "c.a_fish.h": "ਲਾਇਸੈਂਸ ਫ਼ੀਸ ਪਹਿਲਾਂ ਹੀ ਮਿਲੇਗੀ",
+    "c.a_crony.t": "ਬਿਨਾਂ ਟੈਂਡਰ ਠੇਕੇ", "c.a_crony.h": "ਤੇਜ਼ ਕੰਮ, ਵਫ਼ਾਦਾਰ ਦਾਨੀ",
+    "c.a_arms.t": "ਰੱਖਿਆ ਖ਼ਰੀਦ ਵਿੱਚ ਤੇਜ਼ੀ", "c.a_arms.h": "ਰੋਕਥਾਮ ਦੀ ਤਾਕਤ ਅਤੇ ਉਦਯੋਗ ਵਿੱਚ ਨੌਕਰੀਆਂ",
+    "c.a_cuts.t": "ਕਿਫ਼ਾਇਤ ਪੈਕੇਜ", "c.a_cuts.h": "ਬਾਂਡ ਬਾਜ਼ਾਰ ਨੂੰ ਭਰੋਸਾ ਦਿਵਾਓ",
+    "c.a_coal.t": "ਕੋਲਾ ਬੇਸਲੋਡ ਦਾ ਵਾਧਾ", "c.a_coal.h": "ਬੱਤੀਆਂ ਜਗਦੀਆਂ ਰਹਿਣ",
+    "c.a_walls.t": "ਸਰਹੱਦ ਬੰਦੀ ਅਤੇ ਟੈਰਿਫ਼", "c.a_walls.h": "ਘਰੇਲੂ ਉਦਯੋਗ ਬਚਾਓ",
+    "c.a_debtswap.t": "ਕਰਜ਼ੇ ਬਦਲੇ ਕੁਦਰਤ ਦੀ ਸੰਭਾਲ", "c.a_debtswap.h": "ਕਰਜ਼ਦਾਤੇ ਸੰਭਾਲ ਦੀਆਂ ਸ਼ਰਤਾਂ ਤੈਅ ਕਰਨਗੇ",
+    "c.a_gas.t": "ਕੁਦਰਤੀ ਗੈਸ “ਪੁਲ” ਸੌਦਾ", "c.a_gas.h": "ਕੋਲੇ ਨਾਲੋਂ ਸਾਫ਼… ਫ਼ਿਲਹਾਲ", "c.a_gas.l": "ਬੇਕਾਰ ਪਏ ਗੈਸ ਅਸਾਸੇ",
+
+    // ---- moments: kids feelings ----
+    "m.flood.q": "ਗੁਆਂਢੀ ਦੇ ਪਿੰਡ ਵਿੱਚ ਹੜ੍ਹ ਆ ਗਿਆ ਹੈ। ਤੁਸੀਂ ਕੀ ਕਰੋਗੇ?", "m.flood.o0": "ਮਦਦ ਅਤੇ ਕੰਬਲ ਭੇਜੋ", "m.flood.f0": "ਉਹ ਫਿਰ ਸੁਰੱਖਿਅਤ ਮਹਿਸੂਸ ਕਰਦੇ ਹਨ। ਦਇਆ ਨਾਲ ਦੋਸਤ ਬਣਦੇ ਹਨ!", "m.flood.o1": "ਸਾਡਾ ਕੀ ਲੈਣਾ", "m.flood.f1": "ਉਹ ਇਕੱਲੇ ਪੈ ਗਏ। ਦੂਜਿਆਂ ਦੀ ਮਦਦ ਨਾਲ ਸਭ ਦਾ ਭਲਾ ਹੁੰਦਾ ਹੈ।",
+    "m.newkid.q": "ਸਕੂਲ ਵਿੱਚ ਇੱਕ ਨਵਾਂ ਬੱਚਾ ਇਕੱਲਾ ਲੱਗਦਾ ਹੈ।", "m.newkid.o0": "ਉਸ ਨੂੰ ਖੇਡਣ ਲਈ ਸੱਦੋ", "m.newkid.f0": "ਹੁਣ ਉਸ ਦਾ ਇੱਕ ਦੋਸਤ ਹੈ। ਕਿੰਨਾ ਚੰਗਾ ਲੱਗਦਾ ਹੈ!", "m.newkid.o1": "ਕੋਲੋਂ ਲੰਘ ਜਾਓ", "m.newkid.f1": "ਇਕੱਲੇ ਛੱਡੇ ਜਾਣਾ ਦੁਖੀ ਕਰਦਾ ਹੈ। ਅਗਲੀ ਵਾਰ “ਹੈਲੋ” ਕਹਿਣਾ!",
+    "m.sandwich.q": "ਇੱਕ ਸੈਂਡਵਿਚ, ਦੋ ਭੁੱਖੇ ਦੋਸਤ।", "m.sandwich.o0": "ਅੱਧਾ-ਅੱਧਾ ਵੰਡ ਲਓ", "m.sandwich.f0": "ਵੰਡਣ ਨਾਲ ਕੋਈ ਭੁੱਖਾ ਨਹੀਂ ਰਹਿੰਦਾ!", "m.sandwich.o1": "ਸਾਰਾ ਆਪ ਖਾ ਲਓ", "m.sandwich.f1": "ਤੁਹਾਡਾ ਦੋਸਤ ਅਜੇ ਵੀ ਭੁੱਖਾ ਹੈ। ਵੰਡਣਾ ਹੀ ਪਿਆਰ ਹੈ।",
+    "m.bird.q": "ਤੁਹਾਨੂੰ ਇੱਕ ਚਿੜੀ ਮਿਲੀ ਜਿਸ ਦਾ ਖੰਭ ਜ਼ਖ਼ਮੀ ਹੈ।", "m.bird.o0": "ਕਿਸੇ ਵੱਡੇ ਤੋਂ ਮਦਦ ਮੰਗੋ", "m.bird.f0": "ਚਿੜੀ ਠੀਕ ਹੋ ਕੇ ਉੱਡ ਗਈ!", "m.bird.o1": "ਖੇਡਣ ਭੱਜ ਜਾਓ", "m.bird.f1": "ਜਾਨਵਰਾਂ ਨੂੰ ਵੀ ਸਾਡੀ ਮਦਦ ਚਾਹੀਦੀ ਹੈ।",
+    "m.argue.q": "ਦੋ ਟੋਲੀਆਂ ਖੇਡ ਦੇ ਮੈਦਾਨ ਲਈ ਝਗੜ ਰਹੀਆਂ ਹਨ।", "m.argue.o0": "ਵਾਰੀ-ਵਾਰੀ ਖੇਡਣ ਵਿੱਚ ਮਦਦ ਕਰੋ", "m.argue.f0": "ਗੱਲ ਕਰਨ ਨਾਲ ਸ਼ਾਂਤੀ ਆਉਂਦੀ ਹੈ!", "m.argue.o1": "ਇੱਕ ਪਾਸੇ ਹੋ ਜਾਓ", "m.argue.f1": "ਪੱਖ ਲੈਣ ਨਾਲ ਝਗੜਾ ਹੋਰ ਵਧ ਗਿਆ।",
+    "m.grandma.q": "ਇੱਕ ਬਜ਼ੁਰਗ ਗੁਆਂਢਣ ਆਪਣਾ ਸਮਾਨ ਨਹੀਂ ਚੁੱਕ ਪਾ ਰਹੀ।", "m.grandma.o0": "ਸਮਾਨ ਚੁੱਕਣ ਵਿੱਚ ਮਦਦ ਕਰੋ", "m.grandma.f0": "ਉਹ ਮੁਸਕਰਾ ਪਈ। ਛੋਟੀ ਜਿਹੀ ਮਦਦ, ਵੱਡਾ ਫ਼ਰਕ!", "m.grandma.o1": "ਗੇਮ ਖੇਡਦੇ ਰਹੋ", "m.grandma.f1": "ਉਸ ਨੂੰ ਇਕੱਲਿਆਂ ਔਖ ਹੋਈ। ਮਦਦ ਕਰ ਕੇ ਚੰਗਾ ਲੱਗਦਾ ਹੈ!",
+    "m.sad.q": "ਖੇਡ ਹਾਰਨ ਤੋਂ ਬਾਅਦ ਤੁਹਾਡਾ ਦੋਸਤ ਰੋ ਰਿਹਾ ਹੈ।", "m.sad.o0": "ਪੁੱਛੋ ਕਿ ਉਸ ਨੂੰ ਕਿਵੇਂ ਲੱਗ ਰਿਹਾ ਹੈ", "m.sad.f0": "ਸੁਣਨ ਨਾਲ ਮਨ ਹੌਲਾ ਹੁੰਦਾ ਹੈ।", "m.sad.o1": "ਉਸ ’ਤੇ ਹੱਸੋ", "m.sad.f1": "ਇਸ ਨਾਲ ਉਸ ਨੂੰ ਹੋਰ ਬੁਰਾ ਲੱਗਾ। ਪਹਿਲਾਂ ਦਇਆ!",
+    // ---- moments: kids quiz ----
+    "m.kq_water.q": "ਕਿਸ ਵਿੱਚ ਘੱਟ ਪਾਣੀ ਲੱਗਦਾ ਹੈ?", "m.kq_water.o0": "ਛੇਤੀ ਨਾਲ ਸ਼ਾਵਰ", "m.kq_water.o1": "ਭਰੇ ਟੱਬ ਵਿੱਚ ਨਹਾਉਣਾ", "m.kq_water.fact": "ਛੇਤੀ ਸ਼ਾਵਰ ਵਿੱਚ ਟੱਬ ਨਾਲੋਂ ਬਹੁਤ ਘੱਟ ਪਾਣੀ ਲੱਗਦਾ ਹੈ!",
+    "m.kq_peel.q": "ਕੇਲੇ ਦਾ ਛਿਲਕਾ ਕਿੱਥੇ ਜਾਣਾ ਚਾਹੀਦਾ ਹੈ?", "m.kq_peel.o0": "ਨਦੀ ਵਿੱਚ", "m.kq_peel.o1": "ਖਾਦ (ਕੰਪੋਸਟ) ਵਿੱਚ", "m.kq_peel.fact": "ਖਾਦ ਛਿਲਕਿਆਂ ਨੂੰ ਪੌਦਿਆਂ ਦਾ ਖਾਣਾ ਬਣਾ ਦਿੰਦੀ ਹੈ!",
+    "m.kq_light.q": "ਕਮਰੇ ’ਚੋਂ ਬਾਹਰ ਜਾ ਰਹੇ ਹੋ। ਧਰਤੀ ਲਈ ਕੀ ਚੰਗਾ ਹੈ?", "m.kq_light.o0": "ਬੱਤੀ ਬੰਦ ਕਰੋ", "m.kq_light.o1": "ਬੱਤੀ ਜਗਦੀ ਛੱਡ ਦਿਓ", "m.kq_light.fact": "ਬੱਤੀ ਬੰਦ ਕਰਨ ਨਾਲ ਬਿਜਲੀ ਬਚਦੀ ਹੈ ਅਤੇ ਧਰਤੀ ਠੰਢੀ ਰਹਿੰਦੀ ਹੈ।",
+    "m.kq_goals.q": "ਦੁਨੀਆ ਦੇ ਕਿੰਨੇ ਵੱਡੇ ਟੀਚੇ (ਗਲੋਬਲ ਗੋਲਜ਼) ਹਨ?", "m.kq_goals.o0": "17", "m.kq_goals.o1": "100", "m.kq_goals.fact": "2030 ਤੱਕ ਦੁਨੀਆ ਨੂੰ ਬਿਹਤਰ ਬਣਾਉਣ ਲਈ 17 ਟੀਚੇ ਹਨ!",
+    "m.kq_tree.q": "ਰੁੱਖ ਸਾਨੂੰ ਕੀ ਦਿੰਦੇ ਹਨ?", "m.kq_tree.o0": "ਸਾਹ ਲੈਣ ਲਈ ਸਾਫ਼ ਹਵਾ", "m.kq_tree.o1": "ਟਾਫ਼ੀਆਂ", "m.kq_tree.fact": "ਰੁੱਖ ਹਵਾ ਸਾਫ਼ ਕਰਦੇ ਹਨ ਅਤੇ ਜਾਨਵਰਾਂ ਨੂੰ ਘਰ ਦਿੰਦੇ ਹਨ।",
+    // ---- moments: college quiz ----
+    "m.q_count.q": "ਕਿੰਨੇ ਟਿਕਾਊ ਵਿਕਾਸ ਟੀਚੇ (SDG) ਹਨ?", "m.q_count.o0": "15", "m.q_count.o1": "17", "m.q_count.o2": "20", "m.q_count.fact": "17 ਟੀਚੇ, 169 ਨਿਸ਼ਾਨੇ; 2015 ਵਿੱਚ ਸੰਯੁਕਤ ਰਾਸ਼ਟਰ ਦੇ ਸਾਰੇ 193 ਮੈਂਬਰਾਂ ਨੇ ਅਪਣਾਏ।",
+    "m.q_paris.q": "ਪੈਰਿਸ ਸਮਝੌਤਾ ਤਾਪਮਾਨ ਦੇ ਵਾਧੇ ਨੂੰ ਕਿਸ ਤੋਂ ਕਾਫ਼ੀ ਹੇਠਾਂ ਰੱਖਣਾ ਚਾਹੁੰਦਾ ਹੈ…", "m.q_paris.o0": "1 °C", "m.q_paris.o1": "2 °C (ਕੋਸ਼ਿਸ਼ 1.5 °C ਦੀ)", "m.q_paris.o2": "3 °C", "m.q_paris.fact": "ਪੈਰਿਸ (2015): 2 °C ਤੋਂ ਕਾਫ਼ੀ ਹੇਠਾਂ, ਕੋਸ਼ਿਸ਼ 1.5 °C ਦੀ।",
+    "m.q_sector.q": "ਦੁਨੀਆ ਵਿੱਚ ਸਭ ਤੋਂ ਵੱਧ ਗ੍ਰੀਨਹਾਊਸ ਗੈਸ ਕਿੱਥੋਂ ਨਿਕਲਦੀ ਹੈ?", "m.q_sector.o0": "ਊਰਜਾ ਦੀ ਵਰਤੋਂ (ਬਿਜਲੀ, ਗਰਮੀ, ਆਵਾਜਾਈ)", "m.q_sector.o1": "ਸਿਰਫ਼ ਹਵਾਈ ਸਫ਼ਰ", "m.q_sector.o2": "ਕੂੜੇ ਦੇ ਢੇਰ (ਲੈਂਡਫ਼ਿਲ)", "m.q_sector.fact": "ਦੁਨੀਆ ਦਾ ਲਗਭਗ ਤਿੰਨ-ਚੌਥਾਈ ਨਿਕਾਸ ਊਰਜਾ ਦੀ ਵਰਤੋਂ ਤੋਂ ਆਉਂਦਾ ਹੈ।",
+    "m.q_ctax.q": "ਕਾਰਬਨ ਟੈਕਸ ਮੁੱਖ ਤੌਰ ’ਤੇ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ?", "m.q_ctax.o0": "ਕਾਰਾਂ ’ਤੇ ਪਾਬੰਦੀ ਲਾ ਕੇ", "m.q_ctax.o1": "ਪ੍ਰਦੂਸ਼ਣ ਦੀ ਕੀਮਤ ਤੈਅ ਕਰ ਕੇ", "m.q_ctax.o2": "ਰੁੱਖ ਲਾ ਕੇ", "m.q_ctax.fact": "ਕਾਰਬਨ ਦੀ ਕੀਮਤ ਤੈਅ ਹੋਣ ਨਾਲ ਸਾਫ਼ ਵਿਕਲਪ ਮੁਕਾਬਲਤਨ ਸਸਤੇ ਪੈਂਦੇ ਹਨ।",
+    "m.q_food.q": "ਦੁਨੀਆ ਦਾ ਲਗਭਗ ਕਿੰਨਾ ਖਾਣਾ ਖ਼ਰਾਬ ਜਾਂ ਬਰਬਾਦ ਹੁੰਦਾ ਹੈ?", "m.q_food.o0": "ਲਗਭਗ 5%", "m.q_food.o1": "ਲਗਭਗ ਇੱਕ-ਤਿਹਾਈ", "m.q_food.o2": "ਲਗਭਗ ਦੋ-ਤਿਹਾਈ", "m.q_food.fact": "FAO ਦੇ ਅੰਦਾਜ਼ੇ ਮੁਤਾਬਕ ਲਗਭਗ ਇੱਕ-ਤਿਹਾਈ ਖਾਣਾ ਖ਼ਰਾਬ ਜਾਂ ਬਰਬਾਦ ਹੁੰਦਾ ਹੈ।",
+    "m.q_water.q": "ਲਗਭਗ ਕਿੰਨੇ ਲੋਕਾਂ ਨੂੰ ਸੁਰੱਖਿਅਤ ਪੀਣ ਵਾਲਾ ਪਾਣੀ ਨਹੀਂ ਮਿਲਦਾ?", "m.q_water.o0": "20 ਵਿੱਚੋਂ 1", "m.q_water.o1": "4 ਵਿੱਚੋਂ 1", "m.q_water.o2": "2 ਵਿੱਚੋਂ 1", "m.q_water.fact": "WHO/UNICEF: ਲਗਭਗ 2.2 ਅਰਬ ਲੋਕ, ਯਾਨੀ ਕਰੀਬ 4 ਵਿੱਚੋਂ 1।",
+    "m.q_just.q": "“ਨਿਆਂਪੂਰਨ ਬਦਲਾਅ” (ਜਸਟ ਟਰਾਂਜ਼ਿਸ਼ਨ) ਦਾ ਮਤਲਬ ਹੈ…", "m.q_just.o0": "ਨੌਕਰੀਆਂ ਦੀ ਪਰਵਾਹ ਕੀਤੇ ਬਿਨਾਂ ਹਰਿਤ ਬਣਨਾ", "m.q_just.o1": "ਕਾਮਿਆਂ ਅਤੇ ਭਾਈਚਾਰਿਆਂ ਦੀ ਰਾਖੀ ਕਰਦਿਆਂ ਹਰਿਤ ਬਣਨਾ", "m.q_just.o2": "ਕਾਰਖ਼ਾਨੇ ਵਿਦੇਸ਼ ਲੈ ਜਾਣਾ", "m.q_just.fact": "ਪ੍ਰਭਾਵਿਤ ਇਲਾਕਿਆਂ ਲਈ ਨਵਾਂ ਹੁਨਰ, ਸਮਾਜਿਕ ਸੁਰੱਖਿਆ ਅਤੇ ਨਵੀਆਂ ਨੌਕਰੀਆਂ।",
+    "m.q_ncqg.q": "COP29 (2024) ਵਿੱਚ ਅਮੀਰ ਦੇਸ਼ਾਂ ਨੇ 2035 ਤੱਕ ਹਰ ਸਾਲ ਘੱਟੋ-ਘੱਟ ਕਿੰਨਾ ਜਲਵਾਯੂ ਵਿੱਤ ਜੁਟਾਉਣ ਦਾ ਵਾਅਦਾ ਕੀਤਾ?", "m.q_ncqg.o0": "100 ਅਰਬ ਡਾਲਰ", "m.q_ncqg.o1": "300 ਅਰਬ ਡਾਲਰ", "m.q_ncqg.o2": "10 ਲੱਖ ਕਰੋੜ ਡਾਲਰ", "m.q_ncqg.fact": "ਨਵਾਂ ਟੀਚਾ: 2035 ਤੱਕ ਹਰ ਸਾਲ ਘੱਟੋ-ਘੱਟ 300 ਅਰਬ ਡਾਲਰ, 1.3 ਲੱਖ ਕਰੋੜ ਡਾਲਰ ਦੇ ਵੱਡੇ ਟੀਚੇ ਦੇ ਅੰਦਰ।",
+    "m.q_methane.q": "20 ਸਾਲਾਂ ਵਿੱਚ ਕਿਹੜੀ ਗੈਸ CO₂ ਨਾਲੋਂ ਲਗਭਗ 80 ਗੁਣਾ ਵੱਧ ਗਰਮੀ ਵਧਾਉਂਦੀ ਹੈ?", "m.q_methane.o0": "ਮੀਥੇਨ", "m.q_methane.o1": "ਆਕਸੀਜਨ", "m.q_methane.o2": "ਨਾਈਟ੍ਰੋਜਨ", "m.q_methane.fact": "ਮੀਥੇਨ ਘਟਾਉਣਾ ਤਪਸ਼ ਹੌਲੀ ਕਰਨ ਦੇ ਸਭ ਤੋਂ ਤੇਜ਼ ਤਰੀਕਿਆਂ ਵਿੱਚੋਂ ਇੱਕ ਹੈ।",
+    "m.q_solar.q": "ਬਹੁਤੀਆਂ ਥਾਵਾਂ ’ਤੇ ਨਵਿਆਉਣਯੋਗ ਊਰਜਾ ਸਭ ਤੋਂ ਸਸਤੀ ਨਵੀਂ ਬਿਜਲੀ ਕਿਉਂ ਬਣ ਗਈ?", "m.q_solar.o0": "ਸੂਰਜੀ ਅਤੇ ਪੌਣ ਊਰਜਾ ਦੀ ਲਾਗਤ ਬਹੁਤ ਘਟ ਗਈ", "m.q_solar.o1": "ਤੇਲ ਘੱਟ ਪੈ ਗਿਆ", "m.q_solar.o2": "ਫ਼ਿਊਜ਼ਨ ਆ ਗਿਆ", "m.q_solar.fact": "2010 ਦੇ ਦਹਾਕੇ ਵਿੱਚ ਸੋਲਰ ਮਾਡਿਊਲਾਂ ਦੇ ਭਾਅ ਲਗਭਗ 90% ਡਿੱਗੇ।",
+    "m.q_sdg5.q": "SDG 5 ਕਿਸ ਬਾਰੇ ਹੈ?", "m.q_sdg5.o0": "ਸਾਫ਼ ਊਰਜਾ", "m.q_sdg5.o1": "ਲਿੰਗ ਸਮਾਨਤਾ", "m.q_sdg5.o2": "ਪਾਣੀ ਹੇਠ ਜੀਵਨ", "m.q_sdg5.fact": "SDG 5: ਔਰਤਾਂ ਅਤੇ ਕੁੜੀਆਂ ਲਈ ਬਰਾਬਰ ਹੱਕ ਅਤੇ ਮੌਕੇ।",
+    // ---- moments: college dilemmas ----
+    "m.d_protest.q": "ਜਲਵਾਯੂ ਮੁਜ਼ਾਹਰਾਕਾਰੀਆਂ ਨੇ ਹਾਈਵੇਅ ਜਾਮ ਕਰ ਦਿੱਤਾ ਹੈ।", "m.d_protest.o0": "ਉਨ੍ਹਾਂ ਨੂੰ ਮਿਲੋ ਅਤੇ ਸੁਣੋ", "m.d_protest.f0": "ਗੱਲਬਾਤ ਨਾਲ ਤਣਾਅ ਘਟਿਆ ਅਤੇ ਭਰੋਸਾ ਬਣਿਆ।", "m.d_protest.o1": "ਸਭ ਨੂੰ ਗ੍ਰਿਫ਼ਤਾਰ ਕਰੋ", "m.d_protest.f1": "ਗ੍ਰਿਫ਼ਤਾਰੀਆਂ ਸੁਰਖ਼ੀਆਂ ਬਣੀਆਂ ਅਤੇ ਗੁੱਸਾ ਹੋਰ ਭੜਕਿਆ।",
+    "m.d_factory.q": "ਇੱਕ ਕਾਰਖ਼ਾਨਾ ਚੰਗੀ ਤਨਖ਼ਾਹ ਦਿੰਦਾ ਹੈ, ਪਰ ਇੱਕ ਗਰੀਬ ਬਸਤੀ ਨੂੰ ਜ਼ਹਿਰੀਲਾ ਕਰ ਰਿਹਾ ਹੈ।", "m.d_factory.o0": "ਸਫ਼ਾਈ ਕਰਵਾਓ, ਭਾਵੇਂ ਮਹਿੰਗੀ ਪਵੇ", "m.d_factory.f0": "ਸਿਹਤ ਸੁਧਰੀ। ਵਾਤਾਵਰਣੀ ਨਿਆਂ ਮਾਇਨੇ ਰੱਖਦਾ ਹੈ।", "m.d_factory.o1": "ਅਣਡਿੱਠ ਕਰ ਦਿਓ", "m.d_factory.f1": "ਇਸ ਦਾ ਬਿੱਲ ਬਸਤੀ ਨੂੰ ਬਾਅਦ ਵਿੱਚ ਭਰਨਾ ਪਵੇਗਾ।",
+    "m.d_fake.q": "ਇੱਕ ਦੋਸਤ ਨੇ ਜੁਰਮ ਲਈ ਸ਼ਰਨਾਰਥੀਆਂ ਨੂੰ ਦੋਸ਼ੀ ਦੱਸਣ ਵਾਲੀ ਝੂਠੀ ਪੋਸਟ ਸ਼ੇਅਰ ਕੀਤੀ।", "m.d_fake.o0": "ਪਿਆਰ ਨਾਲ ਸਹੀ ਤੱਥ ਦੱਸੋ", "m.d_fake.f0": "ਸ਼ਾਂਤ ਤੱਥ ਗ਼ਲਤ ਜਾਣਕਾਰੀ ਦੀ ਰਫ਼ਤਾਰ ਹੌਲੀ ਕਰਦੇ ਹਨ।", "m.d_fake.o1": "ਘੁਲਣ-ਮਿਲਣ ਲਈ ਲਾਈਕ ਕਰ ਦਿਓ", "m.d_fake.f1": "ਗ਼ਲਤ ਜਾਣਕਾਰੀ ਡਰ ਅਤੇ ਫੁੱਟ ਫੈਲਾਉਂਦੀ ਹੈ।",
+    "m.d_sponsor.q": "ਇੱਕ ਫ਼ੈਸ਼ਨ ਬ੍ਰਾਂਡ ਵੱਡੀ ਸਪਾਂਸਰਸ਼ਿਪ ਦੇ ਰਿਹਾ ਹੈ, ਪਰ ਉਹ ਬਾਲ ਮਜ਼ਦੂਰੀ ਕਰਵਾਉਂਦਾ ਹੈ।", "m.d_sponsor.o0": "ਨਿਮਰਤਾ ਨਾਲ ਨਾਂਹ ਕਰੋ", "m.d_sponsor.f0": "ਇਮਾਨਦਾਰੀ ਦੀ ਕੀਮਤ ਹੁਣੇ ਚੁਕਾਉਣੀ ਪੈਂਦੀ ਹੈ, ਪਰ ਭਰੋਸਾ ਬਣਦਾ ਹੈ।", "m.d_sponsor.o1": "ਪੈਸਾ ਲੈ ਲਓ", "m.d_sponsor.f1": "ਇਹ ਘੁਟਾਲਾ ਦੇਰ-ਸਵੇਰ ਸਾਹਮਣੇ ਆਵੇਗਾ।",
+    "m.d_meals.q": "ਵਿਦਿਆਰਥੀ ਬਜਟ: ਗਰੀਬ ਵਿਦਿਆਰਥੀਆਂ ਲਈ ਮੁਫ਼ਤ ਖਾਣਾ, ਜਾਂ ਸਟੇਡੀਅਮ ਦੀ ਨਵੀਂ ਸਕਰੀਨ?", "m.d_meals.o0": "ਮੁਫ਼ਤ ਖਾਣਾ", "m.d_meals.f0": "ਖ਼ਾਲੀ ਢਿੱਡ ਕੋਈ ਚੰਗੀ ਤਰ੍ਹਾਂ ਨਹੀਂ ਪੜ੍ਹ ਸਕਦਾ।", "m.d_meals.o1": "ਵੱਡੀ ਸਕਰੀਨ", "m.d_meals.f1": "ਮਜ਼ਾ ਤਾਂ ਆਇਆ, ਪਰ ਸਭ ਤੋਂ ਭੁੱਖੇ ਵਿਦਿਆਰਥੀਆਂ ਨੂੰ ਕੁਝ ਨਹੀਂ ਮਿਲਿਆ।",
+    // ---- moments: adult dilemmas ----
+    "m.ad_lobby.q": "ਜੈਵਿਕ-ਬਾਲਣ ਲਾਬੀ ਚੋਣ ਫ਼ੰਡ ਦੇਵੇਗੀ, ਜੇ ਤੁਸੀਂ ਕੋਲਾ ਬੰਦ ਕਰਨ ਵਿੱਚ ਦੇਰੀ ਕਰੋ।", "m.ad_lobby.o0": "ਫ਼ੰਡ ਲੈ ਲਓ", "m.ad_lobby.f0": "ਦਾਨੀ ਖ਼ੁਸ਼ ਹਨ। ਪੱਤਰਕਾਰ ਖੋਜ ਵਿੱਚ ਜੁਟ ਗਏ।", "m.ad_lobby.o1": "ਸਭ ਦੇ ਸਾਹਮਣੇ ਨਾਂਹ ਕਰੋ", "m.ad_lobby.f1": "ਉਹ ਤੁਹਾਡੇ ਖ਼ਿਲਾਫ਼ ਇਸ਼ਤਿਹਾਰਾਂ ’ਤੇ ਪੈਸਾ ਲਾਉਂਦੇ ਹਨ।",
+    "m.ad_imf.q": "IMF ਤੋਂ ਕਰਜ਼ਾ ਮਿਲ ਰਿਹਾ ਹੈ, ਪਰ ਕਿਫ਼ਾਇਤ ਦੀਆਂ ਸ਼ਰਤਾਂ ਨਾਲ।", "m.ad_imf.o0": "ਕਰਜ਼ਾ ਲੈ ਲਓ", "m.ad_imf.f0": "ਹੁਣੇ ਨਕਦੀ; ਕਲੀਨਿਕਾਂ ਅਤੇ ਸਕੂਲਾਂ ’ਤੇ ਦਬਾਅ।", "m.ad_imf.o1": "ਨਾਂਹ ਕਰ ਦਿਓ", "m.ad_imf.f1": "ਬਾਂਡਾਂ ’ਤੇ ਵਿਆਜ ਵਧਿਆ; ਨੀਤੀ ਤੁਹਾਡੇ ਹੱਥ ਰਹੀ।",
+    "m.ad_lithium.q": "ਇੱਕ ਸੁਰੱਖਿਅਤ ਜੰਗਲ ਹੇਠਾਂ ਲਿਥੀਅਮ ਮਿਲਿਆ ਹੈ।", "m.ad_lithium.o0": "ਖੁਦਾਈ ਕਰੋ", "m.ad_lithium.f0": "ਬਦਲਾਅ ਲਈ ਬੈਟਰੀਆਂ, ਪਰ ਕੁਦਰਤ ਦੀ ਕੀਮਤ ’ਤੇ।", "m.ad_lithium.o1": "ਸੁਰੱਖਿਅਤ ਰਹਿਣ ਦਿਓ", "m.ad_lithium.f1": "ਨਿਵੇਸ਼ਕ ਨਾਰਾਜ਼; ਜੰਗਲ ਖੜ੍ਹਾ ਰਿਹਾ।",
+    "m.ad_sanction.q": "ਇੱਕ ਗੁਆਂਢੀ ਦੇਸ਼ ਨੇ ਆਪਣੇ ਹੀ ਸਹਿਯੋਗੀ ’ਤੇ ਹਮਲਾ ਕਰ ਦਿੱਤਾ। ਪਾਬੰਦੀਆਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਈਏ?", "m.ad_sanction.o0": "ਪਾਬੰਦੀਆਂ ਲਾਓ", "m.ad_sanction.f0": "ਵਪਾਰਕ ਘਾਟਾ ਚੁਭਦਾ ਹੈ; ਸਹਿਯੋਗੀ ਤੁਹਾਡੇ ਨਾਲ ਹਨ।", "m.ad_sanction.o1": "ਨਿਰਪੱਖ ਰਹੋ, ਵਪਾਰ ਜਾਰੀ ਰੱਖੋ", "m.ad_sanction.f1": "ਮੁਨਾਫ਼ਾ ਤਾਂ ਹੈ, ਪਰ ਬਾਹਰ ਭਰੋਸਾ ਘਟਦਾ ਹੈ।",
+    "m.ad_blackout.q": "ਲੂ ਕਾਰਨ ਬਿਜਲੀ ਕੱਟਾਂ ਦਾ ਖ਼ਤਰਾ। ਐਮਰਜੈਂਸੀ ਕੋਲਾ ਜਾਂ ਵਾਰੀ-ਵਾਰੀ ਕੱਟ?", "m.ad_blackout.o0": "ਪੁਰਾਣੇ ਕੋਲਾ ਬਿਜਲੀਘਰ ਚਾਲੂ ਕਰੋ", "m.ad_blackout.f0": "ਬੱਤੀਆਂ ਜਗਦੀਆਂ ਰਹੀਆਂ; ਨਿਕਾਸ ਉਛਲ ਗਿਆ।", "m.ad_blackout.o1": "ਵਾਰੀ-ਵਾਰੀ ਕੱਟ + ਛੇਤੀ ਬੈਟਰੀਆਂ", "m.ad_blackout.f1": "ਔਖੀ ਗਰਮੀ; ਹੋਰ ਮਜ਼ਬੂਤ ਗਰਿੱਡ।",
+    "m.ad_leak.q": "ਲੀਕ ਹੋਈ ਰਿਪੋਰਟ ਕਹਿੰਦੀ ਹੈ ਕਿ ਤੁਹਾਡੇ ਮੰਤਰੀ ਨੇ ਰਿਸ਼ਵਤ ਲਈ।", "m.ad_leak.o0": "ਬਰਖ਼ਾਸਤ ਕਰੋ ਅਤੇ ਮੁਕੱਦਮਾ ਚਲਾਓ", "m.ad_leak.f0": "ਹੁਣੇ ਥੋੜ੍ਹਾ ਨੁਕਸਾਨ, ਲੰਮੇ ਸਮੇਂ ਵਿੱਚ ਭਰੋਸਾ।", "m.ad_leak.o1": "ਰਿਪੋਰਟ ਦੱਬ ਦਿਓ", "m.ad_leak.f1": "ਇਹ ਫਿਰ ਲੀਕ ਹੋਵੇਗੀ, ਹੋਰ ਜ਼ੋਰ ਨਾਲ।",
+    "m.ad_finance.q": "ਦਾਨੀ ਦੇਸ਼ ਜਲਵਾਯੂ ਵਿੱਤ ਦੇਣਗੇ, ਜੇ ਤੁਸੀਂ ਜੰਗਲਾਂ ਦੀ ਕਟਾਈ ਅੱਧੀ ਕਰ ਦਿਓ।", "m.ad_finance.o0": "ਸ਼ਰਤਾਂ ਮੰਨ ਲਓ", "m.ad_finance.f0": "ਪਸ਼ੂ-ਪਾਲਕ ਵਿਰੋਧ ਵਿੱਚ; ਪੈਸਾ ਆਉਣ ਲੱਗਾ।", "m.ad_finance.o1": "ਨਾਂਹ ਕਰੋ: “ਪ੍ਰਭੂਸੱਤਾ”", "m.ad_finance.f1": "ਦੇਸ਼ ਵਿੱਚ ਹਰਮਨਪਿਆਰੇ, ਦੁਨੀਆ ਵਿੱਚ ਇਕੱਲੇ।",
+    "m.ad_coalition.q": "ਤੁਹਾਡੀ ਗੱਠਜੋੜ ਭਾਈਵਾਲ ਪਾਰਟੀ ਸਰਕਾਰ ਵਿੱਚ ਰਹਿਣ ਲਈ ਬਾਲਣ ਸਬਸਿਡੀ ਮੰਗ ਰਹੀ ਹੈ।", "m.ad_coalition.o0": "ਉਨ੍ਹਾਂ ਦੀ ਮੰਗ ਮੰਨ ਲਓ", "m.ad_coalition.f0": "ਗੱਠਜੋੜ ਬਚ ਗਿਆ; ਜਲਵਾਯੂ ਦਾ ਬਿੱਲ ਵਧ ਗਿਆ।", "m.ad_coalition.o1": "ਆਪਣੀ ਗੱਲ ’ਤੇ ਡਟੇ ਰਹੋ", "m.ad_coalition.f1": "ਡਾਵਾਂਡੋਲ ਬਹੁਮਤ, ਨੀਤੀ ਬਰਕਰਾਰ।",
+
+    // ---- world events ----
+    "ev.cyclone.t": "ਚੱਕਰਵਾਤ!", "ev.cyclone.w0": "ਗਰਮ ਧਰਤੀ ’ਤੇ ਤੂਫ਼ਾਨ ਵੱਧ ਆਉਂਦੇ ਹਨ", "ev.cyclone.w1": "ਗਰਮ ਧਰਤੀ ’ਤੇ ਵੱਡੇ ਤੂਫ਼ਾਨ ਆਉਂਦੇ ਹਨ",
+    "ev.drought.t": "ਸੋਕਾ", "ev.drought.w0": "ਜਲਵਾਯੂ ਗਰਮ ਹੋ ਰਿਹਾ ਹੈ", "ev.drought.w1": "ਬਹੁਤ ਦਿਨਾਂ ਤੋਂ ਮੀਂਹ ਨਹੀਂ ਪਿਆ",
+    "ev.pandemic.t": "ਮਹਾਂਮਾਰੀ", "ev.pandemic.w0": "ਕਮਜ਼ੋਰ ਸਿਹਤ ਸੇਵਾ ਕਾਰਨ ਹਾਲਤ ਵਿਗੜੀ", "ev.pandemic.w1": "ਤੁਹਾਡੇ ਕਲੀਨਿਕਾਂ ਨੇ ਝਟਕਾ ਘਟਾਇਆ",
+    "ev.cold.t": "ਸਭ ਨੂੰ ਜ਼ੁਕਾਮ ਹੋ ਗਿਆ", "ev.cold.w0": "ਅਗਲੀ ਵਾਰ ਦਵਾਖ਼ਾਨਾ ਮਦਦ ਕਰੇਗਾ", "ev.cold.w1": "ਤੁਹਾਡੇ ਦਵਾਖ਼ਾਨੇ ਨੇ ਸਭ ਨੂੰ ਛੇਤੀ ਠੀਕ ਕੀਤਾ",
+    "ev.recession.t": "ਆਲਮੀ ਮੰਦੀ", "ev.recession.w0": "ਦੁਨੀਆ ਭਰ ਵਿੱਚ ਬਾਜ਼ਾਰ ਡਿੱਗ ਗਏ",
+    "ev.riots.t": "ਦੰਗੇ", "ev.riots.w0": "ਲੋਕ ਨਾਖ਼ੁਸ਼ ਹਨ",
+    "ev.tech.t": "ਸਾਫ਼ ਤਕਨੀਕ ਵਿੱਚ ਵੱਡੀ ਖੋਜ", "ev.tech.w0": "ਦੁਨੀਆ ਭਰ ਦੇ ਵਿਗਿਆਨੀਆਂ ਨੇ ਇਸ ਨੂੰ ਸਾਂਝਾ ਕੀਤਾ", "ev.tech.w1": "ਵਿਗਿਆਨੀਆਂ ਨੇ ਕੁਝ ਕਮਾਲ ਦਾ ਬਣਾਇਆ",
+    "ev.investors.t": "ਹਰਿਤ ਨਿਵੇਸ਼ਕ ਆਏ", "ev.investors.w0": "ਤੁਹਾਡੀ ਧਰਤੀ ਤੰਦਰੁਸਤ ਦਿਸਦੀ ਹੈ",
+    "ev.visitors.t": "ਸੈਲਾਨੀਆਂ ਨੂੰ ਤੁਹਾਡਾ ਸ਼ਹਿਰ ਪਸੰਦ ਆਇਆ!", "ev.visitors.w0": "ਤੁਹਾਡਾ ਸ਼ਹਿਰ ਕਿੰਨਾ ਹਰਾ-ਭਰਾ ਅਤੇ ਸਾਫ਼ ਹੈ",
+    "ev.tourism.t": "ਸੈਰ-ਸਪਾਟੇ ਵਿੱਚ ਉਛਾਲ", "ev.tourism.w0": "ਸਾਫ਼, ਸ਼ਾਂਤ ਥਾਵਾਂ ਸੈਲਾਨੀਆਂ ਨੂੰ ਖਿੱਚਦੀਆਂ ਹਨ",
+    "ev.treaty.t": "ਗੁਆਂਢੀਆਂ ਨੇ ਸੰਧੀ ਦੀ ਪੇਸ਼ਕਸ਼ ਕੀਤੀ", "ev.treaty.w0": "ਤੁਸੀਂ ਸ਼ਾਂਤੀ ਬਣਾਈ ਰੱਖੀ", "ev.treaty.w1": "ਤੁਸੀਂ ਚੰਗੇ ਦੋਸਤ ਬਣੇ",
+    "ev.tradewar.t": "ਵਪਾਰ ਜੰਗ", "ev.tradewar.w0": "ਵੱਡੀਆਂ ਤਾਕਤਾਂ ਨੇ ਟੈਰਿਫ਼ ਥੋਪ ਦਿੱਤੇ",
+    "ev.refugees.t": "ਗੁਆਂਢ ਵਿੱਚ ਘਰੇਲੂ ਜੰਗ", "ev.refugees.w0": "ਇਲਾਕੇ ਦੀ ਅਸਥਿਰਤਾ ਸਾਡੇ ਤੱਕ ਫੈਲ ਗਈ",
+    "ev.ratings.t": "ਕਰੈਡਿਟ ਰੇਟਿੰਗ ਘਟੀ", "ev.ratings.w0": "ਖ਼ਜ਼ਾਨਾ ਖ਼ਾਲੀ ਹੋ ਰਿਹਾ ਹੈ",
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script id="ui">
 /* SDG 2030 v2 — UI: living tiny-planet canvas, SDG ring, cards, juice. A game by Harpreet Raj Singh™. */
 (function () {
@@ -808,11 +1521,29 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
   // in play, rules come from the game state itself (saves without a mode use the original v2 rules)
   const CFG = () => (S && phase !== 'title' ? E.cfg(S) : E.MODES[mode]);
   const MET = k => CFG().meters[k];
-  const when = t => E.when(t, S && phase !== 'title' ? S.mode : mode);
+  // localized "Mon YYYY" (same arithmetic as E.when; Western digits in every language)
+  const whenFor = (tt, m) => { const c = E.MODES[m] || E.MODES.classic, mo = tt * c.step; return t('date', { m: t('mon.' + (mo % 12)), y: c.startYear + Math.floor(mo / 12) }); };
+  const when = tt => whenFor(tt, S && phase !== 'title' ? S.mode : mode);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
   const mix = (a, b, t) => { const A = hex(a), B = hex(b); t = clamp(t, 0, 1); return 'rgb(' + A.map((x, i) => Math.round(x + (B[i] - x) * t)).join(',') + ')'; };
   const sign = v => (v > 0 ? '+' : '−') + Math.abs(v);
+
+  // ---------------- language (en / hi / pa): text only; game state and saves never hold translated text ----------------
+  const I18N = window.SDG2_I18N, L = I18N.make(E), t = L.t, tn = L.tn;
+  const LANG_KEY = 'hrs-lang';
+  const normLang = v => { v = v == null ? '' : String(v).replace(/^"+|"+$/g, '').trim().toLowerCase().slice(0, 2); return I18N.LANGS.includes(v) ? v : null; };
+  const readLang = () => { try { return normLang(localStorage.getItem(LANG_KEY)); } catch (e) { return null; } };
+  L.lang = normLang(new URLSearchParams(location.search).get('lang')) || readLang() || 'en';
+  const metName = k => { const c = CFG(); return t(`met.${c.meters === E.METERS ? 'base' : c.key}.${k}`); };
+  const modeName = k => t(`mode.${k}.name`);
+  const cT = id => t(`c.${id}.t`), cH = id => t(`c.${id}.h`);
+  const cL = id => t(L.has(`c.${id}.l`) ? `c.${id}.l` : `c.${id.replace(/^a_/, '')}.l`); // Adults cards share the base card's consequence
+  const sdgName = i => t('sdg.' + (i + 1));
+  const findMoment = id => { for (const p in E.MOMENT_POOL) { const m = E.MOMENT_POOL[p].find(x => x.id === id); if (m) return m; } return null; };
+  const evWhy = ev => { const k = L.back(`ev.${ev.id}.w`, ev.why); return k ? t(k) : ev.why; };
+  // best scores store the English title (unchanged save shape): map it back to its ending key
+  const titleKey = (title, m) => { for (const p of [m, 'classic', 'college', 'kids', 'adults']) { for (const k in L.en) if (k.startsWith(`end.${p}.`) && k.endsWith('.t') && L.en[k] === title) return k; } return null; };
 
   let S = null, disp = null, busy = true, phase = 'title';
   const vis = { m: 40, h: 55, p: 55, w: 60, sdg: new Array(17).fill(35) };
@@ -867,22 +1598,27 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     for (const k of ['m', 'h', 'p', 'w']) {
       const d = document.createElement('div'); d.className = 'meter';
       d.innerHTML = `<span class="ic">${E.METERS[k][0]}</span><div class="bar"><i></i></div><b>0</b>`;
-      d.addEventListener('click', () => tip(`${MET(k)[0]} ${MET(k)[1]}: ${Math.round(disp ? disp[k] : vis[k])}${k === 'm' ? '' : '/100'}${CFG().noFail ? '' : ' · keep it above zero'}`));
+      d.addEventListener('click', () => tip(() => t('tip.meter', { e: MET(k)[0], name: metName(k), v: Math.round(disp ? disp[k] : vis[k]) + (k === 'm' ? '' : '/100') }) + (CFG().noFail ? '' : t('tip.keep'))));
       m.appendChild(d); meterEls[k] = d;
     }
     const ring = $('#ring');
     E.SDG.forEach((g, i) => {
       const b = document.createElement('button'); b.className = 'dot'; b.style.setProperty('--c', g[1]); b.textContent = i + 1;
-      b.setAttribute('aria-label', `Goal ${i + 1}: ${g[0]}`);
-      b.addEventListener('click', e => { e.stopPropagation(); const v = Math.round(disp ? disp.sdg[i] : 0); tip(`${g[2]} <b>${i + 1} · ${g[0]}</b> — ${v}%${v >= CFG().goal ? ' ✓' : ''} <span style="opacity:.6">(goal ${CFG().goal}%)</span><br><span style="opacity:.75">${mode === 'kids' ? E.SDG_KID[i] : g[3]}</span>`); });
+      b.setAttribute('aria-label', t('aria.goal', { n: i + 1, name: sdgName(i) }));
+      b.addEventListener('click', e => { e.stopPropagation(); tip(() => { const v = Math.round(disp ? disp.sdg[i] : 0); return `${g[2]} <b>${i + 1} · ${sdgName(i)}</b> — ${v}%${v >= CFG().goal ? ' ✓' : ''} <span style="opacity:.6">${t('tip.goalpct', { g: CFG().goal })}</span><br><span style="opacity:.75">${t((mode === 'kids' ? 'sdgk.' : 'sdgl.') + (i + 1))}</span>`; }); });
       ring.appendChild(b);
     });
   })();
   const dots = [...document.querySelectorAll('.dot')];
 
-  let tipT = 0;
-  function tip(html, ms = 3200) { const t = $('#tip'); t.innerHTML = html; t.classList.add('show'); clearTimeout(tipT); tipT = setTimeout(hideTip, ms); Hap.buzz(8); }
-  function hideTip() { $('#tip').classList.remove('show'); }
+  let tipT = 0, tipFn = null;
+  function tip(html, ms = 3200) {
+    if (typeof html === 'string' && html.startsWith('💾 Welcome back!') && S) html = welcomeTip; // HRS layer's resume note, localized
+    tipFn = typeof html === 'function' ? html : null;
+    const el = $('#tip'); el.innerHTML = tipFn ? tipFn() : html; el.classList.add('show'); clearTimeout(tipT); tipT = setTimeout(hideTip, ms); Hap.buzz(8);
+  }
+  function hideTip() { $('#tip').classList.remove('show'); tipFn = null; }
+  const welcomeTip = () => { const T = S.T || CFG().T; return t('hrs.welcome', { d: when(Math.min(S.turn, T - 1)), unit: t(S.mode === 'kids' ? 'hrs.turn' : 'hrs.season'), n: S.turn + 1, T }); };
   // tooltips close on any tap outside a tooltip trigger
   document.addEventListener('pointerdown', e => { if (!e.target.closest('.dot,.chip,.meter,#tip')) hideTip(); }, true);
 
@@ -1155,8 +1891,8 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
       b.classList.toggle('ok', now);
       const dv = d && d.s[i + 1];
       if (dv && !quiet) { b.classList.remove('ping'); void b.offsetWidth; b.classList.add('ping'); const [x, y] = center(b); if (Math.abs(dv) >= 3) pop(sign(dv), x, y - 14, dv > 0 ? 'p' : 'n'); }
-      if (prev && now && !was && !quiet) { const [x, y] = center(b); fxBurst(x, y, 40, [E.SDG[i][1], '#ffd23f', '#ffffff', '#56C02B'], { speed: 300 }); Snd.goal(); Hap.buzz([15, 40, 15], 'success'); pop(`🎯 Goal ${i + 1}!`, x, y - 30, 'k'); }
-      if (prev && !now && was && !quiet) { const [x, y] = center(b); pop('lost', x, y - 16, 'n'); }
+      if (prev && now && !was && !quiet) { const [x, y] = center(b); fxBurst(x, y, 40, [E.SDG[i][1], '#ffd23f', '#ffffff', '#56C02B'], { speed: 300 }); Snd.goal(); Hap.buzz([15, 40, 15], 'success'); pop(t('pop.goal', { n: i + 1 }), x, y - 30, 'k'); }
+      if (prev && !now && was && !quiet) { const [x, y] = center(b); pop(t('pop.lost'), x, y - 16, 'n'); }
     });
     renderFuture();
     computeSlots(disp);
@@ -1167,20 +1903,20 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     const hid = CFG().hidden;
     if (CFG().elections && phase === 'play') {
       const nx = CFG().elections.find(t => t >= disp.turn);
-      if (nx != null) { const b = document.createElement('button'); const left = nx - disp.turn; b.className = 'chip el' + (left === 0 ? ' soon' : ''); b.innerHTML = `🗳️<b>${left === 0 ? 'now' : left}</b>`; b.addEventListener('click', () => tip(`🗳️ Election ${left === 0 ? 'at the end of this season' : 'in ' + left + ' season' + (left === 1 ? '' : 's')}<br><span style="opacity:.75">Public trust must be ${CFG().electionBar}+ or you are voted out</span>`)); f.appendChild(b); }
+      if (nx != null) { const b = document.createElement('button'); const left = nx - disp.turn; b.className = 'chip el' + (left === 0 ? ' soon' : ''); b.innerHTML = `🗳️<b>${left === 0 ? t('el.now') : left}</b>`; b.addEventListener('click', () => tip(() => `${left === 0 ? t('el.tip.now') : tn('el.tip.in', left)}<br><span style="opacity:.75">${t('el.tip.bar', { bar: CFG().electionBar })}</span>`)); f.appendChild(b); }
     }
-    if (disp.tipped) { const b = document.createElement('button'); b.className = 'chip st'; b.innerHTML = '🧊<b>tipped</b>'; b.addEventListener('click', () => tip('🧊 Tipping point crossed: ecosystems now degrade on their own and climate shocks hit harder')); f.appendChild(b); }
+    if (disp.tipped) { const b = document.createElement('button'); b.className = 'chip st'; b.innerHTML = `🧊<b>${t('tipped.chip')}</b>`; b.addEventListener('click', () => tip(() => t('tipped.tip'))); f.appendChild(b); }
     if (hid === 'vague') {
       const n = disp.pending.filter(x => x.kind === 'storm').length;
-      if (n) { const b = document.createElement('button'); b.className = 'chip st'; b.innerHTML = `⛈️<b>?×${n}</b>`; b.addEventListener('click', () => tip(`⛈️ ${n} shortcut${n === 1 ? '' : 's'} will come back to bite…<br><span style="opacity:.75">You won't know when or how until it lands</span>`)); f.appendChild(b); }
+      if (n) { const b = document.createElement('button'); b.className = 'chip st'; b.innerHTML = `⛈️<b>?×${n}</b>`; b.addEventListener('click', () => tip(() => `${tn('vague.tip', n)}<br><span style="opacity:.75">${t('vague.sub')}</span>`)); f.appendChild(b); }
     }
     disp.pending.slice().sort((a, b) => a.at - b.at).forEach(x => {
       const c = E.CARD[x.id], left = x.at - disp.turn, st = x.kind === 'storm';
       if (hid === 'all' || (st && hid === 'vague')) return;
       const b = document.createElement('button'); b.className = 'chip ' + (st ? 'st' : 'sd') + (st && left <= 1 ? ' soon' : '');
       b.innerHTML = `${st ? '⛈️' : '🌱'}${c.e}<b>${left}</b>`;
-      b.setAttribute('aria-label', `${st ? 'Storm' : 'Reward'} in ${left}`);
-      b.addEventListener('click', () => tip(`${c.later.e} <b>${c.later.t}</b> in ${left} season${left === 1 ? '' : 's'}<br><span style="opacity:.75">because you chose ${c.e} ${c.t}</span>`));
+      b.setAttribute('aria-label', t(st ? 'aria.storm' : 'aria.reward', { n: left }));
+      b.addEventListener('click', () => tip(() => `${tn(mode === 'kids' ? 'chip.in.k' : 'chip.in', left, { e: c.later.e, t: cL(x.id) })}<br><span style="opacity:.75">${t(mode === 'kids' ? 'chip.why.k' : 'chip.why', { e: c.e, t: cT(x.id) })}</span>`));
       f.appendChild(b);
     });
   }
@@ -1205,9 +1941,9 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     if (S && phase !== 'title' && E.MODES[S.mode] && S.mode !== 'classic' && S.mode !== mode) { mode = S.mode; store.set(KEY_MODE, mode); applyModeLook(); }
     else if (S && phase !== 'title' && (!S.mode || S.mode === 'classic')) { KEY_BEST = 'sdg2030v2_best'; KEY_SEEN = 'sdg2030v2_seen'; } // resumed pre-modes save: original v2 keys
   }
-  function renderHand() {
+  function renderHand(relang) {
     syncMode();
-    const h = $('#hand'); h.innerHTML = ''; h.style.setProperty('--n', S.moment ? E.moment(S).opts.length : S.hand.length);
+    const h = $('#hand'); h.innerHTML = ''; h.classList.toggle('relang', !!relang); // relang: redraw text without the deal animation h.style.setProperty('--n', S.moment ? E.moment(S).opts.length : S.hand.length);
     const mo = E.moment(S);
     if (mo) return renderMoment(mo);
     hideQ();
@@ -1220,19 +1956,19 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
       let tag = '', stamp = '';
       const mk = c0.key;
       if (mk === 'classic') {
-        tag = c.k === 'b' ? '⚡ Quick win' : '🌱 Sustainable';
-        stamp = c.k === 'b' ? `<div class="later">⏳ ${c.later.e} in ${c.later.in}</div>` : c.later ? `<div class="later g">🌱 ${c.later.e} in ${c.later.in}</div>` : '';
+        tag = t(c.k === 'b' ? 'tag.quick' : 'tag.sus');
+        stamp = c.k === 'b' ? `<div class="later">${t('stamp.storm', { e: c.later.e, n: c.later.in })}</div>` : c.later ? `<div class="later g">${t('stamp.seed', { e: c.later.e, n: c.later.in })}</div>` : '';
       } else if (mk === 'kids') {
-        tag = c.k === 'b' ? '⚡ Fun now' : '🌱 Good for Earth';
-        stamp = c.k === 'b' ? `<div class="later warn">⚠️ Might cause a problem later!</div>` : c.later ? `<div class="later g">🎁 ${c.later.e} bonus soon</div>` : '';
+        tag = t(c.k === 'b' ? 'tag.fun' : 'tag.earth');
+        stamp = c.k === 'b' ? `<div class="later warn">${t('stamp.kwarn')}</div>` : c.later ? `<div class="later g">${t('stamp.kbonus', { e: c.later.e })}</div>` : '';
       } else if (mk === 'college') {
-        tag = c.k === 'b' ? '⚡ Quick win' : '🌱 Sustainable';
-        stamp = c.k === 'b' ? `<div class="later">⚠️ risk later</div>` : c.later ? `<div class="later g">🌱 pays back later</div>` : '';
+        tag = t(c.k === 'b' ? 'tag.quick' : 'tag.sus');
+        stamp = c.k === 'b' ? `<div class="later">${t('stamp.risk')}</div>` : c.later ? `<div class="later g">${t('stamp.pays')}</div>` : '';
       }
-      b.innerHTML = `${tag ? `<span class="tag">${tag}</span>` : ''}<div class="em">${c.e}</div><div class="ti">${c.t}</div><div class="hi">${c.h}</div>
+      b.innerHTML = `${tag ? `<span class="tag">${tag}</span>` : ''}<div class="em">${c.e}</div><div class="ti">${cT(id)}</div><div class="hi">${cH(id)}</div>
         <div class="fx">${meters}</div><div class="fx sd">${sd}</div>${stamp}
-        ${ok ? '' : `<div class="lk">Need ${MET('m')[0]}${E.cost(c)}</div>`}<span class="kbd">${i + 1}</span>`;
-      b.setAttribute('aria-label', `${c.t}. ${c.h}.` + (c0.hidden === 'all' ? '' : c.k === 'b' ? ' Shortcut: something bad may happen later.' : ' Sustainable.'));
+        ${ok ? '' : `<div class="lk">${t('need', { e: MET('m')[0], n: E.cost(c) })}</div>`}<span class="kbd">${i + 1}</span>`;
+      b.setAttribute('aria-label', `${cT(id)}. ${cH(id)}.` + (c0.hidden === 'all' ? '' : ' ' + t(c.k === 'b' ? 'aria.card.short' : 'aria.card.sus')));
       attachSwipe(b, () => choose(i));
       b.addEventListener('click', e => { if (e.detail === 0) choose(i); });
       h.appendChild(b);
@@ -1240,24 +1976,28 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     h.classList.remove('off');
   }
 
-  let qTimer = null;
-  function hideQ() { $('#qbox').classList.add('hide'); clearInterval(qTimer); qTimer = null; }
+  let qTimer = null, qT0 = 0, qMo = null;
+  function hideQ() { $('#qbox').classList.add('hide'); clearInterval(qTimer); qTimer = null; qMo = null; }
   function renderMoment(mo) {
     const h = $('#hand'), q = $('#qbox');
-    const label = mo.kind === 'quiz' ? '🧠 Quick quiz' : mo.kind === 'eq' ? '💛 Feelings moment' : mode === 'adults' ? '⚖️ Hard call' : '⚖️ Dilemma';
+    const label = t(mo.kind === 'quiz' ? 'mo.quiz' : mo.kind === 'eq' ? 'mo.eq' : mode === 'adults' ? 'mo.hard' : 'mo.dil');
     const timed = mode === 'college' && mo.kind === 'quiz' && !FAST;
-    q.innerHTML = `<div class="ql">${label}</div><div class="qq"><span class="qe">${mo.e}</span>${mo.q}</div>${timed ? '<div class="qt"><i></i></div>' : ''}`;
+    clearInterval(qTimer); qTimer = null;
+    if (qMo !== mo.id || !qT0) qT0 = performance.now(); // same moment redrawn (language switch): keep the clock
+    qMo = mo.id; h.dataset.mo = mo.id;
+    q.innerHTML = `<div class="ql">${label}</div><div class="qq"><span class="qe">${mo.e}</span>${t(`m.${mo.id}.q`)}</div>${timed ? '<div class="qt"><i></i></div>' : ''}`;
     q.classList.remove('hide');
     mo.opts.forEach((o, i) => {
       const b = document.createElement('button'); b.className = 'card opt' + (mo.kind === 'quiz' && !o[0] ? ' txt' : ''); b.dataset.i = i;
-      b.innerHTML = `${o[0] ? `<div class="em">${o[0]}</div>` : `<div class="em letter">${'ABC'[i]}</div>`}<div class="ti">${o[1]}</div><span class="kbd">${i + 1}</span>`;
+      b.innerHTML = `${o[0] ? `<div class="em">${o[0]}</div>` : `<div class="em letter">${'ABC'[i]}</div>`}<div class="ti">${t(`m.${mo.id}.o${i}`)}</div><span class="kbd">${i + 1}</span>`;
       attachSwipe(b, () => answerMoment(i));
       b.addEventListener('click', e => { if (e.detail === 0) answerMoment(i); });
       h.appendChild(b);
     });
     h.classList.remove('off');
     if (timed) {
-      const T0 = performance.now(), LIM = 15000, bar = q.querySelector('.qt i');
+      const T0 = qT0, LIM = 15000, bar = q.querySelector('.qt i');
+      bar.style.width = Math.max(0, (1 - (performance.now() - T0) / LIM) * 100) + '%';
       qTimer = setInterval(() => { const f = 1 - (performance.now() - T0) / LIM; bar.style.width = Math.max(0, f * 100) + '%'; if (f <= 0.3) bar.classList.add('low'); if (f <= 0) { clearInterval(qTimer); answerMoment(-1); } }, 100);
     }
   }
@@ -1291,7 +2031,7 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
   async function choose(i) {
     if (busy || phase !== 'play' || !S.hand[i] || S.moment) return;
     const cards = [...document.querySelectorAll('#hand .card')], el = cards[i];
-    if (!E.canPlay(S, S.hand[i])) { el.classList.remove('nope'); void el.offsetWidth; el.classList.add('nope'); el.style.transform = ''; Snd.bad(); Hap.buzz([20, 30, 20]); tip(`Not enough ${MET('m')[0]}: try a card that raises money`); return; }
+    if (!E.canPlay(S, S.hand[i])) { el.classList.remove('nope'); void el.offsetWidth; el.classList.add('nope'); el.style.transform = ''; Snd.bad(); Hap.buzz([20, 30, 20]); tip(() => t('nomoney', { e: MET('m')[0] })); return; }
     busy = true; $('#hand').classList.add('off'); hideCoach();
     const [sx, sy] = stageCenter(), r = el.getBoundingClientRect();
     el.style.transform = `translate(${sx - r.left - r.width / 2}px,${sy - r.top - r.height / 2}px) scale(.35) rotate(${i === 0 ? -20 : i === 2 ? 20 : 0}deg)`; el.classList.add('fly');
@@ -1306,15 +2046,16 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
   }
 
   // ---------------- event presentation ----------------
-  let toastDone = null;
+  let toastDone = null, toastFn = null;
   function toast(html, cls, ms) {
-    const t = $('#toast'); t.className = cls || ''; t.innerHTML = html; void t.offsetWidth; t.classList.add('show');
-    return new Promise(res => { let fin = false; const end = () => { if (fin) return; fin = true; t.classList.remove('show'); toastDone = null; setTimeout(res, FAST ? 0 : 180); }; toastDone = end; setTimeout(end, FAST ? 20 : ms); });
+    toastFn = typeof html === 'function' ? html : null;
+    const el = $('#toast'); el.className = cls || ''; el.innerHTML = toastFn ? toastFn() : html; void el.offsetWidth; el.classList.add('show');
+    return new Promise(res => { let fin = false; const end = () => { if (fin) return; fin = true; el.classList.remove('show'); toastDone = null; toastFn = null; setTimeout(res, FAST ? 0 : 180); }; toastDone = end; setTimeout(end, FAST ? 20 : ms); });
   }
   $('#toast').addEventListener('click', () => toastDone && toastDone());
   function shake() { const a = $('#app'); a.classList.remove('shake'); void a.offsetWidth; if (!HRS.reduceMotion()) a.classList.add('shake'); Hap.buzz(120, 'error'); }
   const coinsTo = (n) => { const [sx, sy] = stageCenter(); fxBurst(sx, sy, n, ['#ffd23f'], { txt: '🪙', size: 16, speed: 260, g: 300, life: 1.2, to: center(meterEls.m) }); };
-  const because = mode2 => (mode2 === 'kids' ? 'because you picked' : mode2 === 'adults' ? 'consequence of' : 'because you chose');
+  const whyKey = m2 => (m2 === 'kids' ? 'storm.why.k' : m2 === 'adults' ? 'storm.why.a' : 'storm.why');
 
   async function showEvent(ev) {
     const [sx, sy] = stageCenter();
@@ -1324,24 +2065,26 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
       if (c.k === 'g') {
         fxBurst(sx, sy, 34, Object.keys(c.s).map(k => E.SDG[k - 1][1]).concat(['#ffffff']), { speed: 320 }); Snd.good();
         if ((c.fx.m || 0) > 0) { coinsTo(8); Snd.coin(); }
-        if (ev.seed && mode !== 'adults') { await wait(350); pop(mode === 'kids' ? `🎁 Bonus in ${ev.seed} turns!` : '🌱 pays back later', sx, sy + W.R * 0.4, 'k'); }
-        if (mode === 'kids') { await wait(200); pop(['Great choice! 🌟', 'Nice! 💚', 'Super kind! 🌈', 'The planet says thanks! 🌍'][S.turn % 4], sx, sy - W.R * 0.5, 'k'); }
+        if (ev.seed && mode !== 'adults') { await wait(350); pop(mode === 'kids' ? tn('pop.bonus', ev.seed) : t('pop.pays'), sx, sy + W.R * 0.4, 'k'); }
+        if (mode === 'kids') { await wait(200); pop(t('pop.kid' + (S.turn % 4)), sx, sy - W.R * 0.5, 'k'); }
       } else {
         if ((c.fx.m || 0) > 0) { coinsTo(12); Snd.coin(); } else fxBurst(sx, sy, 20, ['#ffd23f', '#ff8a00'], { speed: 260 });
         if (mode !== 'adults') {
           await wait(450); Snd.bad(); W.flash = 0.5; W.flashCol = '40,30,50';
-          pop(mode === 'kids' ? `⛈️ Uh-oh… ${c.later.e} ${c.later.t} in ${ev.storm} turns` : '⚠️ That may come back…', sx, sy + W.R * 0.4, 'k');
+          pop(mode === 'kids' ? tn('pop.uhoh', ev.storm, { e: c.later.e, t: cL(ev.card) }) : t('pop.mayback'), sx, sy + W.R * 0.4, 'k');
         }
       }
       await wait(1000);
     } else if (ev.type === 'answer') {
       setDisp(ev.snap, ev.d);
+      const mo = findMoment(ev.id), fk = ev.kind === 'quiz' ? `m.${ev.id}.fact` : `m.${ev.id}.f${ev.i}`;
+      const fb = () => (L.has(fk) ? t(fk) : ev.fb || ''), right = () => (mo ? t(`m.${ev.id}.o${mo.a}`) : ev.right);
       let html;
       if (ev.kind === 'quiz') {
-        html = ev.ok ? `<div class="te">✅</div><div class="tt">Correct!</div><div class="tc">${ev.fb}</div><div class="tfx">${fxChips(ev.d)}</div>`
-          : `<div class="te">${ev.i < 0 ? '⏰' : '🤔'}</div><div class="tt">${ev.i < 0 ? 'Time\'s up!' : 'Not quite'}</div><div class="tc">Answer: <b>${ev.right}</b>. ${ev.fb}</div>`;
+        html = ev.ok ? () => `<div class="te">✅</div><div class="tt">${t('ans.correct')}</div><div class="tc">${fb()}</div><div class="tfx">${fxChips(ev.d)}</div>`
+          : () => `<div class="te">${ev.i < 0 ? '⏰' : '🤔'}</div><div class="tt">${t(ev.i < 0 ? 'ans.timeup' : 'ans.notquite')}</div><div class="tc">${t('ans.answer', { a: right() })} ${fb()}</div>`;
       } else {
-        html = `<div class="te">${ev.ok ? (ev.kind === 'eq' ? '💛' : '🧭') : (ev.kind === 'eq' ? '🤔' : '⚠️')}</div><div class="tt">${ev.ok ? (ev.kind === 'eq' ? 'That was kind!' : 'Principled call') : (ev.kind === 'eq' ? 'Hmm…' : 'Expedient call')}</div><div class="tc">${ev.fb}</div><div class="tfx">${fxChips(ev.d)}</div>`;
+        html = () => `<div class="te">${ev.ok ? (ev.kind === 'eq' ? '💛' : '🧭') : (ev.kind === 'eq' ? '🤔' : '⚠️')}</div><div class="tt">${t(ev.ok ? (ev.kind === 'eq' ? 'ans.kind' : 'ans.principled') : (ev.kind === 'eq' ? 'ans.hmm' : 'ans.expedient'))}</div><div class="tc">${fb()}</div><div class="tfx">${fxChips(ev.d)}</div>`;
       }
       if (ev.ok) { Snd.good(); fxBurst(sx, sy, 28, ['#ffd23f', '#ff6b8b', '#56C02B', '#26BDE2'], { speed: 280, up: true }); } else Snd.bad();
       await toast(html, ev.ok ? 'good' : (mode === 'kids' ? '' : 'bad'), 2600);
@@ -1352,29 +2095,29 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
       W.bolt = 1; W.boltX = W.size * (0.2 + Math.random() * 0.6); W.flash = 1; W.flashCol = '255,80,60'; W.rain = 2; shake(); Snd.storm();
       setDisp(ev.snap, ev.d);
       fxBurst(sx, sy - W.R, 24, ['#5c5470', '#8e8aa0', '#3a3247'], { speed: 200, g: 200 });
-      await toast(`<div class="te">${c.later.e}</div><div class="tt">${c.later.t}!</div><div class="tc">${because(mode)} ${c.e} <b>${c.t}</b> · ${when(ev.from)}</div>${mode === 'kids' ? '<div class="tc">Choices can cause problems later. Try a 🌱 one next time!</div>' : ''}<div class="tfx">${fxChips(ev.d)}</div>`, 'bad', mode === 'kids' ? 2600 : 2100);
+      await toast(() => `<div class="te">${c.later.e}</div><div class="tt">${cL(ev.card)}!</div><div class="tc">${t(whyKey(mode), { e: c.e, t: cT(ev.card), d: when(ev.from) })}</div>${mode === 'kids' ? `<div class="tc">${t('storm.kid')}</div>` : ''}<div class="tfx">${fxChips(ev.d)}</div>`, 'bad', mode === 'kids' ? 2600 : 2100);
     } else if (ev.type === 'bloom') {
       const c = E.CARD[ev.card];
       setDisp(ev.snap, ev.d); Snd.good(); Hap.buzz(15); fxBurst(sx, sy, 30, ['#56C02B', '#ffd23f', '#ffffff', '#26BDE2'], { speed: 280, up: true });
       if (ev.d.fx.m > 0) { coinsTo(8); Snd.coin(); }
-      await toast(`<div class="te">${c.later.e}</div><div class="tt">${c.later.t}</div><div class="tc">thanks to ${c.e} <b>${c.t}</b> · ${when(ev.from)}</div><div class="tfx">${fxChips(ev.d)}</div>`, 'good', 1700);
+      await toast(() => `<div class="te">${c.later.e}</div><div class="tt">${cL(ev.card)}</div><div class="tc">${t('bloom.why', { e: c.e, t: cT(ev.card), d: when(ev.from) })}</div><div class="tfx">${fxChips(ev.d)}</div>`, 'good', 1700);
     } else if (ev.type === 'event') {
       setDisp(ev.snap, ev.d);
       if (ev.bad) { shake(); Snd.bad(); W.flash = 0.7; W.flashCol = '255,120,60'; if (/cyclone|drought/.test(ev.id)) { W.rain = ev.id === 'cyclone' ? 2 : 0; Snd.storm(); } }
       else { Snd.good(); fxBurst(sx, sy, 26, ['#ffd23f', '#56C02B', '#26BDE2'], { speed: 260, up: true }); }
-      await toast(`<div class="te">${ev.e}</div><div class="tt">${ev.t}</div><div class="tc">${ev.why}</div><div class="tfx">${fxChips(ev.d)}</div>`, ev.bad ? 'bad' : 'good', 1900);
+      await toast(() => `<div class="te">${ev.e}</div><div class="tt">${t(`ev.${ev.id}.t`)}</div><div class="tc">${evWhy(ev)}</div><div class="tfx">${fxChips(ev.d)}</div>`, ev.bad ? 'bad' : 'good', 1900);
     } else if (ev.type === 'tipping') {
       setDisp(ev.snap, null, true); shake(); Snd.storm(); W.flash = 1; W.flashCol = '120,60,20';
-      await toast('<div class="te">🧊</div><div class="tt">Tipping point crossed</div><div class="tc">Ecosystems now degrade on their own, and climate shocks hit harder. There is no undo.</div>', 'bad', 2600);
+      await toast(() => `<div class="te">🧊</div><div class="tt">${t('tipping.t')}</div><div class="tc">${t('tipping.b')}</div>`, 'bad', 2600);
     } else if (ev.type === 'electionSoon') {
-      await toast(`<div class="te">🗳️</div><div class="tt">Election this season</div><div class="tc">Public trust must be <b>${ev.bar}+</b> when the season ends.</div>`, '', 1900);
+      await toast(() => `<div class="te">🗳️</div><div class="tt">${t('elsoon.t')}</div><div class="tc">${t('elsoon.b', { bar: ev.bar })}</div>`, '', 1900);
     } else if (ev.type === 'election') {
       setDisp(ev.snap, null, true);
       if (ev.won) { Snd.good(); fxBurst(sx, sy, 30, ['#26BDE2', '#ffffff', '#E5243B'], { speed: 300, up: true }); }
-      await toast(`<div class="te">🗳️</div><div class="tt">${ev.won ? 'Re-elected!' : 'Election lost'}</div><div class="tc">Public trust ${ev.h} (needed ${ev.bar})</div>`, ev.won ? 'good' : 'bad', 2000);
+      await toast(() => `<div class="te">🗳️</div><div class="tt">${t(ev.won ? 'el.won' : 'el.lost')}</div><div class="tc">${t('el.b', { h: ev.h, bar: ev.bar })}</div>`, ev.won ? 'good' : 'bad', 2000);
     } else if (ev.type === 'reckoning') {
       setDisp(ev.snap, null, true);
-      await toast(`<div class="te">⏰</div><div class="tt">${mode === 'kids' ? 'Last turn: leftover surprises!' : '2030: the bills arrive'}</div><div class="tc">${ev.n} delayed effect${ev.n === 1 ? '' : 's'} land now</div>`, '', 1600);
+      await toast(() => `<div class="te">⏰</div><div class="tt">${t(mode === 'kids' ? 'reck.k' : 'reck')}</div><div class="tc">${tn('reck.b', ev.n)}</div>`, '', 1600);
     } else if (ev.type === 'deal') {
       setDisp(ev.snap, null, true); renderTop(); Snd.tick();
     } else if (ev.type === 'over') {
@@ -1384,22 +2127,22 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
 
   // ---------------- screens ----------------
   function bestOf(m) { return store.get(bestKey(m), null); }
-  function bestText(m = mode) { const b = bestOf(m); return b ? `🏆 Best: ${b.goals}/17 · ${b.title}` : 'No best score yet'; }
+  function bestText(m = mode) { const b = bestOf(m); if (!b) return t('best.none'); const k = titleKey(b.title, m); return t('best', { g: b.goals, title: k ? t(k) : b.title }); }
   function applyModeLook() {
     KEY_BEST = bestKey(mode); KEY_SEEN = seenKey(mode);
     document.body.classList.remove('mode-kids', 'mode-college', 'mode-adults'); document.body.classList.add('mode-' + mode);
-    for (const k of ['m', 'h', 'p', 'w']) { meterEls[k].querySelector('.ic').textContent = MET(k)[0]; meterEls[k].setAttribute('aria-label', MET(k)[1]); }
+    for (const k of ['m', 'h', 'p', 'w']) { meterEls[k].querySelector('.ic').textContent = MET(k)[0]; meterEls[k].setAttribute('aria-label', metName(k)); }
   }
   function renderModes() {
     const box = $('#modes'); box.innerHTML = '';
     E.MODE_KEYS.forEach((k, i) => {
       const m = E.MODES[k], b = document.createElement('button');
       b.className = 'mode' + (k === mode ? ' on' : ''); b.dataset.mode = k; b.setAttribute('aria-pressed', k === mode);
-      b.innerHTML = `<span class="me">${m.e}</span><span class="mn">${m.name}</span><span class="ma">${m.ages}</span>`;
+      b.innerHTML = `<span class="me">${m.e}</span><span class="mn">${modeName(k)}</span><span class="ma">${t(`mode.${k}.ages`)}</span>`;
       b.addEventListener('click', () => setMode(k));
       box.appendChild(b);
     });
-    $('#intro').textContent = CFG().intro;
+    $('#intro').textContent = t(`mode.${mode}.intro`);
     $('#bestT').textContent = bestText();
   }
   function setMode(k) {
@@ -1411,7 +2154,7 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     phase = 'title'; busy = true; hideQ(); hideCoach(true);
     $('#title').classList.remove('hide'); $('#end').classList.add('hide');
     $('#hand').innerHTML = ''; $('#future').innerHTML = '';
-    applyModeLook(); renderModes();
+    applyModeLook(); renderModes(); queueMicrotask(hrsLang); // after the HRS layer's own title text
     const demo = E.newGame(42, mode); disp = null; setDisp({ ...demo, pending: [], turn: 0 }, null, true); renderTop();
   }
   function start() {
@@ -1424,14 +2167,10 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     if (!store.get(KEY_SEEN, false)) showCoach();
     saveGame();
   }
-  const COACH = {
-    kids: '👆 <b>Tap a card</b> to choose. You get 2 choices each turn.<br>⚠️ Some fun choices cause problems later.<br>🎯 Fill the <b>17 coloured dots</b> to help the planet!',
-    college: '👆 <b>Tap or swipe up</b> a card: one choice per season.<br>⚡ Quick wins pay now, but you won\'t know <i>when</i> the bill lands.<br>🎯 Fill the <b>17 SDG dots</b> (70%) by 2030.',
-    adults: '👆 <b>Tap or swipe up</b> a card each quarter.<br>No labels, no warnings: read the trade-offs.<br>🗳️ Elections in 2028 and 2030. 🎯 17 goals at 70%.',
-  };
+  function renderCoach() { const c = $('#coach'); c.innerHTML = t('coach.' + mode) + `<button class="cx" aria-label="${t('aria.close')}">✕</button>`; c.querySelector('.cx').addEventListener('click', () => hideCoach()); }
   function showCoach() {
-    const c = $('#coach'); c.innerHTML = COACH[mode] + '<button class="cx" aria-label="Close">✕</button>';
-    c.classList.remove('hide'); c.querySelector('.cx').addEventListener('click', () => hideCoach());
+    const c = $('#coach'); renderCoach();
+    c.classList.remove('hide');
     dots.forEach((d, i) => setTimeout(() => { d.classList.remove('ping'); void d.offsetWidth; d.classList.add('ping'); }, 300 + i * 60));
   }
   function hideCoach(silent) { const c = $('#coach'); if (!c.classList.contains('hide')) { c.classList.add('hide'); if (!silent) store.set(KEY_SEEN, true); } }
@@ -1443,35 +2182,38 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
     if (isBest) store.set(KEY_BEST, { goals: r.goals, score: r.score, title: r.title });
     HRS.store.del(SAVE_KEY); recordBest(r); HRS.buzz(r.win ? 'success' : 'warning');
     await wait(400);
-    const st = S.stats, extra = [];
-    if (st.quizTotal) extra.push(`🧠 ${st.quizRight}/${st.quizTotal} quiz`);
-    const nMoments = (S.usedMoments || []).length - (st.quizTotal || 0); // older saves lack these fields
-    if (nMoments > 0) extra.push(`${mode === 'kids' ? '💛' : '🧭'} ${st.kind}/${nMoments} ${mode === 'kids' ? 'kind' : 'principled'}`);
-    const el = $('#end');
-    el.innerHTML = `<div class="brand">A game by Harpreet Raj Singh™</div>
-      <div class="erow"><div class="badge">${r.emoji}</div><div class="etxt"><div class="etitle">${r.title}</div><div class="eline">${r.early ? `Game over in ${when(Math.min(S.turn, m.T - 1))}. ` : ''}${r.line}</div></div></div>
-      <div class="score">${r.goals}<small> / 17 goals</small></div>
-      <div class="estats"><span>🌱 ${st.good} sustainable</span><span>⚡ ${st.quick} shortcuts</span><span>⛈️ ${st.storms} storms</span>${extra.map(x => `<span>${x}</span>`).join('')}</div>
-      ${isBest ? `<div class="newbest">★ New ${m.name} best!</div>` : `<div class="best">${bestText()}</div>`}
-      <div class="ebtns"><button class="big pulse" id="againBtn">↻ Play again</button><button class="ghost" id="modeBtn">${m.e} ${m.name} · change</button></div>`;
-    el.classList.remove('hide');
-    $('#againBtn').addEventListener('click', start);
-    $('#modeBtn').addEventListener('click', showTitle);
+    endBest = isBest; renderEnd(); $('#end').classList.remove('hide');
     Snd.end(r.win); Hap.buzz(r.win ? [20, 40, 20, 40, 60] : [80, 50, 120], r.win ? 'success' : 'warning');
     const [sx, sy] = stageCenter();
     if (r.win) { for (let k = 0; k < 4; k++) setTimeout(() => fxBurst(innerWidth * (0.2 + k * 0.2), innerHeight * 0.25, 70, E.SDG.map(g => g[1]), { speed: 420, up: true, life: 2.4 }), k * 260); }
     else { shake(); fxBurst(sx, sy - W.R, 60, ['#6b6b6b', '#3a3a3a', '#ff7b2f'], { speed: 120, g: 60, life: 2.6, size: 4 }); }
   }
 
+  let endBest = false;
+  function renderEnd() { // text only: safe to call again on a language switch
+    const r = E.result(S), m = CFG(), st = S.stats, extra = [];
+    if (st.quizTotal) extra.push(t('st.quiz', { a: st.quizRight || 0, b: st.quizTotal }));
+    const nMoments = (S.usedMoments || []).length - (st.quizTotal || 0); // older saves lack these fields
+    if (nMoments > 0) extra.push(t(mode === 'kids' ? 'st.kind' : 'st.princ', { a: st.kind || 0, b: nMoments }));
+    const ek = m.endings[S.ending] ? S.ending : Object.keys(m.endings).find(k => m.endings[k][1] === r.title);
+    const title = ek ? t(`end.${m.key}.${ek}.t`) : r.title, line = ek ? t(`end.${m.key}.${ek}.l`) : r.line;
+    const el = $('#end');
+    el.innerHTML = `<div class="brand">${t('brand.by')}</div>
+      <div class="erow"><div class="badge">${r.emoji}</div><div class="etxt"><div class="etitle">${title}</div><div class="eline">${r.early ? t('end.over', { d: when(Math.min(S.turn, m.T - 1)) }) + ' ' : ''}${line}</div></div></div>
+      <div class="score">${r.goals}<small>${t('end.goals')}</small></div>
+      <div class="estats"><span>${t('st.good', { n: st.good })}</span><span>${t('st.quick', { n: st.quick })}</span><span>${t('st.storms', { n: st.storms })}</span>${extra.map(x => `<span>${x}</span>`).join('')}</div>
+      ${endBest ? `<div class="newbest">${t('end.newbest', { m: modeName(m.key) })}</div>` : `<div class="best">${bestText()}</div>`}
+      <div class="ebtns"><button class="big pulse" id="againBtn">${t('again')}</button><button class="ghost" id="modeBtn">${t('end.change', { e: m.e, m: modeName(m.key) })}</button></div>`;
+    $('#againBtn').addEventListener('click', start);
+    $('#modeBtn').addEventListener('click', showTitle);
+  }
+
   // ---------------- help (3 slides, per mode) ----------------
-  const HELP = {
-    kids: [['🌍', 'Help your planet', 'You have 10 turns. Each turn, tap one of 2 cards and watch your planet change!'], ['⚡ → ⛈️', 'Fun now, problem later', 'Some cards are fun right now but cause a problem a little later. 🌱 cards help the Earth.'], ['💛', 'Be kind and clever', 'Answer feelings questions and quick quizzes. Fill the 17 coloured dots to become an Earth Superhero!']],
-    college: [['🌍', '16 seasons to 2030', 'Each season, pick one of 3 cards. Your planet shows the result.'], ['⚡ → ❔', 'Hidden bills', 'Quick wins pay now and land a consequence later. You only learn when and how when it hits.'], ['🧠⚖️', 'Quizzes and dilemmas', 'Answer timed SDG quizzes for bonuses, and make ethical calls. Fill 11+ of 17 goals (70%) to win.']],
-    adults: [['🏛️', 'Full mandate', '20 quarters, 3 options each. No labels: every option has costs, and some costs are delayed.'], ['🗳️🧊', 'Stakes', 'Elections in 2028 and 2030 need public trust 38+. Let ecosystems fall below 30 and a permanent tipping point kicks in.'], ['🎯', 'Deliver Agenda 2030', 'Reach 11+ of 17 goals at 70% without collapsing the treasury, trust, ecosystems or stability.']],
-  };
+  const HELP = { kids: ['🌍', '⚡ → ⛈️', '💛'], college: ['🌍', '⚡ → ❔', '🧠⚖️'], adults: ['🏛️', '🗳️🧊', '🎯'] }; // text: help.<mode>.<i>.t / .b
+  let helpAt = 0;
   function showHelp(i = 0) {
-    const H = HELP[mode], h = H[i];
-    $('#helpBox').innerHTML = `<div class="he">${h[0]}</div><div class="ht">${h[1]}</div><div class="hb">${h[2]}</div><div class="dots">${H.map((_, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('')}</div><button class="big" id="helpNext">${i < 2 ? 'Next' : 'Got it'}</button>`;
+    const H = HELP[mode]; helpAt = i;
+    $('#helpBox').innerHTML = `<div class="he">${H[i]}</div><div class="ht">${t(`help.${mode}.${i}.t`)}</div><div class="hb">${t(`help.${mode}.${i}.b`)}</div><div class="dots">${H.map((_, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('')}</div><button class="big" id="helpNext">${t(i < 2 ? 'help.next' : 'help.got')}</button>`;
     $('#help').classList.remove('hide'); $('#helpNext').focus({ preventScroll: true });
     $('#helpNext').onclick = () => (i < 2 ? showHelp(i + 1) : closeHelp());
   }
@@ -1480,7 +2222,7 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
 
   // ---------------- controls ----------------
   function setSnd(on) { Snd.on = on; HRS.setSetting('sound', on); $('#sndBtn').textContent = on ? '🔊' : '🔇'; $('#sndBtn').setAttribute('aria-pressed', on); if (on) { Snd.init(); if (Snd.ctx && Snd.ctx.state === 'suspended') Snd.ctx.resume(); Snd.pop(); } }
-  function setHap(on, quiet) { Hap.on = on; store.set('sdg2030v2_hap', on); const b = $('#hapBtn'); b.classList.toggle('offd', !on); b.setAttribute('aria-pressed', on); b.title = on ? 'Vibration on' : 'Vibration off'; if (on && !quiet) Hap.buzz(30); }
+  function setHap(on, quiet) { Hap.on = on; store.set('sdg2030v2_hap', on); const b = $('#hapBtn'); b.classList.toggle('offd', !on); b.setAttribute('aria-pressed', on); b.title = t(on ? 'hap.on' : 'hap.off'); if (on && !quiet) Hap.buzz(30); }
   $('#sndBtn').addEventListener('click', () => setSnd(!Snd.on));
   $('#hapBtn').addEventListener('click', () => setHap(!Hap.on));
   $('#helpBtn').addEventListener('click', () => showHelp(0));
@@ -1506,6 +2248,79 @@ button,.card{touch-action:manipulation;-webkit-user-select:none;user-select:none
 
   $('#sndBtn').textContent = Snd.on ? '🔊' : '🔇';
   if (Hap.ok && !window.HRS) { $('#hapBtn').hidden = false; setHap(Hap.on, true); }
+
+  // ---------------- language: apply / live switch / picker / HRS text shim ----------------
+  const LANG_UI = !window.HRS; // inside HRS Games the host owns language (same rule as the haptics button): no picker, follow hrs-lang
+  const saveTag = st => (['kids', 'college', 'adults'].includes(st.mode) ? ` · ${E.MODES[st.mode].e} ${modeName(st.mode)}` : '');
+  const saveWhen = st => whenFor(Math.min(st.turn, (st.T || E.T) - 1), st.mode);
+  function hrsLang() { // HRS layer text (title buttons, links, confirm dialog) follows the language too
+    const ui = window.__sdg2ui, rec = ui && ui.loadSave ? ui.loadSave() : null, cont = $('#contBtn');
+    if (cont && rec) { cont.textContent = `${t('hrs.continue')} · ${saveWhen(rec.S)}${saveTag(rec.S)}`; $('#playBtn').textContent = t('hrs.new'); } else $('#playBtn').textContent = t('play');
+    if (!(window.HRS && typeof HRS.translateOverlay === 'function')) { // a host that translates its own overlay (links, home button) keeps doing so
+      const a = document.querySelectorAll('#title .tlinks a');
+      ['hrs.allgames', 'hrs.classic', 'hrs.about', 'hrs.privacy'].forEach((k, i) => { if (a[i]) a[i].textContent = t(k); });
+      const hb = $('#homeBtn'); if (hb) { hb.setAttribute('aria-label', t('hrs.home')); hb.title = t('hrs.allgames').replace(/^\S+\s+/, ''); }
+    }
+    const disc = $('#title .disc'); if (disc) { disc.textContent = t('hrs.disc'); disc.lang = L.lang; }
+    const yes = $('#cnYes');
+    if (yes) {
+      const r = rec || (ui && ui.loadSave && ui.loadSave()), box = $('#helpBox');
+      box.setAttribute('aria-label', t('hrs.startq')); box.querySelector('.ht').textContent = t('hrs.startq');
+      if (r) box.querySelector('.hb').textContent = t('hrs.replaced', { d: saveWhen(r.S) + saveTag(r.S) });
+      $('#cnNo').textContent = t('hrs.cancel'); yes.textContent = t('hrs.startnew'); yes.dataset.l = L.lang;
+    }
+  }
+  if (window.HRS && window.MutationObserver) new MutationObserver(() => { const y = $('#cnYes'); if (y && y.dataset.l !== L.lang) hrsLang(); }).observe($('#helpBox'), { childList: true });
+  function applyLang() {
+    const l = L.lang, md = document.querySelector('meta[name="description"]');
+    document.documentElement.lang = l;
+    document.body.classList.remove('lang-en', 'lang-hi', 'lang-pa'); document.body.classList.add('lang-' + l);
+    if (md) md.setAttribute('content', t('doc.desc'));
+    $('#title .brand').textContent = t('brand.presents'); $('#title .sub').textContent = t('sub'); $('#foot').textContent = t('foot'); $('#howBtn').textContent = t('how');
+    $('#modes').setAttribute('aria-label', t('aria.modes')); $('#hapBtn').setAttribute('aria-label', t('aria.hap')); $('#sndBtn').setAttribute('aria-label', t('aria.snd'));
+    $('#helpBtn').setAttribute('aria-label', t('aria.help')); $('#world').setAttribute('aria-label', t('aria.world'));
+    if (!$('#hapBtn').hidden) $('#hapBtn').title = t(Hap.on ? 'hap.on' : 'hap.off');
+    dots.forEach((b, i) => b.setAttribute('aria-label', t('aria.goal', { n: i + 1, name: sdgName(i) })));
+    for (const k of ['m', 'h', 'p', 'w']) meterEls[k].setAttribute('aria-label', metName(k));
+    const lb = $('#langBtn'); lb.textContent = t('lang.' + l); lb.setAttribute('aria-label', `${t('aria.lang')}: ${t('lang.' + l + '.n')}`);
+    $('#langs').setAttribute('aria-label', t('aria.lang')); $('#langMenu').setAttribute('aria-label', t('aria.lang'));
+    document.querySelectorAll('#langs button,#langMenu button').forEach(b => { const on = b.dataset.lang === l; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+    hrsLang();
+  }
+  function relang() { // redraw visible text in the new language; never touches S
+    if (phase === 'title') renderModes();
+    if (disp) renderFuture();
+    $('#date').textContent = when(Math.min(disp ? disp.turn : 0, CFG().T - 1));
+    if (phase === 'play' && S && !busy) renderHand(true);
+    else if (busy && $('#hand').dataset.mo) document.querySelectorAll('#hand .card.opt').forEach(b => { const ti = b.querySelector('.ti'); if (ti) ti.textContent = t(`m.${$('#hand').dataset.mo}.o${b.dataset.i}`); }); // answer still animating
+    if (toastFn && $('#toast').classList.contains('show')) $('#toast').innerHTML = toastFn();
+    if ($('#tip').classList.contains('show')) { if (tipFn) $('#tip').innerHTML = tipFn(); else hideTip(); }
+    if ($('#coach').innerHTML) renderCoach(); // hidden bubbles too (aria-label)
+    if (phase === 'end' && S && !$('#end').classList.contains('hide')) renderEnd();
+    if (!$('#help').classList.contains('hide') && $('#helpNext')) { const f = document.activeElement && document.activeElement.id === 'helpNext'; showHelp(helpAt); if (!f) $('#helpNext').blur(); }
+  }
+  function setLang(l, fromPicker) {
+    l = normLang(l); if (!l) return;
+    const changed = l !== L.lang; L.lang = l;
+    if (fromPicker) try { localStorage.setItem(LANG_KEY, l); } catch (e) { /* private mode */ }
+    applyLang(); if (changed) relang();
+    if (fromPicker && changed) dispatchEvent(new CustomEvent('hrs-lang-change', { detail: { lang: l, source: 'sdg-2030' } }));
+  }
+  addEventListener('hrs-lang-change', e => setLang(e.detail && e.detail.lang));
+  document.addEventListener('hrs-lang-change', e => { if (e.target === document) setLang(e.detail && e.detail.lang); });
+  addEventListener('storage', e => { if (e.key === LANG_KEY) setLang(normLang(e.newValue) || 'en'); });
+  function langMenu(open) { const m = $('#langMenu'); m.classList.toggle('hide', !open); $('#langBtn').setAttribute('aria-expanded', open); }
+  if (LANG_UI) {
+    document.body.classList.add('has-lang');
+    const mk = (l, full) => { const b = document.createElement('button'); b.dataset.lang = l; b.lang = l; b.innerHTML = full ? `<b>${t('lang.' + l)}</b><span>${t('lang.' + l + '.n')}</span>` : t('lang.' + l); if (!full) b.title = t('lang.' + l + '.n'); b.addEventListener('click', e => { e.stopPropagation(); langMenu(false); setLang(l, true); Snd.pop(); Hap.buzz(10); }); return b; };
+    I18N.LANGS.forEach(l => { $('#langs').appendChild(mk(l)); $('#langMenu').appendChild(mk(l, true)); });
+    $('#langs').hidden = false; $('#langBtn').hidden = false;
+    $('#langBtn').addEventListener('click', e => { e.stopPropagation(); langMenu($('#langMenu').classList.contains('hide')); });
+    document.addEventListener('pointerdown', e => { if (!e.target.closest('#langMenu,#langBtn')) langMenu(false); }, true);
+    addEventListener('keydown', e => { if (e.key === 'Escape') langMenu(false); });
+  }
+  window.__sdg2i18n = { get lang() { return L.lang; }, langs: I18N.LANGS.slice(), t, tn, has: L.has, setLang: (l, opts) => setLang(l, !!(opts && opts.persist)), picker: LANG_UI };
+  applyLang();
   addEventListener('orientationchange', () => setTimeout(layout, 250));
   if (window.ResizeObserver) new ResizeObserver(() => layout()).observe($('#stage'));
   if (window.visualViewport) visualViewport.addEventListener('resize', layout);
