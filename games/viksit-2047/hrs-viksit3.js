@@ -95,8 +95,8 @@ const _helpSheet = helpSheet;
 helpSheet = function () {
   _helpSheet();
   const row = $('sheetBody').querySelector('.row2');
-  if (row && !kid() && !(window.VB && VB.t)) row.insertAdjacentHTML('beforebegin', `<details class="x"><summary>📖 Glossary</summary><div><dl class="hrs-gloss">${GLOSSARY.map(([t, d]) => `<dt>${t}</dt><dd>${d}</dd>`).join('')}</dl></div></details>`);
-  $('sheetBody').insertAdjacentHTML('beforeend', `<div class="hrs-links"><a href="../../index.html">🏠 All games</a><a href="../viksit-2047-v2/">v2 edition</a><a href="../viksit-2047-classic/">Classic edition</a><a href="../../about.html">About &amp; disclaimers</a><a href="../../privacy.html">Privacy</a></div>
+  if (row && !kid() && !(window.VB && VB.t)) row.insertAdjacentHTML('beforebegin', `<details class="x"><summary>Glossary</summary><div><dl class="hrs-gloss">${GLOSSARY.map(([t, d]) => `<dt>${t}</dt><dd>${d}</dd>`).join('')}</dl></div></details>`);
+  $('sheetBody').insertAdjacentHTML('beforeend', `<div class="hrs-links"><a href="../../index.html"><svg class="hrs-house" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M6 10.4v8.8c0 .5.4.8.8.8h10.4c.4 0 .8-.3.8-.8v-8.8" fill="#fff" stroke="#3d3833" stroke-width="1.8" stroke-linejoin="round"/><rect x="10" y="14.2" width="4" height="5.8" rx="1" fill="#138808"/><path d="M3.6 11.4 12 4.3l8.4 7.1" fill="none" stroke="#e8801a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>All games</a><a href="../viksit-2047-v2/">v2 edition</a><a href="../viksit-2047-classic/">Classic edition</a><a href="../../about.html">About &amp; disclaimers</a><a href="../../privacy.html">Privacy</a></div>
   <p class="mut center hrs-disc" style="font-size:.78rem" lang="${LL()}">${tl('disc')}</p>`);
 };
 

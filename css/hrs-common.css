@@ -2,19 +2,19 @@
 img.emoji{height:1.05em;width:1.05em;margin:0 .05em 0 .08em;vertical-align:-.15em;display:inline-block}
 :focus-visible{outline:3px solid #ffb547;outline-offset:2px}
 .hrs-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.hrs-pop{position:fixed;z-index:100000;background:#111827;color:#fff;font:500 13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:9px 11px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.35);max-width:300px}
+.hrs-pop{position:fixed;z-index:100000;background:#fff;color:#1f1f1f;font:500 13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:10px 12px;border-radius:14px;border:1px solid #ebe4d7;box-shadow:0 2px 6px rgba(60,40,10,.06),0 14px 34px -10px rgba(60,40,10,.28);max-width:300px}
 .hrs-has-tip{cursor:help}
-.hrs-btn{font:600 15px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:44px;min-width:44px;padding:10px 16px;border-radius:12px;border:0;background:#1d4ed8;color:#fff;cursor:pointer}
+.hrs-btn{font:600 15px/1.2 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:44px;min-width:44px;padding:10px 16px;border-radius:12px;border:0;background:#1f1f1f;color:#fff;cursor:pointer}
 .hrs-btn.ghost{background:transparent;color:inherit;border:1px solid currentColor;opacity:.9}
 .hrs-tour{position:fixed;inset:0;z-index:99990}
-.hrs-tour.dim{background:rgba(5,10,25,.6)}
-.hrs-tour-hole{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(5,10,25,.62);outline:3px solid #ffb547;transition:all .25s;pointer-events:none}
-.hrs-tour-box{position:fixed;left:50%;transform:translateX(-50%);width:min(440px,calc(100vw - 20px));background:#fff;color:#1d2433;border-radius:16px;padding:14px 16px;box-shadow:0 20px 60px rgba(0,0,0,.4);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.hrs-tour-box h3{margin:2px 0 6px;font-size:18px;color:#0b2a6b}
+.hrs-tour.dim{background:rgba(30,24,16,.5)}
+.hrs-tour-hole{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(30,24,16,.55);outline:3px solid #ffb547;transition:all .25s;pointer-events:none}
+.hrs-tour-box{position:fixed;left:50%;transform:translateX(-50%);width:min(440px,calc(100vw - 20px));background:#fff;color:#1f1f1f;border-radius:20px;padding:14px 16px;box-shadow:0 24px 60px -12px rgba(0,0,0,.35);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.hrs-tour-box h3{margin:2px 0 6px;font-size:18px;color:#1f1f1f}
 .hrs-tour-box p{margin:0 0 10px}
-.hrs-tour-step{font-size:12px;color:#5d6b82;text-transform:uppercase;letter-spacing:.5px}
+.hrs-tour-step{font-size:12px;color:#5f5850;text-transform:uppercase;letter-spacing:.5px}
 .hrs-tour-btns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.hrs-tour-btns .ghost{color:#1d2433}
+.hrs-tour-btns .ghost{color:#1f1f1f}
 .hrs-home{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:12px;text-decoration:none;font-size:20px}
 html[data-reduce-motion] *,html[data-reduce-motion] *::before,html[data-reduce-motion] *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 /* iOS / touch: no double-tap zoom delay (pinch-zoom stays available), no font inflation, no grey tap flash */
@@ -33,5 +33,5 @@ body{-webkit-tap-highlight-color:rgba(0,0,0,0)}
 .hrs-links a:lang(pa),.tlinks a:lang(pa),.hrs-toast:lang(pa),.hrs-lang-note:lang(pa){font-family:"HRS Gurmukhi",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .hrs-lang-note{margin:6px auto 0;text-align:center;font:600 12px/1.4 "HRS Devanagari","HRS Gurmukhi",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;opacity:.75}
 .hrs-toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:100001;max-width:calc(100vw - 32px);
-  background:rgba(29,29,31,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;font:650 14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,"HRS Devanagari","HRS Gurmukhi",sans-serif;padding:10px 16px;border-radius:999px;box-shadow:0 12px 30px -8px rgba(0,0,0,.35);transition:opacity .3s,transform .3s;pointer-events:none;text-align:center}
+  background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#1f1f1f;border:1px solid #ebe4d7;font:650 14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,"HRS Devanagari","HRS Gurmukhi",sans-serif;padding:10px 16px;border-radius:999px;box-shadow:0 2px 6px rgba(60,40,10,.06),0 16px 36px -12px rgba(60,40,10,.3);transition:opacity .3s,transform .3s;pointer-events:none;text-align:center}
 .hrs-toast.on{opacity:1;transform:translate(-50%,0)}
