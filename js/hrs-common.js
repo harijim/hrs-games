@@ -5,8 +5,10 @@
 const SCRIPT = document.currentScript;
 const ROOT = new URL(SCRIPT && SCRIPT.src ? '../' : './', SCRIPT && SCRIPT.src ? SCRIPT.src : location.href); // www/ root (or page dir in single-file builds)
 const SETTINGS_KEY = 'hrs_settings_v1';
-const DEFAULTS = { sound: false, vibration: true, reduceMotion: null, textSize: 'normal', emoji: true };
+const DEFAULTS = { sound: false, vibration: true, reduceMotion: null, textSize: 'normal', emoji: true, theme: 'light' };
 const mq = window.matchMedia ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+const mqDark = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : { matches: false };
+const IN_GAME = /\/games\//.test(location.pathname);
 
 /* ---------- storage ---------- */
 const store = {
@@ -18,8 +20,16 @@ function settings() { return Object.assign({}, DEFAULTS, store.get(SETTINGS_KEY,
 function setSetting(k, v) { const s = settings(); s[k] = v; store.set(SETTINGS_KEY, s); apply(); return s; }
 function reduceMotion() { const s = settings(); return s.reduceMotion == null ? mq.matches : !!s.reduceMotion; }
 const SCALE = { normal: 1, large: 1.15, xlarge: 1.3 };
+/* appearance (launcher pages only; the games keep their own look): 'light' (default, even when the device is dark) | 'dark' | 'auto' */
+const THEMES = ['light', 'dark', 'auto'], THEME_BG = { light: '#fbf8f3', dark: '#0f0f11' };
+function themePref() { const t = settings().theme; return THEMES.includes(t) ? t : 'light'; }
+function theme() { const t = themePref(); return t === 'auto' ? (mqDark.matches ? 'dark' : 'light') : t; }
 function apply() {
   const s = settings(), h = document.documentElement;
+  if (!IN_GAME) {
+    const th = theme(); h.dataset.theme = th; h.dataset.themePref = themePref(); h.style.colorScheme = th;
+    document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute('content', THEME_BG[th]));
+  }
   h.toggleAttribute('data-reduce-motion', reduceMotion());
   h.dataset.textSize = s.textSize;
   h.style.setProperty('--hrs-scale', SCALE[s.textSize] || 1);
@@ -310,9 +320,9 @@ if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol) && !Cap)
 
 apply(); applyLang();
 document.documentElement.classList.toggle('hrs-ios', isIOS); document.documentElement.classList.toggle('hrs-standalone', isStandalone);
-if (mq.addEventListener) mq.addEventListener('change', apply);
+if (mq.addEventListener) { mq.addEventListener('change', apply); mqDark.addEventListener('change', apply); }
 window.addEventListener('storage', e => { if (e.key === SETTINGS_KEY) apply(); });
 document.addEventListener('DOMContentLoaded', startEmoji); document.addEventListener('DOMContentLoaded', startLang);
 
-window.HRS = { lang, setLang, LANGS, LANG_NAMES, gameLangs, translateOverlay, ROOT, store, settings, setSetting, reduceMotion, apply, sfx, buzz, openExternal, onBack, handleBack, home, parseEmoji, clickables, titlePopovers, showPopover, hidePopover, dialog, announce, tour, isNative: !!Cap, isIOS, isIOSSafari, isStandalone, canVibrate };
+window.HRS = { lang, setLang, LANGS, LANG_NAMES, gameLangs, translateOverlay, ROOT, store, settings, setSetting, reduceMotion, apply, theme, themePref, THEMES, sfx, buzz, openExternal, onBack, handleBack, home, parseEmoji, clickables, titlePopovers, showPopover, hidePopover, dialog, announce, tour, isNative: !!Cap, isIOS, isIOSSafari, isStandalone, canVibrate };
 })();

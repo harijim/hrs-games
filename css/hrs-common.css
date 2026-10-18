@@ -33,5 +33,5 @@ body{-webkit-tap-highlight-color:rgba(0,0,0,0)}
 .hrs-links a:lang(pa),.tlinks a:lang(pa),.hrs-toast:lang(pa),.hrs-lang-note:lang(pa){font-family:"HRS Gurmukhi",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .hrs-lang-note{margin:6px auto 0;text-align:center;font:600 12px/1.4 "HRS Devanagari","HRS Gurmukhi",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;opacity:.75}
 .hrs-toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;z-index:100001;max-width:calc(100vw - 32px);
-  background:linear-gradient(115deg,#5b21e6,#d1146b);color:#fff;font:700 14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,"HRS Devanagari","HRS Gurmukhi",sans-serif;padding:10px 16px;border-radius:999px;box-shadow:0 10px 30px rgba(60,10,120,.35);transition:opacity .3s,transform .3s;pointer-events:none;text-align:center}
+  background:rgba(29,29,31,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;font:650 14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,"HRS Devanagari","HRS Gurmukhi",sans-serif;padding:10px 16px;border-radius:999px;box-shadow:0 12px 30px -8px rgba(0,0,0,.35);transition:opacity .3s,transform .3s;pointer-events:none;text-align:center}
 .hrs-toast.on{opacity:1;transform:translate(-50%,0)}

@@ -61,14 +61,14 @@ function renderGames() {
   [...new Set(fresh)].forEach((id, k) => setTimeout(() => celebrate(document.querySelector(`.game[data-game="${id}"]`)), 450 + k * 300));
 }
 /* a small confetti burst on a card (skipped entirely with reduced motion) */
-const PALETTE = { viksit: ['#ff9933', '#ffffff', '#138808', '#1f2f9e', '#ffd34d'], sdg: ['#e5243b', '#dda63a', '#4c9f38', '#26bde2', '#fcc30b', '#dd1367', '#fd6925', '#0a97d9'] };
+const PALETTE = { viksit: ['#ff9933', '#ffb45c', '#138808', '#22a35a', '#f5c542', '#ffffff'], sdg: ['#e5243b', '#dda63a', '#4c9f38', '#26bde2', '#fcc30b', '#dd1367', '#fd6925', '#0a97d9'] };
 function celebrate(card) {
   if (!card) return;
   HRS.buzz('success'); HRS.sfx('milestone'); HRS.announce(t('card.newBestSr'));
   if (HRS.reduceMotion()) return;
   const box = document.createElement('div'); box.className = 'confetti'; box.setAttribute('aria-hidden', 'true');
   const pal = PALETTE[card.dataset.game] || PALETTE.sdg;
-  for (let n = 0; n < 34; n++) {
+  for (let n = 0; n < 40; n++) {
     const i = document.createElement('i'), a = Math.random() * Math.PI * 2, r = 90 + Math.random() * 170;
     i.style.cssText = `--c:${pal[n % pal.length]};--x:${Math.cos(a) * r}px;--y:${Math.sin(a) * r * .8 + 120}px;--r:${(Math.random() * 720 - 360) | 0}deg;--d:${(Math.random() * 120) | 0}ms`;
     box.appendChild(i);
@@ -171,7 +171,14 @@ function loadSettings() {
   $('#s-sound').checked = !!s.sound; $('#s-vibration').checked = !!s.vibration && HRS.canVibrate(); $('#s-emoji').checked = s.emoji !== false;
   $('#s-motion').value = s.reduceMotion == null ? 'system' : s.reduceMotion ? 'on' : 'off';
   $('#s-text').value = s.textSize || 'normal';
+  syncTheme();
 }
+/* appearance: Light (default) / Dark / Auto, a segmented radio group */
+function syncTheme() { const t = HRS.themePref(); document.querySelectorAll('[data-theme-pick]').forEach(b => { const on = b.dataset.themePick === t; b.setAttribute('aria-checked', String(on)); b.tabIndex = on ? 0 : -1; }); }
+document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-theme-pick]'); if (!b) return; HRS.setSetting('theme', b.dataset.themePick); HRS.buzz('light'); syncTheme(); });
+$('#themeSeg').addEventListener('keydown', e => { const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key]; if (!d) return; e.preventDefault(); const bs = [...e.currentTarget.querySelectorAll('button')], i = (bs.indexOf(document.activeElement) + d + bs.length) % bs.length; bs[i].click(); bs[i].focus(); });
+window.addEventListener('storage', e => { if (e.key === 'hrs_settings_v1') syncTheme(); });
+syncTheme();
 $('#s-sound').onchange = e => { HRS.setSetting('sound', e.target.checked); if (e.target.checked) HRS.sfx('good'); };
 $('#s-vibration').onchange = e => { HRS.setSetting('vibration', e.target.checked); if (e.target.checked) HRS.buzz('medium'); };
 $('#s-emoji').onchange = e => { HRS.setSetting('emoji', e.target.checked); location.reload(); };
@@ -200,5 +207,14 @@ if (!HRS.canVibrate()) {
   $('#s-vibration').disabled = true; $('#t-vib').disabled = true;
   const old = row.querySelector('small'), sm = document.createElement('small'), k = HRS.isIOS ? 'vib.ios' : 'vib.no'; sm.dataset.i18n = k; sm.textContent = HRSI18N.D[k].en; old.replaceWith(sm); HRSI18N.apply(row);
 }
+/* gentle depth on scroll: ambient light drifts slower than the page, screenshots float a little; frosted bar gets a hairline */
+(function depth() {
+  let raf = 0; const top = $('.top'), art = $('.bg-art');
+  const run = () => { raf = 0; const y = scrollY; top.classList.toggle('scrolled', y > 4);
+    if (HRS.reduceMotion()) { art.style.removeProperty('--par'); document.querySelectorAll('.thumb').forEach(t => t.style.removeProperty('--py')); return; }
+    art.style.setProperty('--par', (-y * 0.06).toFixed(1) + 'px');
+    const H = innerHeight; document.querySelectorAll('.game').forEach(g => { const r = g.getBoundingClientRect(); if (r.bottom < 0 || r.top > H) return; const k = ((r.top + r.height / 2) - H / 2) / H; const th = g.querySelector('.thumb'); if (th) th.style.setProperty('--py', (k * 14).toFixed(1) + 'px'); }); };
+  addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(run); }, { passive: true }); addEventListener('resize', run); run();
+})();
 route();
 })();
