@@ -12,6 +12,9 @@ const sdgLabel = st => { const c = SDG_MODES[st.mode] || SDG_MODES.classic, T = 
 const VB_MODES = { school: mode('🎒', 'm.school'), college: mode('🎓', 'm.college'), expert: mode('💼', 'm.expert') };
 const VB_BEST = { school: 'hrs_best_viksit_v3_school', college: 'hrs_best_viksit_v2', expert: 'hrs_best_viksit_v3_expert' };
 const live = s => s && s.S && !s.S.over ? s : null;
+// Optimise Your Health (games/optimise-your-health): modes and best keys mirror oyh-data.js MODES / oyh-game.js bestKey
+const OYH_MODES = { school: mode('🎒', 'm.school', { T: 6 }), college: mode('🎓', 'm.college', { T: 8 }), adult: mode('💼', 'm.adult', { T: 10 }) };
+const OYH_BEST = { school: 'hrs_best_health_school', college: 'hrs_best_health_college', adult: 'hrs_best_health_adult' };
 // v3 save, or an unfinished v2 game that v3 will adopt on open (until imported or declined)
 const viksitSave = () => live(HRS.store.get('hrs_save_viksit_v3')) || (s => s && s.t > (HRS.store.get('hrs_viksit_v2_imported') || 0) ? s : null)(live(HRS.store.get('hrs_save_viksit_v2')));
 const SDG_BEST = { kids: 'hrs_best_sdg_v2_kids', college: 'hrs_best_sdg_v2', adults: 'hrs_best_sdg_v2_adults' };
@@ -28,6 +31,11 @@ const GAMES = [
     saveLabel: s => sdgLabel(s.S),
     bestOf: () => Object.entries(SDG_BEST).map(([m, k]) => [m, HRS.store.get(k)]).filter(x => x[1]), modes: SDG_MODES, max: 17,
     editions: [{ path: 'games/sdg-2030-classic/index.html', save: 'hrs_save_sdg_v1', get label() { return t('sdg.ed.c'); } }] }, Object.getOwnPropertyDescriptors(txt('sdg'))),
+  Object.defineProperties({ id: 'health', cls: 'g3', icon: '🌿', path: 'games/optimise-your-health/index.html', thumb: 'assets/thumbs/optimise-your-health.jpg',
+    save: 'hrs_save_health_v1',
+    saveLabel: s => { const m = OYH_MODES[s.S.mode] || OYH_MODES.school, T = s.S.T || m.T; return `${m.e} ${m.name} · ${t('oyh.save', { n: Math.min(s.S.week + 1, T), T })}`; },
+    bestOf: () => Object.entries(OYH_BEST).map(([m, k]) => [m, HRS.store.get(k)]).filter(x => x[1]), modes: OYH_MODES, max: 100,
+    editions: [] }, Object.getOwnPropertyDescriptors(txt('oyh'))),
 ];
 
 const SEEN_BEST = 'hrs_seen_best'; // launcher-only: which best records were already celebrated
@@ -53,7 +61,7 @@ function renderGames() {
         </div>
         <div class="more-row">
           <details class="more"><summary>ⓘ ${t('card.about')}</summary><div class="in"><p class="desc">${g.desc}</p><div class="learn"><h3>${t('card.learn')}</h3><ul>${g.learn.map(l => `<li>${l}</li>`).join('')}</ul></div><div class="meta"><span class="chip">🔁 ${g.turns}</span><span class="chip">⏱️ ${g.time}</span><span class="chip">👤 ${g.age}</span></div></div></details>
-          <details class="eds"><summary>${t('card.eds')}</summary><div class="in"><p class="classic">${g.editions.map(ed => { const sv = live(HRS.store.get(ed.save)); return `<a href="${ed.path}${sv ? '?continue=1' : ''}">${ed.label}${sv ? ` <span class="sv">· ${t('card.contSaved')}</span>` : ''}</a>`; }).join('')}</p></div></details>
+          ${g.editions.length ? '' : '<!-- no earlier editions -->'}${!g.editions.length ? '' : `<details class="eds"><summary>${t('card.eds')}</summary><div class="in"><p class="classic">${g.editions.map(ed => { const sv = live(HRS.store.get(ed.save)); return `<a href="${ed.path}${sv ? '?continue=1' : ''}">${ed.label}${sv ? ` <span class="sv">· ${t('card.contSaved')}</span>` : ''}</a>`; }).join('')}</p></div></details>`}
         </div>
       </div></article>`;
   }).join('');
@@ -61,7 +69,7 @@ function renderGames() {
   [...new Set(fresh)].forEach((id, k) => setTimeout(() => celebrate(document.querySelector(`.game[data-game="${id}"]`)), 450 + k * 300));
 }
 /* a small confetti burst on a card (skipped entirely with reduced motion) */
-const PALETTE = { viksit: ['#ff9933', '#ffb45c', '#138808', '#22a35a', '#f5c542', '#ffffff'], sdg: ['#e5243b', '#dda63a', '#4c9f38', '#26bde2', '#fcc30b', '#dd1367', '#fd6925', '#0a97d9'] };
+const PALETTE = { health: ['#3f9d68', '#2f969b', '#5b7fcf', '#9a84cf', '#e2706a', '#eea63a'], viksit: ['#ff9933', '#ffb45c', '#138808', '#22a35a', '#f5c542', '#ffffff'], sdg: ['#e5243b', '#dda63a', '#4c9f38', '#26bde2', '#fcc30b', '#dd1367', '#fd6925', '#0a97d9'] };
 function celebrate(card) {
   if (!card) return;
   HRS.buzz('success'); HRS.sfx('milestone'); HRS.announce(t('card.newBestSr'));

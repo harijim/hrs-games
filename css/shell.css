@@ -112,6 +112,14 @@ html[data-theme=dark] .g1 .newb{background:rgba(255,153,51,.16);color:#ffc58a}ht
 .g2 .btn{background:linear-gradient(135deg,#0b72c6 0%,#0369a1 100%);box-shadow:0 1px 1px rgba(3,105,161,.15),0 12px 24px -10px rgba(3,105,161,.6)}
 .g1 .btn.cont{background:linear-gradient(135deg,#15803d 0%,#166534 100%);color:#fff;box-shadow:0 12px 24px -10px rgba(21,128,61,.6)}
 .g2 .btn.cont{background:linear-gradient(135deg,#15803d 0%,#0e7490 100%);box-shadow:0 12px 24px -10px rgba(14,116,144,.55)}
+/* g3: Optimise Your Health v2 (botanical teal, sunrise coral, cream) */
+.g3{background:radial-gradient(110% 70% at 100% 0%,rgba(31,127,112,.20) 0%,rgba(31,127,112,0) 62%),radial-gradient(80% 50% at 0% 42%,rgba(244,183,64,.16) 0%,rgba(244,183,64,0) 70%),radial-gradient(60% 40% at 60% 30%,rgba(239,123,95,.07),rgba(239,123,95,0) 70%),linear-gradient(180deg,#f6f8f1 0%,var(--surface) 62%)}
+html[data-theme=dark] .g3{background:radial-gradient(110% 70% at 100% 0%,rgba(31,127,112,.24),rgba(31,127,112,0) 62%),radial-gradient(80% 50% at 0% 42%,rgba(244,183,64,.12),rgba(244,183,64,0) 70%),var(--surface)}
+.g3 .band{background:linear-gradient(90deg,#3f9d68 0%,#2f969b 20%,#5b7fcf 40%,#9a84cf 58%,#e2706a 78%,#eea63a 100%)}
+.g3 .ico{background:conic-gradient(from -90deg,#3f9d68,#2f969b,#5b7fcf,#9a84cf,#e2706a,#eea63a,#3f9d68)}
+.g3 .newb{background:#e3f1ec;color:#15604f}html[data-theme=dark] .g3 .newb{background:rgba(31,127,112,.2);color:#9fe0cf}
+.g3 .btn{background:linear-gradient(135deg,#23907e 0%,#16695a 100%);color:#fff;box-shadow:0 1px 1px rgba(21,96,79,.15),0 12px 24px -10px rgba(21,96,79,.6)}
+.g3 .btn.cont{background:linear-gradient(135deg,#f08a68 0%,#d9603f 100%);color:#fff;box-shadow:0 12px 24px -10px rgba(199,90,64,.55)}
 .btn.cont{flex:1 1 100%;flex-direction:column;gap:0;min-height:62px;padding:10px 20px;border-radius:22px}
 .btn .bt1{font-size:1.12rem}
 .btn .sr-meta{font-weight:500;opacity:.95;font-size:.82rem}

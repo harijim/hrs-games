@@ -66,6 +66,16 @@
           "sizes": "96x96"
         }
       ]
+    },
+    {
+      "name": "Optimise Your Health",
+      "url": "./games/optimise-your-health/index.html?continue=1",
+      "icons": [
+        {
+          "src": "assets/icons/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ]
 }
