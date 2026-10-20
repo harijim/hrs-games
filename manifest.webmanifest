@@ -76,6 +76,16 @@
           "sizes": "96x96"
         }
       ]
+    },
+    {
+      "name": "Let's Optimise the World",
+      "url": "./games/lets-optimise-the-world/index.html",
+      "icons": [
+        {
+          "src": "assets/icons/icon-96.png",
+          "sizes": "96x96"
+        }
+      ]
     }
   ]
 }

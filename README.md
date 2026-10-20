@@ -7,7 +7,9 @@ Created by **Harpreet Raj Singh**.
 **Play:** https://harijim.github.io/hrs-games/
 
 - Viksit Bharat 2047: The Planner's Desk
-- SDG 2030: Race to the Goals
+- SDG 2030: Heal the World
+- Optimise Your Health
+- Let's Optimise the World (cooperative planetary strategy, 1–4 players)
 
 Privacy policy: https://harijim.github.io/hrs-games/privacy.html · About: https://harijim.github.io/hrs-games/about.html
 

@@ -15,6 +15,9 @@ const live = s => s && s.S && !s.S.over ? s : null;
 // Optimise Your Health (games/optimise-your-health): modes and best keys mirror oyh-data.js MODES / oyh-game.js bestKey
 const OYH_MODES = { school: mode('🎒', 'm.school', { T: 6 }), college: mode('🎓', 'm.college', { T: 8 }), adult: mode('💼', 'm.adult', { T: 10 }) };
 const OYH_BEST = { school: 'hrs_best_health_school', college: 'hrs_best_health_college', adult: 'hrs_best_health_adult' };
+// Let's Optimise the World (games/lets-optimise-the-world): no mid-game save; its own store 'lotw.v1' records finished scenarios (completed: {s1..s5: date})
+const LOTW_MODES = { done: mode('🌏', 'lotw.done') };
+const lotwDone = () => { const st = HRS.store.get('lotw.v1'), n = st && st.completed ? Object.keys(st.completed).filter(k => /^s[1-5]$/.test(k)).length : 0; return n ? [['done', { score: n }]] : []; };
 // v3 save, or an unfinished v2 game that v3 will adopt on open (until imported or declined)
 const viksitSave = () => live(HRS.store.get('hrs_save_viksit_v3')) || (s => s && s.t > (HRS.store.get('hrs_viksit_v2_imported') || 0) ? s : null)(live(HRS.store.get('hrs_save_viksit_v2')));
 const SDG_BEST = { kids: 'hrs_best_sdg_v2_kids', college: 'hrs_best_sdg_v2', adults: 'hrs_best_sdg_v2_adults' };
@@ -36,6 +39,10 @@ const GAMES = [
     saveLabel: s => { const m = OYH_MODES[s.S.mode] || OYH_MODES.school, T = s.S.T || m.T; return `${m.e} ${m.name} · ${t('oyh.save', { n: Math.min(s.S.week + 1, T), T })}`; },
     bestOf: () => Object.entries(OYH_BEST).map(([m, k]) => [m, HRS.store.get(k)]).filter(x => x[1]), modes: OYH_MODES, max: 100,
     editions: [] }, Object.getOwnPropertyDescriptors(txt('oyh'))),
+  Object.defineProperties({ id: 'lotw', cls: 'g4', icon: '🌏', path: 'games/lets-optimise-the-world/index.html', thumb: 'assets/thumbs/lets-optimise-the-world.jpg',
+    getSave: () => null, saveLabel: () => '',
+    bestOf: lotwDone, modes: LOTW_MODES, max: 5,
+    editions: [] }, Object.getOwnPropertyDescriptors(txt('lotw'))),
 ];
 
 const SEEN_BEST = 'hrs_seen_best'; // launcher-only: which best records were already celebrated
@@ -69,7 +76,7 @@ function renderGames() {
   [...new Set(fresh)].forEach((id, k) => setTimeout(() => celebrate(document.querySelector(`.game[data-game="${id}"]`)), 450 + k * 300));
 }
 /* a small confetti burst on a card (skipped entirely with reduced motion) */
-const PALETTE = { health: ['#3f9d68', '#2f969b', '#5b7fcf', '#9a84cf', '#e2706a', '#eea63a'], viksit: ['#ff9933', '#ffb45c', '#138808', '#22a35a', '#f5c542', '#ffffff'], sdg: ['#e5243b', '#dda63a', '#4c9f38', '#26bde2', '#fcc30b', '#dd1367', '#fd6925', '#0a97d9'] };
+const PALETTE = { lotw: ['#18c76a', '#3df58a', '#2a7de1', '#4da3ff', '#ffc23d', '#ffffff'], health: ['#3f9d68', '#2f969b', '#5b7fcf', '#9a84cf', '#e2706a', '#eea63a'], viksit: ['#ff9933', '#ffb45c', '#138808', '#22a35a', '#f5c542', '#ffffff'], sdg: ['#e5243b', '#dda63a', '#4c9f38', '#26bde2', '#fcc30b', '#dd1367', '#fd6925', '#0a97d9'] };
 function celebrate(card) {
   if (!card) return;
   HRS.buzz('success'); HRS.sfx('milestone'); HRS.announce(t('card.newBestSr'));
@@ -194,7 +201,7 @@ $('#s-motion').onchange = e => HRS.setSetting('reduceMotion', e.target.value ===
 $('#s-text').onchange = e => HRS.setSetting('textSize', e.target.value);
 $('#t-sound').onclick = () => { if (!HRS.settings().sound) { $('#dataMsg').textContent = ''; HRS.setSetting('sound', true); $('#s-sound').checked = true; } HRS.sfx('milestone'); };
 $('#t-vib').onclick = () => HRS.buzz('success');
-const DATA_KEY = /^(hrs_(save|best|tut)_|hrs_viksit_v2_imported$|hrs_seen_best$|sdg2030_best_v1$|sdg2030v2_(best|seen))/;
+const DATA_KEY = /^(hrs_(save|best|tut)_|hrs_viksit_v2_imported$|hrs_seen_best$|sdg2030_best_v1$|sdg2030v2_(best|seen)|lotw\.v1$)/; // lotw.v1: Let's Optimise the World's own record (days played, finished scenarios, chosen actions, its settings)
 const TUT_KEY = /^(hrs_tut_|sdg2030v2_seen)/;
 const keys = re => { const out = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (re.test(k)) out.push(k); } } catch (e) {} return out; };
 $('#resetTut').onclick = () => { keys(TUT_KEY).forEach(HRS.store.del); $('#dataMsg').textContent = t('msg.tut'); };

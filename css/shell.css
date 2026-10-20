@@ -120,6 +120,14 @@ html[data-theme=dark] .g3{background:radial-gradient(110% 70% at 100% 0%,rgba(31
 .g3 .newb{background:#e3f1ec;color:#15604f}html[data-theme=dark] .g3 .newb{background:rgba(31,127,112,.2);color:#9fe0cf}
 .g3 .btn{background:linear-gradient(135deg,#23907e 0%,#16695a 100%);color:#fff;box-shadow:0 1px 1px rgba(21,96,79,.15),0 12px 24px -10px rgba(21,96,79,.6)}
 .g3 .btn.cont{background:linear-gradient(135deg,#f08a68 0%,#d9603f 100%);color:#fff;box-shadow:0 12px 24px -10px rgba(199,90,64,.55)}
+/* g4: Let's Optimise the World (planet green, ocean blue, a hint of solar gold; from the game's light palette) */
+.g4{background:radial-gradient(110% 70% at 100% 0%,rgba(42,125,225,.20) 0%,rgba(42,125,225,0) 62%),radial-gradient(80% 50% at 0% 42%,rgba(24,199,106,.16) 0%,rgba(24,199,106,0) 70%),radial-gradient(60% 40% at 60% 30%,rgba(255,194,61,.08),rgba(255,194,61,0) 70%),linear-gradient(180deg,#f1f8ff 0%,var(--surface) 62%)}
+html[data-theme=dark] .g4{background:radial-gradient(110% 70% at 100% 0%,rgba(42,125,225,.26),rgba(42,125,225,0) 62%),radial-gradient(80% 50% at 0% 42%,rgba(24,199,106,.14),rgba(24,199,106,0) 70%),var(--surface)}
+.g4 .band{background:linear-gradient(90deg,#0b2f57 0%,#2a7de1 30%,#18c76a 65%,#ffc23d 100%)}
+.g4 .ico{background:conic-gradient(from -90deg,#2a7de1,#18c76a,#7dffb2,#ffc23d,#2a7de1)}
+.g4 .newb{background:#e4f0ff;color:#174f9c}html[data-theme=dark] .g4 .newb{background:rgba(42,125,225,.2);color:#9fd0ff}
+.g4 .btn{background:linear-gradient(135deg,#18b864 0%,#0f8a4a 100%);color:#fff;box-shadow:0 1px 1px rgba(11,107,58,.15),0 12px 24px -10px rgba(11,107,58,.6)}
+.g4 .btn.cont{background:linear-gradient(135deg,#2a7de1 0%,#174f9c 100%);color:#fff;box-shadow:0 12px 24px -10px rgba(23,79,156,.55)}
 .btn.cont{flex:1 1 100%;flex-direction:column;gap:0;min-height:62px;padding:10px 20px;border-radius:22px}
 .btn .bt1{font-size:1.12rem}
 .btn .sr-meta{font-weight:500;opacity:.95;font-size:.82rem}
