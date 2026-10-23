@@ -23,6 +23,14 @@ const viksitSave = () => live(HRS.store.get('hrs_save_viksit_v3')) || (s => s &&
 const SDG_BEST = { kids: 'hrs_best_sdg_v2_kids', college: 'hrs_best_sdg_v2', adults: 'hrs_best_sdg_v2_adults' };
 // card text is looked up at render time, so a language switch re-renders in place
 const txt = p => ({ get title() { return t(p + '.title'); }, get sub() { return t(p + '.sub'); }, get badge() { return t(p + '.badge'); }, get desc() { return t(p + '.desc'); }, get time() { return t(p + '.time'); }, get turns() { return t(p + '.turns'); }, get age() { return t(p + '.age'); }, get learn() { return [1, 2, 3, 4].map(i => t(p + '.l' + i)); }, get empty() { return t(p + '.empty'); } });
+// ===== js/shell.js: BRICS Bridges — Classic (0.3.0) =====
+// BRICS Bridges — Classic (games/brics-bridges-classic): its own store 'brics_bridges_classic_v1' = { save, bestQ: {1..4: {school, college, expert}}, qDone, ... }.
+// It writes plain localStorage JSON (not HRS.store), so it is read directly here. A finished quarter sets save:null.
+const BB_KEY = 'brics_bridges_classic_v1';
+const BB_MODES = { q1: mode('🛡️', 'bb.q1'), q2: mode('💡', 'bb.q2'), q3: mode('🤝', 'bb.q3'), q4: mode('🌱', 'bb.q4') };
+const bbStore = () => { try { return JSON.parse(localStorage.getItem(BB_KEY) || 'null'); } catch (e) { return null; } };
+const bbBest = () => { const bq = (bbStore() || {}).bestQ || {}; return [1, 2, 3, 4].filter(q => bq[q] && Object.keys(bq[q]).length).map(q => ['q' + q, { score: Math.max(...Object.values(bq[q])) }]); };
+
 const GAMES = [
   Object.defineProperties({ id: 'viksit', cls: 'g1', icon: '🇮🇳', path: 'games/viksit-2047/index.html', thumb: 'assets/thumbs/viksit-2047.jpg',
     getSave: viksitSave,
@@ -43,6 +51,11 @@ const GAMES = [
     getSave: () => null, saveLabel: () => '',
     bestOf: lotwDone, modes: LOTW_MODES, max: 5,
     editions: [] }, Object.getOwnPropertyDescriptors(txt('lotw'))),
+  Object.defineProperties({ id: 'bricsb', cls: 'g5', icon: '🌉', path: 'games/brics-bridges-classic/index.html', thumb: 'assets/thumbs/brics-bridges-classic.jpg',
+    getSave: () => { const st = bbStore(); return st && st.save ? { S: st.save } : null; },
+    saveLabel: s => { const q = s.S.quarter || 1; return `${BB_MODES['q' + q].e} ${BB_MODES['q' + q].name} · ${t('bb.save', { n: Math.min(s.S.turn + 1, s.S.turns || 3), T: s.S.turns || 3 })}`; },
+    bestOf: bbBest, modes: BB_MODES, max: 100,
+    editions: [] }, Object.getOwnPropertyDescriptors(txt('bb'))),
 ];
 
 const SEEN_BEST = 'hrs_seen_best'; // launcher-only: which best records were already celebrated
@@ -201,7 +214,7 @@ $('#s-motion').onchange = e => HRS.setSetting('reduceMotion', e.target.value ===
 $('#s-text').onchange = e => HRS.setSetting('textSize', e.target.value);
 $('#t-sound').onclick = () => { if (!HRS.settings().sound) { $('#dataMsg').textContent = ''; HRS.setSetting('sound', true); $('#s-sound').checked = true; } HRS.sfx('milestone'); };
 $('#t-vib').onclick = () => HRS.buzz('success');
-const DATA_KEY = /^(hrs_(save|best|tut)_|hrs_viksit_v2_imported$|hrs_seen_best$|sdg2030_best_v1$|sdg2030v2_(best|seen)|lotw\.v1$)/; // lotw.v1: Let's Optimise the World's own record (days played, finished scenarios, chosen actions, its settings)
+const DATA_KEY = /^(hrs_(save|best|tut)_|hrs_viksit_v2_imported$|hrs_seen_best$|sdg2030_best_v1$|sdg2030v2_(best|seen)|lotw\.v1$|brics_bridges_classic_v1$|brics_bridges_v1$|brics-lang$)/; // lotw.v1: Let's Optimise the World's own record (days played, finished scenarios, chosen actions, its settings)
 const TUT_KEY = /^(hrs_tut_|sdg2030v2_seen)/;
 const keys = re => { const out = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (re.test(k)) out.push(k); } } catch (e) {} return out; };
 $('#resetTut').onclick = () => { keys(TUT_KEY).forEach(HRS.store.del); $('#dataMsg').textContent = t('msg.tut'); };

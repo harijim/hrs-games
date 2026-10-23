@@ -1,0 +1,57 @@
+/* Harpreet Raj Singh Games: wellbeing overlay. Uses the house light palette; override the --hrswb-* variables per game. */
+.hrswb{--hrswb-bg:#fbf8f3;--hrswb-card:#fff;--hrswb-ink:#1f2328;--hrswb-soft:#5b6168;--hrswb-accent:#0f766e;--hrswb-accent-ink:#fff;--hrswb-line:#e7e1d6;
+  --hrswb-head:'Fraunces',Georgia,'Noto Serif',serif;--hrswb-body:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans','Noto Sans Devanagari','Noto Sans Gurmukhi','Noto Sans Arabic','Noto Naskh Arabic','Noto Sans Ethiopic','Noto Serif Ethiopic','Nyala','Ebrima','PingFang SC','Microsoft YaHei','Noto Sans CJK SC',sans-serif;
+  position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:16px;
+  background:rgba(31,35,40,.38);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);font-family:var(--hrswb-body);color:var(--hrswb-ink)}
+.hrswb[hidden]{display:none}
+.hrswb-box{background:var(--hrswb-card);border-radius:20px;box-shadow:0 18px 50px rgba(0,0,0,.18);width:min(460px,100%);max-height:calc(100dvh - 32px);overflow:auto;
+  padding:24px 22px 20px;text-align:center;outline:none;animation:hrswb-in .28s ease-out}
+.hrswb-box h2{font-family:var(--hrswb-head);font-weight:600;font-size:1.45rem;margin:.2em 0 .5em;line-height:1.2}
+.hrswb-box p{margin:.5em 0;line-height:1.5;color:var(--hrswb-ink)}
+.hrswb-icon{font-size:2.6rem;line-height:1}
+.hrswb-strong{font-weight:600}
+.hrswb-small{font-size:.86rem;color:var(--hrswb-soft)!important}
+.hrswb-msg{min-height:1.3em;font-size:.92rem;color:#9a3412!important}
+.hrswb-notes{list-style:none;padding:10px 12px;margin:12px 0 4px;background:var(--hrswb-bg);border-radius:12px;font-size:.9rem;color:var(--hrswb-soft);text-align:start}
+.hrswb-notes li{margin:3px 0}
+.hrswb-row{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.hrswb-wrap .hrswb-btn{flex:1 1 45%;font-size:.88rem}
+.hrswb-btn{appearance:none;border:0;border-radius:999px;padding:12px 20px;min-height:46px;font:600 1rem var(--hrswb-body);cursor:pointer;background:var(--hrswb-accent);color:var(--hrswb-accent-ink);transition:transform .12s}
+.hrswb-btn:active{transform:scale(.97)}
+.hrswb-btn.ghost{background:transparent;color:var(--hrswb-ink);box-shadow:inset 0 0 0 1.5px var(--hrswb-line)}
+.hrswb-btn.danger{color:#b42318}
+.hrswb-btn:focus-visible,.hrswb-act:focus-visible,.hrswb-link:focus-visible,.hrswb-box input:focus-visible,.hrswb-box select:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.hrswb-lbl{display:block;text-align:start;font-size:.92rem;margin:10px 0}
+.hrswb-pin{display:block;width:100%;box-sizing:border-box;margin-top:6px;font-size:1.5rem;letter-spacing:.5em;text-align:center;padding:10px;border-radius:12px;border:1.5px solid var(--hrswb-line);background:var(--hrswb-bg)}
+.hrswb-acts{display:flex;flex-direction:column;gap:8px;margin:8px 0}
+.hrswb-act{appearance:none;text-align:start;border:1.5px solid var(--hrswb-line);background:var(--hrswb-bg);border-radius:14px;padding-block:11px;padding-inline:40px 14px;font:500 .95rem var(--hrswb-body);color:var(--hrswb-ink);cursor:pointer;position:relative;min-height:46px}
+.hrswb-act::before{content:'';position:absolute;inset-inline-start:13px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:5px;border:2px solid var(--hrswb-line);background:#fff}
+.hrswb-act[aria-pressed="true"]{border-color:var(--hrswb-accent);background:#ecfdf5}
+.hrswb-act[aria-pressed="true"]::before{background:var(--hrswb-accent);border-color:var(--hrswb-accent);box-shadow:inset 0 0 0 3px #fff}
+.hrswb-form{text-align:start;display:grid;gap:10px;margin:10px 0}
+.hrswb-form label{font-size:.9rem;display:flex;flex-direction:column;gap:4px}
+.hrswb-form small{color:var(--hrswb-soft)}
+.hrswb-form .hrswb-inline{display:inline-flex;flex-direction:row;align-items:center;gap:6px;margin-inline-end:10px}
+.hrswb-form input[type=number],.hrswb-form input[type=time],.hrswb-form select{font:1rem var(--hrswb-body);padding:8px 10px;border-radius:10px;border:1.5px solid var(--hrswb-line);background:var(--hrswb-bg);color:var(--hrswb-ink)}
+.hrswb-form fieldset{border:1.5px solid var(--hrswb-line);border-radius:12px;padding:6px 10px 10px}
+.hrswb-form legend{font-weight:600;font-size:.92rem}
+.hrswb-link{appearance:none;background:none;border:0;color:inherit;text-decoration:underline;text-underline-offset:3px;font:inherit;font-size:.9rem;cursor:pointer;padding:8px;min-height:44px}
+html.hrswb-open{overflow:hidden}
+@keyframes hrswb-in{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}
+[data-reduce-motion] .hrswb-box,html[data-reduce-motion] .hrswb-box{animation:none}
+@media (prefers-reduced-motion:reduce){.hrswb-box{animation:none}}
+[data-theme="dark"] .hrswb{--hrswb-bg:#1a1b1e;--hrswb-card:#24262a;--hrswb-ink:#ececec;--hrswb-soft:#a5a9ae;--hrswb-line:#3a3d42}
+[data-theme="dark"] .hrswb-act[aria-pressed="true"]{background:#12332f}
+/* keep the main buttons reachable on short screens: the last button row sticks to the bottom of the scrolling box */
+.hrswb-box>.hrswb-row:last-child{position:sticky;bottom:-20px;margin:16px -22px -20px;padding:12px 22px 16px;background:var(--hrswb-card);border-radius:0 0 20px 20px;box-shadow:0 -10px 12px -12px rgba(0,0,0,.25)}
+/* scripts and right-to-left (v1.1). Fonts are system fonts: nothing is downloaded. */
+.hrswb-box:lang(ar),.hrswb-box:lang(fa){--hrswb-head:'Noto Naskh Arabic','Noto Sans Arabic','Segoe UI',Tahoma,'Geeza Pro',serif;--hrswb-body:'Noto Sans Arabic','Noto Naskh Arabic','Segoe UI',Tahoma,'Geeza Pro',sans-serif;line-height:1.6}
+.hrswb-box:lang(fa){--hrswb-body:Vazirmatn,'Noto Sans Arabic','Noto Naskh Arabic',Tahoma,sans-serif}
+.hrswb-box:lang(am){--hrswb-head:'Noto Serif Ethiopic','Noto Sans Ethiopic',Nyala,Ebrima,'Abyssinica SIL',serif;--hrswb-body:'Noto Sans Ethiopic','Noto Serif Ethiopic',Nyala,Ebrima,'Abyssinica SIL',sans-serif}
+.hrswb-box:lang(zh){--hrswb-head:'Noto Serif CJK SC','Songti SC','Noto Sans CJK SC',serif;--hrswb-body:'PingFang SC','Microsoft YaHei','Noto Sans CJK SC','Hiragino Sans GB',sans-serif}
+.hrswb-box:lang(hi){--hrswb-head:'Noto Serif Devanagari','Noto Sans Devanagari',serif;--hrswb-body:'Noto Sans Devanagari','Nirmala UI','Kohinoor Devanagari',Mangal,sans-serif}
+.hrswb-box[dir=rtl] .hrswb-pin{direction:ltr}
+.hrswb-box[dir=rtl] input[type=time]{direction:ltr;text-align:end}
+.hrswb-sub{font-weight:600;font-size:.88rem;margin:6px 0 -4px!important}
+.hrswb-grp{display:grid;gap:8px}
+.hrswb-box{font-family:var(--hrswb-body)}
