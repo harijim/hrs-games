@@ -30,6 +30,10 @@ const BB_KEY = 'brics_bridges_classic_v1';
 const BB_MODES = { q1: mode('🛡️', 'bb.q1'), q2: mode('💡', 'bb.q2'), q3: mode('🤝', 'bb.q3'), q4: mode('🌱', 'bb.q4') };
 const bbStore = () => { try { return JSON.parse(localStorage.getItem(BB_KEY) || 'null'); } catch (e) { return null; } };
 const bbBest = () => { const bq = (bbStore() || {}).bestQ || {}; return [1, 2, 3, 4].filter(q => bq[q] && Object.keys(bq[q]).length).map(q => ['q' + q, { score: Math.max(...Object.values(bq[q])) }]); };
+// BRICS Bridges v2: own store 'brics_bridges_v2' = { save, bestQ: {1..4: {school, college, expert}}, qDone, year, ... } (same shape as Classic).
+const BB2_KEY = 'brics_bridges_v2';
+const bb2Store = () => { try { return JSON.parse(localStorage.getItem(BB2_KEY) || 'null'); } catch (e) { return null; } };
+const bb2Best = () => { const bq = (bb2Store() || {}).bestQ || {}; return [1, 2, 3, 4].filter(q => bq[q] && Object.keys(bq[q]).length).map(q => ['q' + q, { score: Math.max(...Object.values(bq[q])) }]); };
 
 const GAMES = [
   Object.defineProperties({ id: 'viksit', cls: 'g1', icon: '🇮🇳', path: 'games/viksit-2047/index.html', thumb: 'assets/thumbs/viksit-2047.jpg',
@@ -51,6 +55,11 @@ const GAMES = [
     getSave: () => null, saveLabel: () => '',
     bestOf: lotwDone, modes: LOTW_MODES, max: 5,
     editions: [] }, Object.getOwnPropertyDescriptors(txt('lotw'))),
+  Object.defineProperties({ id: 'bricsb2', cls: 'g6', icon: '🌉', path: 'games/brics-bridges/index.html', thumb: 'assets/thumbs/brics-bridges.jpg',
+    getSave: () => { const st = bb2Store(); return st && st.save ? { S: st.save } : null; },
+    saveLabel: s => { const q = s.S.quarter || 1; return `${BB_MODES['q' + q].e} ${BB_MODES['q' + q].name} · ${t('bb.save', { n: Math.min(s.S.turn + 1, s.S.turns || 3), T: s.S.turns || 3 })}`; },
+    bestOf: bb2Best, modes: BB_MODES, max: 100,
+    editions: [] }, Object.getOwnPropertyDescriptors(txt('bb2'))),
   Object.defineProperties({ id: 'bricsb', cls: 'g5', icon: '🌉', path: 'games/brics-bridges-classic/index.html', thumb: 'assets/thumbs/brics-bridges-classic.jpg',
     getSave: () => { const st = bbStore(); return st && st.save ? { S: st.save } : null; },
     saveLabel: s => { const q = s.S.quarter || 1; return `${BB_MODES['q' + q].e} ${BB_MODES['q' + q].name} · ${t('bb.save', { n: Math.min(s.S.turn + 1, s.S.turns || 3), T: s.S.turns || 3 })}`; },
@@ -214,7 +223,7 @@ $('#s-motion').onchange = e => HRS.setSetting('reduceMotion', e.target.value ===
 $('#s-text').onchange = e => HRS.setSetting('textSize', e.target.value);
 $('#t-sound').onclick = () => { if (!HRS.settings().sound) { $('#dataMsg').textContent = ''; HRS.setSetting('sound', true); $('#s-sound').checked = true; } HRS.sfx('milestone'); };
 $('#t-vib').onclick = () => HRS.buzz('success');
-const DATA_KEY = /^(hrs_(save|best|tut)_|hrs_viksit_v2_imported$|hrs_seen_best$|sdg2030_best_v1$|sdg2030v2_(best|seen)|lotw\.v1$|brics_bridges_classic_v1$|brics_bridges_v1$|brics-lang$)/; // lotw.v1: Let's Optimise the World's own record (days played, finished scenarios, chosen actions, its settings)
+const DATA_KEY = /^(hrs_(save|best|tut)_|hrs_viksit_v2_imported$|hrs_seen_best$|sdg2030_best_v1$|sdg2030v2_(best|seen)|lotw\.v1$|brics_bridges_classic_v1$|brics_bridges_v1$|brics_bridges_v2$|brics_bridges_v2_settings$|brics-lang$)/; // lotw.v1: Let's Optimise the World's own record (days played, finished scenarios, chosen actions, its settings)
 const TUT_KEY = /^(hrs_tut_|sdg2030v2_seen)/;
 const keys = re => { const out = []; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (re.test(k)) out.push(k); } } catch (e) {} return out; };
 $('#resetTut').onclick = () => { keys(TUT_KEY).forEach(HRS.store.del); $('#dataMsg').textContent = t('msg.tut'); };

@@ -273,3 +273,11 @@ html[data-theme=dark] .g5{background:radial-gradient(110% 70% at 100% 0%,rgba(15
 .g5 .newb{background:#e2f3f0;color:#0d5c56}html[data-theme=dark] .g5 .newb{background:rgba(15,118,110,.22);color:#99e0d6}
 .g5 .btn{background:linear-gradient(135deg,#14917f 0%,#0f766e 100%);color:#fff;box-shadow:0 1px 1px rgba(13,92,86,.15),0 12px 24px -10px rgba(13,92,86,.6)}
 .g5 .btn.cont{background:linear-gradient(135deg,#f5a524 0%,#d97706 100%);color:#fff;box-shadow:0 12px 24px -10px rgba(180,83,9,.55)}
+/* ===== css/shell.css: card palette for BRICS Bridges v2 (cls 'g6'; dusk navy, teal arcs, amber India node) ===== */
+.g6{background:radial-gradient(120% 75% at 100% 0%,rgba(42,35,70,.20) 0%,rgba(42,35,70,0) 60%),radial-gradient(80% 50% at 0% 40%,rgba(242,169,59,.16) 0%,rgba(242,169,59,0) 70%),radial-gradient(60% 40% at 60% 30%,rgba(15,118,110,.10),rgba(15,118,110,0) 70%),linear-gradient(180deg,#f2f1f6 0%,var(--surface) 62%)}
+html[data-theme=dark] .g6{background:radial-gradient(120% 75% at 100% 0%,rgba(42,35,70,.55),rgba(42,35,70,0) 60%),radial-gradient(80% 50% at 0% 40%,rgba(242,169,59,.12),rgba(242,169,59,0) 70%),var(--surface)}
+.g6 .band{background:linear-gradient(90deg,#19213a 0%,#2a2346 30%,#0f766e 60%,#f2a93b 85%,#be185d 100%)}
+.g6 .ico{background:conic-gradient(from -90deg,#19213a,#2a2346,#0f766e,#f2a93b,#19213a)}
+.g6 .newb{background:#ece9f6;color:#2a2346}html[data-theme=dark] .g6 .newb{background:rgba(124,108,200,.22);color:#d9d3ff}
+.g6 .btn{background:linear-gradient(135deg,#2a3a66 0%,#19213a 100%);color:#fff;box-shadow:0 1px 1px rgba(25,33,58,.15),0 12px 24px -10px rgba(25,33,58,.6)}
+.g6 .btn.cont{background:linear-gradient(135deg,#f5a524 0%,#b45309 100%);color:#fff;box-shadow:0 12px 24px -10px rgba(180,83,9,.55)}
