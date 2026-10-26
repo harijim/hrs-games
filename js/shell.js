@@ -59,12 +59,7 @@ const GAMES = [
     getSave: () => { const st = bb2Store(); return st && st.save ? { S: st.save } : null; },
     saveLabel: s => { const q = s.S.quarter || 1; return `${BB_MODES['q' + q].e} ${BB_MODES['q' + q].name} · ${t('bb.save', { n: Math.min(s.S.turn + 1, s.S.turns || 3), T: s.S.turns || 3 })}`; },
     bestOf: bb2Best, modes: BB_MODES, max: 100,
-    editions: [] }, Object.getOwnPropertyDescriptors(txt('bb2'))),
-  Object.defineProperties({ id: 'bricsb', cls: 'g5', icon: '🌉', path: 'games/brics-bridges-classic/index.html', thumb: 'assets/thumbs/brics-bridges-classic.jpg',
-    getSave: () => { const st = bbStore(); return st && st.save ? { S: st.save } : null; },
-    saveLabel: s => { const q = s.S.quarter || 1; return `${BB_MODES['q' + q].e} ${BB_MODES['q' + q].name} · ${t('bb.save', { n: Math.min(s.S.turn + 1, s.S.turns || 3), T: s.S.turns || 3 })}`; },
-    bestOf: bbBest, modes: BB_MODES, max: 100,
-    editions: [] }, Object.getOwnPropertyDescriptors(txt('bb'))),
+    editions: [{ path: 'games/brics-bridges-classic/index.html', getSave: () => { const st = bbStore(); return st && st.save ? { S: st.save } : null; }, get label() { return t('bb.ed.c'); } }] }, Object.getOwnPropertyDescriptors(txt('bb2'))),
 ];
 
 const SEEN_BEST = 'hrs_seen_best'; // launcher-only: which best records were already celebrated
@@ -90,7 +85,7 @@ function renderGames() {
         </div>
         <div class="more-row">
           <details class="more"><summary>ⓘ ${t('card.about')}</summary><div class="in"><p class="desc">${g.desc}</p><div class="learn"><h3>${t('card.learn')}</h3><ul>${g.learn.map(l => `<li>${l}</li>`).join('')}</ul></div><div class="meta"><span class="chip">🔁 ${g.turns}</span><span class="chip">⏱️ ${g.time}</span><span class="chip">👤 ${g.age}</span></div></div></details>
-          ${g.editions.length ? '' : '<!-- no earlier editions -->'}${!g.editions.length ? '' : `<details class="eds"><summary>${t('card.eds')}</summary><div class="in"><p class="classic">${g.editions.map(ed => { const sv = live(HRS.store.get(ed.save)); return `<a href="${ed.path}${sv ? '?continue=1' : ''}">${ed.label}${sv ? ` <span class="sv">· ${t('card.contSaved')}</span>` : ''}</a>`; }).join('')}</p></div></details>`}
+          ${g.editions.length ? '' : '<!-- no earlier editions -->'}${!g.editions.length ? '' : `<details class="eds"><summary>${t('card.eds')}</summary><div class="in"><p class="classic">${g.editions.map(ed => { const sv = live(ed.getSave ? ed.getSave() : HRS.store.get(ed.save)); return `<a href="${ed.path}${sv ? '?continue=1' : ''}">${ed.label}${sv ? ` <span class="sv">· ${t('card.contSaved')}</span>` : ''}</a>`; }).join('')}</p></div></details>`}
         </div>
       </div></article>`;
   }).join('');
