@@ -1,5 +1,6 @@
-/* Viksit Bharat 2047 (v3: School / College / Expert levels): app layer for Harpreet Raj Singh Games.
-   Autosave/resume (also adopts a v2 save once), per-level best score, sound & haptics, dialog semantics, back button, glossary.
+/* Viksit Bharat 2047 (v3 levels … v6 Global Conditions): app layer for Harpreet Raj Singh Games.
+   Autosave/resume (also adopts a v2 save once; v5/1.4.x saves resume in v6 with Global Conditions off, as the game's normState does),
+   per-level best score, sound & haptics (silent in the game's quiet hours), dialog semantics, back button, glossary.
    Loaded after the game script and shares its global scope. Game design and content are unchanged. */
 'use strict';
 (function () {
@@ -9,12 +10,15 @@ const bestKey = m => m === 'school' || m === 'expert' ? 'hrs_best_viksit_v3_' + 
 const BEST_KEY = bestKey('college');
 const ALL_EVENTS = () => [...EVENTS, ...SCHOOL_EVENTS, ...DILEMMAS, DISCOM_CRISIS];
 const UI = { restoring: false, beforeIdx: -1, counted: false };
+// the game's quiet hours (v6) also mute the app's sounds
+const quiet = () => { try { return typeof isQuiet === 'function' && isQuiet(); } catch (e) { return false; } };
+const sfx = n => { if (!quiet()) HRS.sfx(n); }, hbuzz = n => { if (!quiet()) HRS.buzz(n); };
 const hubIds = a => (a || []).map(h => h.id), hubObjs = a => (a || []).map(id => HUBS.find(h => h.id === id)).filter(Boolean);
 const msObjs = a => (a || []).map(id => MILESTONES.find(m => m.id === id)).filter(Boolean);
 
 /* ---------- save / resume (S holds a few object references; store ids instead) ---------- */
 function save() {
-  if (!S || UI.restoring || phase === 'intro' || phase === 'end') return;
+  if (!S || UI.restoring || phase === 'intro' || phase === 'end' || phase === 'done') return;
   const o = Object.assign({}, S, { cfg: undefined, event: S.event ? S.event.id : null, newMs: S.newMs.map(m => m.id), missedMs: S.missedMs.map(m => m.id), newHubs: hubIds(S.newHubs), lostHubs: hubIds(S.lostHubs) });
   HRS.store.set(SAVE_KEY, { v: 3, t: Date.now(), phase, mode: S.mode, beforeIdx: UI.beforeIdx, S: o });
 }
@@ -38,25 +42,25 @@ window.HRSViksit3 = { save, SAVE_KEY, BEST_KEY, bestKey, UI };
 UI.rr = false;
 if (typeof rerender === 'function') { const _rr = rerender; rerender = function () { UI.rr = true; try { return _rr.apply(this, arguments); } finally { UI.rr = false; } }; }
 const _showEvent = showEvent;
-showEvent = function () { _showEvent.apply(this, arguments); if (!UI.rr) { HRS.sfx('event'); HRS.announce(tl('news') + S.event.t); } queueSave(); };
+showEvent = function () { _showEvent.apply(this, arguments); if (!UI.rr) { sfx('event'); HRS.announce(tl('news') + S.event.t); } queueSave(); };
 const _showPlan = showPlan;
 showPlan = function () { _showPlan(); queueSave(); };
 const _enactTerm = enactTerm;
-enactTerm = function (s) { HRS.sfx('whoosh'); HRS.buzz('medium'); return _enactTerm(s); };
+enactTerm = function (s) { sfx('whoosh'); hbuzz('medium'); return _enactTerm(s); };
 const _showResult = showResult;
 showResult = function (a, re) {
   UI.beforeIdx = S.history.indexOf(a); _showResult(a, re);
   if (re || UI.rr) return;
-  if (S.newMs.length || S.newHubs.length) { HRS.sfx('milestone'); HRS.buzz('success'); } else HRS.sfx('good');
+  if (S.newMs.length || S.newHubs.length) { sfx('milestone'); hbuzz('success'); } else sfx('good');
   if (S.over) recordBest();
   queueSave();
 };
 const _showEnd = showEnd;
-showEnd = function (re) { if (re || UI.rr) return _showEnd(re); recordBest(); _showEnd(re); HRS.sfx('end'); HRS.buzz('success'); HRS.store.del(SAVE_KEY); };
+showEnd = function (re) { if (re || UI.rr) return _showEnd(re); recordBest(); _showEnd(re); sfx('end'); hbuzz('success'); HRS.store.del(SAVE_KEY); };
 const _startGame = startGame;
-startGame = function (seed, skipIntro, mode) { UI.counted = false; UI.beforeIdx = -1; _startGame(seed, skipIntro, mode); queueSave(); };
+startGame = function () { UI.counted = false; UI.beforeIdx = -1; _startGame.apply(this, arguments); queueSave(); };  // v6 adds a 4th argument (Global Conditions options)
 const _toast = toast;
-toast = function (msg, bad, ms) { _toast(msg, bad, ms); if (bad) { HRS.sfx('bad'); HRS.buzz('warning'); } HRS.announce(String(msg).replace(/<[^>]+>/g, '')); };
+toast = function (msg, bad, ms) { _toast(msg, bad, ms); if (bad) { sfx('bad'); hbuzz('warning'); } HRS.announce(String(msg).replace(/<[^>]+>/g, '')); };
 
 /* glossary inside the game's own Help sheet (plain-language jargon, national scope) */
 const GLOSSARY = [
@@ -103,10 +107,10 @@ helpSheet = function () {
 /* ---------- sound/haptics for taps; save after every move (registered after the game's own handlers) ---------- */
 document.addEventListener('click', e => {
   const t = e.target.closest('button,.tile,.pcard'); if (!t) return;
-  if (t.dataset.choice !== undefined) { HRS.sfx('select'); HRS.buzz('light'); }
-  else if (t.dataset.k || t.dataset.b) { HRS.sfx('tap'); HRS.buzz('light'); }
-  else if (t.classList.contains('pcard') || t.dataset.tariff) { HRS.sfx('select'); HRS.buzz('light'); }
-  else if (t.id === 'nextBtn' || t.id === 'startBtn' || t.classList.contains('mode')) HRS.sfx('tap');
+  if (t.dataset.choice !== undefined) { sfx('select'); hbuzz('light'); }
+  else if (t.dataset.k || t.dataset.b) { sfx('tap'); hbuzz('light'); }
+  else if (t.classList.contains('pcard') || t.dataset.tariff) { sfx('select'); hbuzz('light'); }
+  else if (t.id === 'nextBtn' || t.id === 'startBtn' || t.classList.contains('mode')) sfx('tap');
   queueSave();
 });
 document.addEventListener('keydown', queueSave);
@@ -121,7 +125,8 @@ $('confetti').setAttribute('aria-hidden', 'true');
 
 /* ---------- boot ---------- */
 const qs = new URLSearchParams(location.search);
-if (qs.get('new')) { HRS.store.del(SAVE_KEY); const v2 = HRS.store.get(V2_SAVE); if (v2 && v2.t) HRS.store.set(V2_IMPORTED, v2.t); } // a v2 game is not re-offered after New (the v2 edition keeps it)
+if (qs.get('new')) { HRS.store.del(SAVE_KEY); try { localStorage.removeItem('vb-save'); } catch (e) {} // the game's own Continue (v6) would offer the old game
+  const v2 = HRS.store.get(V2_SAVE); if (v2 && v2.t) HRS.store.set(V2_IMPORTED, v2.t); } // a v2 game is not re-offered after New (the v2 edition keeps it)
 let rec = !qs.get('new') && !qs.get('seed') && !qs.get('mode') ? HRS.store.get(SAVE_KEY) : null;
 if (!rec && !qs.get('new') && !qs.get('seed') && !qs.get('mode')) { // adopt an unfinished v2 game once (the v2 edition keeps its copy)
   const v2 = HRS.store.get(V2_SAVE);
@@ -134,6 +139,7 @@ if (rec && (rec.v === 3 || rec.v === 2) && rec.S) {
     ['sv-gdp', 'sv-adq', 'sv-nf', 'sv-ap', 'hYear'].forEach(id => { if ($(id)) delete $(id)._v; });
     renderTop(false);
     if (rec.phase === 'event' && S.event) _showEvent();
+    else if (rec.phase === 'global' && typeof showGlobal === 'function' && typeof gcOn === 'function' && gcOn(S) && S.gc.pending) showGlobal();
     else if (rec.phase === 'result' && S.history[rec.beforeIdx]) { const b = S.history[rec.beforeIdx]; if (typeof lastBefore !== 'undefined') lastBefore = b; _showResult(b); } // v4 re-renders the result screen from lastBefore
     else if (S.over) _showEnd();
     else _showPlan();
@@ -142,6 +148,8 @@ if (rec && (rec.v === 3 || rec.v === 2) && rec.S) {
     if (rec.v === 2) save();
   } catch (err) { console.warn('save restore failed', err); UI.restoring = false; HRS.store.del(SAVE_KEY); startGame(); }
 } else {
-  startGame(qs.get('seed') ? +qs.get('seed') : undefined, qs.has('play'), qs.get('mode') || undefined);
+  startGame(qs.get('seed') ? +qs.get('seed') : undefined, qs.has('play'), qs.get('mode') || undefined, qs.has('gc') ? { gc: qs.get('gc') !== '0' } : undefined);
 }
+// the game's Settings → Erase (v6) also removes the app's copy of the unfinished game
+if (window.VB && typeof VB.on === 'function') VB.on('erase', () => { HRS.store.del(SAVE_KEY); return ''; });
 })();
